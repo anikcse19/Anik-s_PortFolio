@@ -1,3 +1,4 @@
+import Education from "@/components/Education";
 import Grid from "@/components/Grid";
 import Hero from "@/components/Hero";
 import ProjectHeader from "@/components/ProjectHeader";
@@ -15,6 +16,7 @@ export default function Home() {
         <Hero />
         <Grid />
         <ProjectShowCase />
+        <Education />
       </div>
     </main>
   );

@@ -3,10 +3,18 @@ import { Spotlight } from "./ui/Spotlight";
 import { TextGenerateEffect } from "./ui/text-generate-effect";
 import { MagicButton } from "./ui/MagicButton";
 import { FaLocationArrow } from "react-icons/fa";
+import { FaCloudDownloadAlt } from "react-icons/fa";
 import { FloatingNav } from "./ui/FloatingNav";
 import { link } from "fs";
+import { FlipWords } from "./ui/FlipWords";
 
 const Hero = () => {
+  const words = [
+    "Web-Developer",
+    "Frontend-Developer",
+    "Backend-Developer",
+    "Software-Developer",
+  ];
   return (
     <div className="mb-20 pt-36 ">
       <div className="">
@@ -32,26 +40,38 @@ const Hero = () => {
       </div>
       <div className=" flex justify-center my-15 z-50 relative">
         <div className="flex flex-col gap-y-3 items-center max-w-[89vw] md:max-w-2xl lg:max-w-[60vw]">
-          <h2 className="uppercase tracking-widest text-xs text-center text-blue-200 max-w-80">
-            hello, I am anik. Lets do it with Next
-          </h2>
+          <div className="text-sm md:text-base lg:text-lg mx-auto font-normal text-neutral-600 dark:text-blue-200">
+            Hi, I am Anik. I am a
+            <FlipWords words={words} />
+          </div>
           <TextGenerateEffect
             className="text-blue-300 tracking-wider text-sm"
             duration={2}
             // filter={false}
-            words="Hello, how are you all? Hope good! Hope to do awesome!"
+            words="Hello, How are You? Hope good! Let's Explore!"
           />
 
           {/* <p className="p-2 text-sm md:text-base tracking-wider">
             Hi i am anik, a next js developer bases in bangladesh
           </p> */}
-          <a href="#about">
-            <MagicButton
-              title="Show my work"
-              icon={<FaLocationArrow />}
-              position="right"
-            />
-          </a>
+          <div className="flex items-center gap-2">
+            <a href="#projects">
+              <MagicButton
+                title="Show my work"
+                icon={<FaLocationArrow />}
+                position="right"
+                from="work"
+              />
+            </a>
+            <a href="">
+              <MagicButton
+                title="Download my Resume"
+                icon={<FaCloudDownloadAlt />}
+                position="right"
+                from="resume"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </div>

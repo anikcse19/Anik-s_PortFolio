@@ -6,15 +6,15 @@ import Image from "next/image";
 import { AnimatedTooltip } from "./ui/AnimatedTooltip";
 const ProjectShowCase = () => {
   return (
-    <div className="">
-      <div>
-        <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 py-6 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
-          <Cover>My Projects</Cover>
+    <div id="projects" className="w-full">
+      <div className="w-full ">
+        <h1 className="text-4xl md:text-4xl lg:text-3xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 py-6 bg-clip-text text-blue-200 bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
+          Review and Give Feedback of My <Cover>Projects</Cover>
         </h1>
-        <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 space-x-3 gap-x-3">
+        <div className="w-full">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-3">
             {projects.map((project) => (
-              <CardContainer key={project.id} className="inter-var">
+              <CardContainer key={project.id} className="inter-var w-full">
                 <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-[#020817] dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
                   <CardItem
                     translateZ="50"
@@ -25,7 +25,7 @@ const ProjectShowCase = () => {
                   <CardItem
                     as="p"
                     translateZ="60"
-                    className="text-neutral-500 text-sm max-w-sm mt-2 dark:text-neutral-300"
+                    className="text-neutral-500 text-sm lg:text-[10px] max-w-sm mt-2 dark:text-neutral-300"
                   >
                     {project.des}
                   </CardItem>
