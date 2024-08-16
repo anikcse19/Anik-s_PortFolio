@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import ProjectHeader from "@/components/ProjectHeader";
 import Projects from "@/components/ProjectHeader";
 import ProjectShowCase from "@/components/ProjectShowCase";
+import Testimonials from "@/components/Testimonials";
 import { FloatingNav } from "@/components/ui/FloatingNav";
 import { navItems } from "@/data";
 import Image from "next/image";
@@ -17,6 +18,7 @@ export default function Home() {
         <Grid />
         <ProjectShowCase />
         <Education />
+        <Testimonials />
       </div>
     </main>
   );
