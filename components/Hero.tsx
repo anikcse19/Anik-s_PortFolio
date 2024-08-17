@@ -17,46 +17,15 @@ const Hero = () => {
     "Software-Developer",
   ];
 
-  // const handleDownload = () => {
-  //   console.log("cliked");
-
-  //   const link = document.createElement("a");
-  //   link.href =
-  //     "https://drive.google.com/uc?export=download&id=1WI5jh-lnapKYkwHJd162tZPFbov1H69D";
-  //   link.download = "Anik's_Resume.pdf"; // This sets the default name for the downloaded file
-  //   link.click();
-  // };
   const handleDownload = () => {
     window.open(
       "https://drive.google.com/file/d/1WI5jh-lnapKYkwHJd162tZPFbov1H69D/view?usp=sharing",
       "_blank"
     );
-    // try {
-    //   const response = await fetch(
-    //     "https://drive.google.com/uc?export=download&id=1WI5jh-lnapKYkwHJd162tZPFbov1H69DL"
-    //   );
-
-    //   // Ensure the response is ok
-    //   if (!response.ok) {
-    //     throw new Error("Network response was not ok");
-    //   }
-
-    //   const blob = await response.blob();
-    //   const url = window.URL.createObjectURL(blob);
-    //   const a = document.createElement("a");
-    //   a.href = url;
-    //   a.download = "Your_Resume.pdf"; // Set the name of the downloaded file
-    //   document.body.appendChild(a);
-    //   a.click();
-    //   window.URL.revokeObjectURL(url);
-    //   document.body.removeChild(a);
-    // } catch (error) {
-    //   console.error("Download error:", error);
-    // }
   };
 
   return (
-    <div className="mb-20 pt-36 ">
+    <div className="mb-20 pt-16 md:pt-36 ">
       <div className="">
         {" "}
         <Spotlight

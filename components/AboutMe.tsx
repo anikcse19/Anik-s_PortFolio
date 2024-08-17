@@ -10,8 +10,6 @@ import { FaLinkedin } from "react-icons/fa";
 import ConfettiButton from "./ui/ConfettiButton";
 
 const AboutMe = () => {
-  console.log(ba, "ba");
-
   return (
     <div id="about" className="mt-5 mb-10">
       {/* sparkless */}
