@@ -26,6 +26,10 @@ const config = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
+        backgroundImage: {
+          'about-me': "url('/aboutMe.jpeg')",
+          // 'footer-texture': "url('/images/footer-texture.png')",
+        },
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",

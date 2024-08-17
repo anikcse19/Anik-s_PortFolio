@@ -75,9 +75,9 @@ export const gridItems = [
 export const projects = [
   {
     id: 1,
-    title: "3D Solar System Planets to Explore",
+    title: "Spinner App - Try Your Luck",
     des: "Explore the wonders of our solar system with this captivating 3D simulation of the planets using Three.js.",
-    img: "/p1.svg",
+    img: "/p1.png",
     iconLists: [
       {
         id: 1,
@@ -91,13 +91,13 @@ export const projects = [
       },
       {
         id: 3,
-        title: 'TypeScript',
-        image: "/ts.svg"
+        title: 'Javascript',
+        image: "/javas.svg"
       },
       {
         id: 4,
-        title: 'Three Js',
-        image: '/three.svg'
+        title: 'Web Socket',
+        image: '/webSock.png'
       },
       {
         id: 5,
@@ -105,18 +105,18 @@ export const projects = [
         image: '/fm.svg'
       }
     ],
-    link: "https://github.com/adrianhajdin?tab=repositories",
+    link: "https://spinner-site.vercel.app/",
   },
   {
     id: 2,
-    title: "Yoom - Video Conferencing App",
+    title: "EasyTech - Techno E-commerce Site",
     des: "Simplify your video conferencing experience with Yoom. Seamlessly connect with colleagues and friends.",
-    img: "/p2.svg",
+    img: "/p2.png",
     iconLists: [
       {
         id: 1,
-        title: "React Js",
-        image: "/re.svg"
+        title: "Next Js",
+        image: "/next.svg"
       },
       {
         id: 2,
@@ -125,13 +125,13 @@ export const projects = [
       },
       {
         id: 3,
-        title: 'TypeScript',
-        image: "/ts.svg"
+        title: 'Javascript',
+        image: "/javas.svg"
       },
       {
         id: 4,
-        title: 'Three Js',
-        image: '/three.svg'
+        title: 'Material UI',
+        image: '/mateUi.png'
       },
       {
         id: 5,
@@ -139,18 +139,18 @@ export const projects = [
         image: '/fm.svg'
       }
     ],
-    link: "https://github.com/adrianhajdin/zoom-clone",
+    link: "https://subtle-torrone-21476d.netlify.app/",
   },
   {
     id: 3,
-    title: "AI Image SaaS - Canva Application",
+    title: "Imdb Movies - Flims Related Artilces",
     des: "A REAL Software-as-a-Service app with AI features and a payments and credits system using the latest tech stack.",
-    img: "/p3.svg",
+    img: "/p3.png",
     iconLists: [
       {
         id: 1,
-        title: "React Js",
-        image: "/re.svg"
+        title: "Next Js",
+        image: "/next.svg"
       },
       {
         id: 2,
@@ -159,13 +159,13 @@ export const projects = [
       },
       {
         id: 3,
-        title: 'TypeScript',
-        image: "/ts.svg"
+        title: 'Javascript',
+        image: "/javas.svg"
       },
       {
         id: 4,
-        title: 'Three Js',
-        image: '/three.svg'
+        title: 'Material UI',
+        image: '/mateUi.png'
       },
       {
         id: 5,
@@ -173,13 +173,13 @@ export const projects = [
         image: '/fm.svg'
       }
     ],
-    link: "https://github.com/adrianhajdin/ai_saas_app",
+    link: "https://movie-blog-site.vercel.app/",
   },
   {
     id: 4,
-    title: "Animated Apple Iphone 3D Website",
+    title: "AgList - List and maintainance of Agent",
     des: "Recreated the Apple iPhone 15 Pro website, combining GSAP animations and Three.js 3D effects..",
-    img: "/p4.svg",
+    img: "/p4.png",
     iconLists: [
       {
         id: 1,
@@ -207,7 +207,7 @@ export const projects = [
         image: '/fm.svg'
       }
     ],
-    link: "https://github.com/adrianhajdin/iphone",
+    link: "https://1ten365-react.vercel.app/",
   },
 ];
 

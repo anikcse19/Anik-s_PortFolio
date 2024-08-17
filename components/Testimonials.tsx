@@ -3,7 +3,7 @@ import { InfiniteMovingCards } from "./ui/InfiniteMovingCrads";
 
 const Testimonials = () => {
   return (
-    <div className="my-5 w-full">
+    <div id="testimonials" className="my-5 w-full">
       <h1 className="text-base md:text-lg lg:text-2xl font-bold text-blue-200">
         Testimonials
       </h1>

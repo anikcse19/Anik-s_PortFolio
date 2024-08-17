@@ -105,11 +105,13 @@ export const CardItem = ({
   rotateX = 0,
   rotateY = 0,
   rotateZ = 0,
+  projectLink,
   ...rest
 }: {
   as?: React.ElementType;
   children: React.ReactNode;
   className?: string;
+  projectLink?: string;
   translateX?: number | string;
   translateY?: number | string;
   translateZ?: number | string;
@@ -136,6 +138,9 @@ export const CardItem = ({
 
   return (
     <Tag
+      onClick={() => {
+        window.open(`${projectLink}`, "_blank");
+      }}
       ref={ref}
       className={cn("w-fit transition duration-200 ease-linear", className)}
       {...rest}

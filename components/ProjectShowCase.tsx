@@ -4,6 +4,7 @@ import { projects } from "@/data";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 import Image from "next/image";
 import { AnimatedTooltip } from "./ui/AnimatedTooltip";
+import Link from "next/link";
 const ProjectShowCase = () => {
   return (
     <div id="projects" className="w-full">
@@ -18,7 +19,7 @@ const ProjectShowCase = () => {
                 <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-[#020817] dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
                   <CardItem
                     translateZ="50"
-                    className="text-xl font-bold text-neutral-600 dark:text-white"
+                    className="text-lg font-bold text-neutral-600 dark:text-white"
                   >
                     {project.title}
                   </CardItem>
@@ -39,7 +40,7 @@ const ProjectShowCase = () => {
                       src={project.img}
                       height="1000"
                       width="1000"
-                      className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl"
+                      className="h-60 w-full object-cover object-center rounded-xl group-hover/card:shadow-xl"
                       alt="thumbnail"
                     />
                   </CardItem>
@@ -53,6 +54,7 @@ const ProjectShowCase = () => {
                       <AnimatedTooltip items={project.iconLists} />
                     </CardItem>
                     <CardItem
+                      projectLink={project.link}
                       translateZ={20}
                       translateX={40}
                       as="button"
