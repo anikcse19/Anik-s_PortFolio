@@ -57,18 +57,18 @@ const AboutMe = () => {
           className={`bg-cover bg-center w-full h-full group-hover:scale-110 group-hover:blur-0 transition-all duration-500 ease-in-out`}
         />{" "}
         <div className="absolute bottom-[10%] left-[50%] -translate-x-1/2">
-          <p className="text-sm tracking-widest capitalize p-3 text-center">
+          <p className="text-[10px] md:text-sm tracking-widest capitalize p-3 text-center">
             Knack of building applications with front and back end operations.
           </p>
-          <div className="flex items-center justify-center gap-3 mt-5">
+          <div className="flex items-center justify-center flex-wrap sm:flex-nowrap  gap-1 md:gap-3 mt-5">
             <HoverBorderGradient
               link="https://github.com/Anikcse19"
               containerClassName="rounded-full"
               as="button"
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
             >
-              <FaFacebook className="text-blue-400" />
-              <span>Facebook</span>
+              <FaFacebook className="text-blue-400 text-xs md:text-sm lg:text-lg" />
+              <span className="text-xs md:text-sm lg:text-lg">Facebook</span>
             </HoverBorderGradient>
             <HoverBorderGradient
               link="https://github.com/Anikcse19"
@@ -76,8 +76,8 @@ const AboutMe = () => {
               as="button"
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
             >
-              <FaGithub className="" />
-              <span>Github</span>
+              <FaGithub className="text-xs md:text-sm lg:text-lg" />
+              <span className="text-xs md:text-sm lg:text-lg">Github</span>
             </HoverBorderGradient>
             <HoverBorderGradient
               link="https://www.linkedin.com/in/anik-deb-0117641b2/"
@@ -85,8 +85,8 @@ const AboutMe = () => {
               as="button"
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
             >
-              <FaLinkedin className="text-blue-600" />
-              <span>LinkedIn</span>
+              <FaLinkedin className="text-blue-600 text-xs md:text-sm lg:text-lg" />
+              <span className="text-xs md:text-sm lg:text-lg">Linkedin</span>
             </HoverBorderGradient>
           </div>
           <div className="flex items-center justify-center mt-5">

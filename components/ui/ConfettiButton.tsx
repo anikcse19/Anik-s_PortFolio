@@ -27,8 +27,6 @@ const ConfettiButton = () => {
     <button
       onClick={handleClick}
       style={{
-        padding: "10px 20px",
-        fontSize: "16px",
         backgroundColor: "black",
         color: "white",
         // border: "none",
@@ -39,6 +37,7 @@ const ConfettiButton = () => {
         gap: "5px",
         border: ".5px solid white",
       }}
+      className="text-xs md:text-sm lg:text-lg px-8 py-2"
     >
       {!copied && <IoMdCopy className="flex " />}
       {copied ? "copied!" : "Copy my email"}

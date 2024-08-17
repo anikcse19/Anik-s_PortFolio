@@ -46,9 +46,10 @@ const ProjectShowCase = () => {
                   </CardItem>
                   <div className="flex justify-between items-center mt-20">
                     <CardItem
+                      from="tooltip"
                       translateZ={20}
                       translateX={-40}
-                      as="button"
+                      // as="button"
                       className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white flex items-center gap-2"
                     >
                       <AnimatedTooltip items={project.iconLists} />

@@ -99,6 +99,7 @@ export const CardItem = ({
   as: Tag = "div",
   children,
   className,
+  from,
   translateX = 0,
   translateY = 0,
   translateZ = 0,
@@ -111,6 +112,7 @@ export const CardItem = ({
   as?: React.ElementType;
   children: React.ReactNode;
   className?: string;
+  from?: string;
   projectLink?: string;
   translateX?: number | string;
   translateY?: number | string;
@@ -139,7 +141,7 @@ export const CardItem = ({
   return (
     <Tag
       onClick={() => {
-        window.open(`${projectLink}`, "_blank");
+        if (from && from != "tooltip") window.open(`${projectLink}`, "_blank");
       }}
       ref={ref}
       className={cn("w-fit transition duration-200 ease-linear", className)}
