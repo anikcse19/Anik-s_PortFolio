@@ -60,7 +60,7 @@ const AboutMe = () => {
           </p>
           <div className="flex items-center justify-center flex-wrap sm:flex-nowrap  gap-1 md:gap-3 mt-5">
             <HoverBorderGradient
-              link="https://github.com/Anikcse19"
+              link="https://www.facebook.com/anik.chandra.dev.37"
               containerClassName="rounded-full"
               as="button"
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"

@@ -21,7 +21,7 @@ import SEOImg from "@/public/SEOImg.png";
 
 const Grid = () => {
   return (
-    <section id="about" className="py-5">
+    <section id="services" className="py-5">
       {/* sparkless */}
       <div>
         <div className="h-fit w-full flex flex-col items-center justify-center overflow-hidden rounded-md mb-5">
