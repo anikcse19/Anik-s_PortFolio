@@ -18,12 +18,14 @@ const ProjectShowCase = () => {
               <CardContainer key={project.id} className="inter-var w-full">
                 <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-[#020817] dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
                   <CardItem
+                    from="title"
                     translateZ="50"
                     className="text-lg font-bold text-neutral-600 dark:text-white"
                   >
                     {project.title}
                   </CardItem>
                   <CardItem
+                    from="desc"
                     as="p"
                     translateZ="60"
                     className="text-neutral-500 text-sm lg:text-[10px] max-w-sm mt-2 dark:text-neutral-300"
@@ -31,6 +33,7 @@ const ProjectShowCase = () => {
                     {project.des}
                   </CardItem>
                   <CardItem
+                    from="img"
                     translateZ="100"
                     rotateX={20}
                     rotateZ={-10}
@@ -55,6 +58,7 @@ const ProjectShowCase = () => {
                       <AnimatedTooltip items={project.iconLists} />
                     </CardItem>
                     <CardItem
+                      from="show"
                       projectLink={project.link}
                       translateZ={20}
                       translateX={40}

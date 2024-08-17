@@ -141,7 +141,7 @@ export const CardItem = ({
   return (
     <Tag
       onClick={() => {
-        if (from != "tooltip") window.open(`${projectLink}`, "_blank");
+        if (from == "show") window.open(`${projectLink}`, "_blank");
       }}
       ref={ref}
       className={cn("w-fit transition duration-200 ease-linear", className)}
