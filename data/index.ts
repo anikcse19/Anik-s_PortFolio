@@ -139,7 +139,7 @@ export const projects = [
         image: '/fm.svg'
       }
     ],
-    link: "https://subtle-torrone-21476d.netlify.app/",
+    link: "https://e-commerce-front-c253.vercel.app/",
   },
   {
     id: 3,
