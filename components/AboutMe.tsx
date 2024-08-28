@@ -47,7 +47,7 @@ const AboutMe = () => {
       >
         <div
           style={{
-            backgroundImage: " url('/me.jpeg')",
+            backgroundImage: " url('/me.png')",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             filter: "blur(3px)" /* Apply blur to the entire element */,

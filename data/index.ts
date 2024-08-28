@@ -139,7 +139,7 @@ export const projects = [
         image: '/fm.svg'
       }
     ],
-    link: "https://e-commerce-front-wheat.vercel.app/",
+    link: "https://easy-tech-ten.vercel.app/",
   },
   {
     id: 3,

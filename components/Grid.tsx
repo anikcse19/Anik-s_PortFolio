@@ -110,7 +110,7 @@ const items = [
     // icon: <IconBoxAlignTopLeft className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "SEO Expert",
+    title: "Code Debugging",
     description: "Embark on exciting journeys and thrilling discoveries.",
     header: "/SEOImg.png",
     // icon: <IconBoxAlignRightFilled className="h-4 w-4 text-neutral-500" />,
