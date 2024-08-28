@@ -7,6 +7,7 @@ import ProjectHeader from "@/components/ProjectHeader";
 import Projects from "@/components/ProjectHeader";
 import ProjectShowCase from "@/components/ProjectShowCase";
 import Testimonials from "@/components/Testimonials";
+import Technologies from "@/components/Technologies";
 import Footer from "@/components/Footer";
 import { FloatingNav } from "@/components/ui/FloatingNav";
 import { navItems } from "@/data";
@@ -22,6 +23,7 @@ export default function Home() {
         <ProjectShowCase />
         <Experiences />
         <AboutMe />
+        <Technologies />
         <Education />
         <Grid />
         <Testimonials />
