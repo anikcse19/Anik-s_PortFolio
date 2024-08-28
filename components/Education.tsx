@@ -45,11 +45,16 @@ const Education = () => {
     },
   ];
   return (
-    <div className="my-10">
-      <TextRevealCard
+    <div className="my-16">
+      {/* <TextRevealCard
         text="Education Courses and Recognition"
         revealText="Recognition Courses and Education "
-      />
+      /> */}
+      <div className="flex justify-center mb-3">
+        <h1 className="text-base md:text-lg lg:text-xl text-blue-200 font-bold tracking-widest">
+          Education Course and Recognition
+        </h1>
+      </div>
       <div>
         <div className="w-full mx-auto">
           <HoverEffect items={educations} />

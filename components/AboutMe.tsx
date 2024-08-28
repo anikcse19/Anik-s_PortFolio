@@ -12,31 +12,36 @@ import ConfettiButton from "./ui/ConfettiButton";
 const AboutMe = () => {
   return (
     <div id="about" className="mt-5 mb-10">
+      <div className="flex justify-center mb-3">
+        <h1 className="text-base md:text-lg lg:text-xl text-blue-200 font-bold tracking-widest">
+          About Me
+        </h1>
+      </div>
       {/* sparkless */}
       <div>
         <div className="h-fit w-full flex flex-col items-center justify-center overflow-hidden rounded-md mb-5">
-          <h1 className="md:text-3xl text-3xl lg:text-6xl font-medium text-center text-blue-200 relative z-20 pb-2">
+          {/* <h1 className="md:text-3xl text-3xl lg:text-6xl font-medium text-center text-blue-200 relative z-20 pb-2">
             About Me
-          </h1>
+          </h1> */}
           <div className="w-[40rem] h-16 relative">
             {/* Gradients */}
-            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[12px] w-3/4 blur-sm" />
+            {/* <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[12px] w-3/4 blur-sm" />
             <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
             <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" /> */}
 
             {/* Core component */}
-            <SparklesCore
+            {/* <SparklesCore
               background="transparent"
               minSize={0.4}
               maxSize={1}
               particleDensity={1200}
               className="w-full h-full"
               particleColor="#FFFFFF"
-            />
+            /> */}
 
             {/* Radial Gradient to prevent sharp edges */}
-            <div className="absolute inset-0 w-full h-full  [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
+            {/* <div className="absolute inset-0 w-full h-full  [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div> */}
           </div>
         </div>
       </div>
@@ -50,13 +55,14 @@ const AboutMe = () => {
             backgroundImage: " url('/me.png')",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
-            filter: "blur(3px)" /* Apply blur to the entire element */,
+            filter: "blur(2px)" /* Apply blur to the entire element */,
           }}
           className={`bg-cover bg-center w-full h-full group-hover:scale-110 group-hover:blur-0 transition-all duration-500 ease-in-out`}
         />{" "}
         <div className="absolute bottom-[10%] left-[50%] -translate-x-1/2">
-          <p className="text-[10px] md:text-sm tracking-widest capitalize p-3 text-center">
-            Knack of building applications with front and back end operations.
+          <p className="text-[10px] md:text-sm tracking-widest capitalize p-3 text-center text-blue-300">
+            I am a results-oriented frontend developer with a strong passion for
+            crafting intuitive and visually appealing user interfaces.
           </p>
           <div className="flex items-center justify-center flex-wrap sm:flex-nowrap  gap-1 md:gap-3 mt-5">
             <HoverBorderGradient
@@ -66,7 +72,7 @@ const AboutMe = () => {
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
             >
               <FaFacebook className="text-blue-400 text-xs md:text-sm lg:text-lg" />
-              <span className="text-xs md:text-sm lg:text-lg">Facebook</span>
+              <span className="text-xs md:text-sm">Facebook</span>
             </HoverBorderGradient>
             <HoverBorderGradient
               link="https://github.com/Anikcse19"
@@ -75,7 +81,7 @@ const AboutMe = () => {
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
             >
               <FaGithub className="text-xs md:text-sm lg:text-lg" />
-              <span className="text-xs md:text-sm lg:text-lg">Github</span>
+              <span className="text-xs md:text-sm">Github</span>
             </HoverBorderGradient>
             <HoverBorderGradient
               link="https://www.linkedin.com/in/anik-deb-0117641b2/"
@@ -84,7 +90,7 @@ const AboutMe = () => {
               className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
             >
               <FaLinkedin className="text-blue-600 text-xs md:text-sm lg:text-lg" />
-              <span className="text-xs md:text-sm lg:text-lg">Linkedin</span>
+              <span className="text-xs md:text-sm">Linkedin</span>
             </HoverBorderGradient>
           </div>
           <div className="flex items-center justify-center mt-5">

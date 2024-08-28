@@ -41,7 +41,7 @@ export const TextGenerateEffect = ({
                 idx > 6
                   ? "text-cyan-500"
                   : "dark:text-white tracking-wider text-center text-black"
-              }  opacity-0  text-sm md:text-lg lg:text-4xl tracking-wider`}
+              }  opacity-0  text-sm md:text-lg lg:text-xl tracking-wider`}
               style={{
                 filter: filter ? "blur(10px)" : "none",
               }}

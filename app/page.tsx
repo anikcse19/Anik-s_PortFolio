@@ -2,6 +2,7 @@ import AboutMe from "@/components/AboutMe";
 import Education from "@/components/Education";
 import Grid from "@/components/Grid";
 import Hero from "@/components/Hero";
+
 import ProjectHeader from "@/components/ProjectHeader";
 import Projects from "@/components/ProjectHeader";
 import ProjectShowCase from "@/components/ProjectShowCase";
@@ -10,6 +11,7 @@ import Footer from "@/components/Footer";
 import { FloatingNav } from "@/components/ui/FloatingNav";
 import { navItems } from "@/data";
 import Image from "next/image";
+import Experiences from "@/components/Experiences";
 
 export default function Home() {
   return (
@@ -18,6 +20,7 @@ export default function Home() {
         <FloatingNav className="hidden md:flex" navItems={navItems} />
         <Hero />
         <ProjectShowCase />
+        <Experiences />
         <AboutMe />
         <Education />
         <Grid />

@@ -9,8 +9,8 @@ const ProjectShowCase = () => {
   return (
     <div id="projects" className="w-full">
       <div className="w-full ">
-        <h1 className="text-4xl md:text-4xl lg:text-3xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 py-6 bg-clip-text text-blue-200 bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
-          Review and Give Feedback of My <Cover>Projects</Cover>
+        <h1 className="text-base md:text-lg lg:text-xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 py-6 bg-clip-text text-blue-200 bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
+          Review and Give Feedback of My Projects
         </h1>
         <div className="w-full">
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-3">
@@ -20,7 +20,7 @@ const ProjectShowCase = () => {
                   <CardItem
                     from="title"
                     translateZ="50"
-                    className="text-lg font-bold text-neutral-600 dark:text-white"
+                    className="text-sm font-bold text-neutral-600 dark:text-white "
                   >
                     {project.title}
                   </CardItem>
@@ -28,7 +28,7 @@ const ProjectShowCase = () => {
                     from="desc"
                     as="p"
                     translateZ="60"
-                    className="text-neutral-500 text-sm lg:text-[10px] max-w-sm mt-2 dark:text-neutral-300"
+                    className="text-neutral-500 text-sm lg:text-[10px] max-w-sm mt-2 py-5 dark:text-neutral-300"
                   >
                     {project.des}
                   </CardItem>
