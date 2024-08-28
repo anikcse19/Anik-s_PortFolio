@@ -76,7 +76,7 @@ export const projects = [
   {
     id: 1,
     title: "Spinner App - Try Your Luck",
-    des: "Explore the wonders of our solar system with this captivating 3D simulation of the planets using Three.js.",
+    des: "An Online live streaming cassino game app directed by Web-Sockets, build with react,taiwind,laravell and web sockets",
     img: "/p1.png",
     iconLists: [
       {
@@ -110,7 +110,7 @@ export const projects = [
   {
     id: 2,
     title: "EasyTech - Techno E-commerce Site",
-    des: "Simplify your video conferencing experience with Yoom. Seamlessly connect with colleagues and friends.",
+    des: "Simplify your purchasing techno products. Implemented stripe as payment method and have a attractive dashboard for  super admin.",
     img: "/p2.png",
     iconLists: [
       {
@@ -144,7 +144,7 @@ export const projects = [
   {
     id: 3,
     title: "Imdb Movies - Flims Related Artilces",
-    des: "A REAL Software-as-a-Service app with AI features and a payments and credits system using the latest tech stack.",
+    des: "A movie, web-series and any kinds of films blog site. Implemented Rich-Text-Editor for writing blog as authenticated user.",
     img: "/p3.png",
     iconLists: [
       {
@@ -178,7 +178,7 @@ export const projects = [
   {
     id: 4,
     title: "AgList - List and maintainance of Agent",
-    des: "Recreated the Apple iPhone 15 Pro website, combining GSAP animations and Three.js 3D effects..",
+    des: "Keep the track of your all employee's information and activities and also track empolyee chain.",
     img: "/p4.png",
     iconLists: [
       {

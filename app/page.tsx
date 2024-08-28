@@ -17,10 +17,10 @@ export default function Home() {
       <div className="max-w-7xl w-full">
         <FloatingNav className="hidden md:flex" navItems={navItems} />
         <Hero />
-        <Grid />
-        <AboutMe />
         <ProjectShowCase />
+        <AboutMe />
         <Education />
+        <Grid />
         <Testimonials />
         <Footer />
       </div>

@@ -74,38 +74,43 @@ const Skeleton = () => (
 const items = [
   {
     title: "Web Development",
-    description: "Explore the birth of groundbreaking ideas and inventions.",
+    description:
+      "I craft intuitive and visually appealing user interfaces that enhance the user experience.",
     header: "/webDev.jpeg",
     // icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
   },
   {
     title: "Web Desgning",
-    description: "Dive into the transformative power of technology.",
+    description:
+      "I create visually stunning and responsive websites that captivate audiences and drive results.",
     header: "/webDesign.jpeg",
     // icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
   },
   {
     title: "Backend Development",
-    description: "Discover the beauty of thoughtful and functional design.",
+    description:
+      "I am proficient in server-side programming languages, databases, and APIs.",
     header: "/backendImg.png",
     // icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
   },
   {
     title: "Full Stack Development",
     description:
-      "Understand the impact of effective communication in our lives.",
+      "I am proficient in languages like JavaScript, Python, and frameworks such as React, Node.js, and Express.Js.",
     header: "/fullStackImg.png",
     // icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
   },
   {
     title: "Content Writing",
-    description: "Join the quest for understanding and enlightenment.",
+    description:
+      "I specialize in creating clear, concise, and engaging technical documentation and tutorials for developers.",
     header: "/contentWritingImg.jpg",
     // icon: <IconArrowWaveRightUp className="h-4 w-4 text-neutral-500" />,
   },
   {
     title: "Business Analyst",
-    description: "Experience the thrill of bringing ideas to life.",
+    description:
+      "I bridge the gap between business needs and technical solutions by conducting thorough analysis and requirements gathering.",
     header: "/businessAnaImg.png",
     // icon: <IconBoxAlignTopLeft className="h-4 w-4 text-neutral-500" />,
   },
