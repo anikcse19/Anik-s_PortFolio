@@ -52,7 +52,7 @@ const Education = () => {
       /> */}
       <div className="flex justify-center mb-3">
         <h1 className="text-base md:text-lg lg:text-xl text-blue-200 font-bold tracking-widest">
-          Education Course and Recognition
+          Education and Courses
         </h1>
       </div>
       <div>

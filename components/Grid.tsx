@@ -57,7 +57,7 @@ const items = [
     // icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Web Desgning",
+    title: "Web Designing",
     description:
       "I create visually stunning and responsive websites that captivate audiences and drive results.",
     header: "/webDesign.jpeg",
