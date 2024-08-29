@@ -1,8 +1,10 @@
+"use client";
 import { title } from "process";
-import React from "react";
+import React, { useState } from "react";
 import { MagicButton } from "./ui/MagicButton";
 
 const Technologies = () => {
+  const [techType, setTechType] = useState("frontend");
   const frontendSkill = [
     {
       title: "JavaScript",
@@ -101,64 +103,112 @@ const Technologies = () => {
           Tech Stack
         </h1>
       </div>
+      <div className="flex justify-center mt-4">
+        <div className="flex items-center gap-4">
+          <span
+            onClick={() => {
+              setTechType("frontend");
+            }}
+            className={`${
+              techType == "frontend" &&
+              "border-b-4 border-red-600 dark:text-blue-900"
+            }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
+          >
+            Frontend
+          </span>
+          <span
+            onClick={() => {
+              setTechType("backend");
+            }}
+            className={`${
+              techType == "backend" &&
+              "border-b-4 border-red-200 dark:text-blue-900"
+            }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
+          >
+            Backend
+          </span>
+          <span
+            onClick={() => {
+              setTechType("database");
+            }}
+            className={`${
+              techType == "database" &&
+              "border-b-4 border-red-200 dark:text-blue-900"
+            }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
+          >
+            Database
+          </span>
+          <span
+            onClick={() => {
+              setTechType("others");
+            }}
+            className={`${
+              techType == "others" &&
+              "border-b-4 border-red-200 dark:text-blue-900"
+            }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
+          >
+            Others
+          </span>
+        </div>
+      </div>
       <div className="flex flex-col">
-        <div>
-          <p>Frontend</p>
-          <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
-            {frontendSkill.map((f, i) => (
-              <MagicButton
-                key={i}
-                title={f.title}
-                img={f.img}
-                position="right"
-                from="techStack"
-              />
-            ))}
+        {techType == "frontend" ? (
+          <div>
+            <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
+              {frontendSkill.map((f, i) => (
+                <MagicButton
+                  key={i}
+                  title={f.title}
+                  img={f.img}
+                  position="right"
+                  from="techStack"
+                />
+              ))}
+            </div>
           </div>
-        </div>
-
-        <div>
-          <p>Backend</p>
-          <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
-            {backendSkill.map((f, i) => (
-              <MagicButton
-                key={i}
-                title={f.title}
-                img={f.img}
-                position="right"
-                from="techStack"
-              />
-            ))}
+        ) : techType == "backend" ? (
+          <div>
+            <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
+              {backendSkill.map((f, i) => (
+                <MagicButton
+                  key={i}
+                  title={f.title}
+                  img={f.img}
+                  position="right"
+                  from="techStack"
+                />
+              ))}
+            </div>
           </div>
-        </div>
-        <div>
-          <p>Database</p>
-          <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
-            {dataBaseSkill.map((f, i) => (
-              <MagicButton
-                key={i}
-                title={f.title}
-                img={f.img}
-                position="right"
-                from="techStack"
-              />
-            ))}
+        ) : techType == "database" ? (
+          <div>
+            <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
+              {dataBaseSkill.map((f, i) => (
+                <MagicButton
+                  key={i}
+                  title={f.title}
+                  img={f.img}
+                  position="right"
+                  from="techStack"
+                />
+              ))}
+            </div>
           </div>
-        </div>
-        <div>
-          <p>Others</p>
-          <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
-            {othersSkill.map((f, i) => (
-              <MagicButton
-                key={i}
-                title={f.title}
-                img={f.img}
-                position="right"
-                from="techStack"
-              />
-            ))}
+        ) : (
+          <div>
+            <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
+              {othersSkill.map((f, i) => (
+                <MagicButton
+                  key={i}
+                  title={f.title}
+                  img={f.img}
+                  position="right"
+                  from="techStack"
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
