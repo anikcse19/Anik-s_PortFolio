@@ -104,7 +104,7 @@ const Technologies = () => {
       <div className="flex flex-col">
         <div>
           <p>Frontend</p>
-          <div className="grid grid-cols-5 md:grid-cols-6 space-x-2 space-y-3 py-4">
+          <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
             {frontendSkill.map((f, i) => (
               <MagicButton
                 key={i}
@@ -119,7 +119,7 @@ const Technologies = () => {
 
         <div>
           <p>Backend</p>
-          <div className="grid grid-cols-5 md:grid-cols-6 space-x-2 space-y-3 py-4">
+          <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
             {backendSkill.map((f, i) => (
               <MagicButton
                 key={i}
@@ -133,7 +133,7 @@ const Technologies = () => {
         </div>
         <div>
           <p>Database</p>
-          <div className="grid grid-cols-5 md:grid-cols-6 space-x-2 space-y-3 py-4">
+          <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
             {dataBaseSkill.map((f, i) => (
               <MagicButton
                 key={i}
@@ -147,7 +147,7 @@ const Technologies = () => {
         </div>
         <div>
           <p>Others</p>
-          <div className="grid grid-cols-5 md:grid-cols-6 space-x-2 space-y-3 py-4">
+          <div className="grid grid-cols-3 md:grid-cols-6 space-x-2 space-y-3 py-4">
             {othersSkill.map((f, i) => (
               <MagicButton
                 key={i}
