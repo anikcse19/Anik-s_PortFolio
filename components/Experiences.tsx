@@ -9,23 +9,25 @@ const Experiences = () => {
           Experience
         </h1>
       </div>
-      <CardSpotlight className="h-fit w-80 lg:w-96 hover:scale-105 transition-all duration-500 ease-in-out">
-        <p className="text-xl font-bold relative z-20 mt-2 text-white">
-          CloudySign LLC
-        </p>
-        <p>Dubai</p>
-        <p className="z-20 mt-2">
-          Frontend Developer - Remote (01.02.2023 - Present)
-        </p>
-        <div className="text-neutral-200 mt-4 relative z-20">
-          Responsibilites:
-          <ul className="list-none  mt-2">
-            <Step title="Developed and maintained front-end applications using React JS, Next JS, Redux, TypeScript, webSockets." />
-            <Step title="Collaborated with backend developers to integrate front-end components with RESTful APIs." />
-            <Step title="Troubleshooted and debugged issues to ensure smooth deployment of applications." />
-          </ul>
-        </div>
-      </CardSpotlight>
+      <div className="flex items-center justify-center">
+        <CardSpotlight className="h-fit w-80 lg:w-96 hover:scale-105 transition-all duration-500 ease-in-out">
+          <p className="text-xl font-bold relative z-20 mt-2 text-white">
+            CloudySign LLC
+          </p>
+          <p>Dubai</p>
+          <p className="z-20 mt-2">
+            Frontend Developer - Remote (01.02.2023 - Present)
+          </p>
+          <div className="text-neutral-200 mt-4 relative z-20">
+            Responsibilites:
+            <ul className="list-none  mt-2">
+              <Step title="Developed and maintained front-end applications using React JS, Next JS, Redux, TypeScript, webSockets." />
+              <Step title="Collaborated with backend developers to integrate front-end components with RESTful APIs." />
+              <Step title="Troubleshooted and debugged issues to ensure smooth deployment of applications." />
+            </ul>
+          </div>
+        </CardSpotlight>
+      </div>
     </div>
   );
 };
