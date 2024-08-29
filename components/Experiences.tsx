@@ -9,7 +9,7 @@ const Experiences = () => {
           Experience
         </h1>
       </div>
-      <CardSpotlight className="h-fit w-96 hover:scale-105 transition-all duration-500 ease-in-out">
+      <CardSpotlight className="h-fit w-80 lg:w-96 hover:scale-105 transition-all duration-500 ease-in-out">
         <p className="text-xl font-bold relative z-20 mt-2 text-white">
           CloudySign LLC
         </p>
