@@ -4,12 +4,12 @@ import { CardSpotlight } from "./ui/CardSpotlight";
 const Experiences = () => {
   return (
     <div className="my-10">
-      <div className="flex justify-center mb-3">
+      {/* <div className="flex justify-center mb-6">
         <h1 className="text-base md:text-lg lg:text-xl text-blue-200 font-bold tracking-widest">
           Experience
         </h1>
-      </div>
-      <div className="flex items-center justify-center">
+      </div> */}
+      <div className="flex items-center justify-center lg:justify-start pt-10">
         <CardSpotlight className="h-fit w-80 lg:w-96 hover:scale-105 transition-all duration-500 ease-in-out">
           <p className="text-xl font-bold relative z-20 mt-2 text-white">
             CloudySign LLC

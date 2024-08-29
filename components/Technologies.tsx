@@ -97,12 +97,12 @@ const Technologies = () => {
     },
   ];
   return (
-    <div id="technologies" className="my-8 md:my-16">
-      <div className="flex justify-center mb-3">
+    <div id="technologies" className="w-full min-h-[80vh]">
+      {/* <div className="flex justify-center mb-3">
         <h1 className="text-base md:text-lg lg:text-xl text-blue-200 font-bold tracking-widest">
           Tech Stack
         </h1>
-      </div>
+      </div> */}
       <div className="flex justify-center mt-4">
         <div className="flex items-center gap-4">
           <span
@@ -122,7 +122,7 @@ const Technologies = () => {
             }}
             className={`${
               techType == "backend" &&
-              "border-b-4 border-red-200 dark:text-blue-900"
+              "border-b-4 border-red-600 dark:text-blue-900"
             }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
           >
             Backend
@@ -133,7 +133,7 @@ const Technologies = () => {
             }}
             className={`${
               techType == "database" &&
-              "border-b-4 border-red-200 dark:text-blue-900"
+              "border-b-4 border-red-600 dark:text-blue-900"
             }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
           >
             Database
@@ -144,7 +144,7 @@ const Technologies = () => {
             }}
             className={`${
               techType == "others" &&
-              "border-b-4 border-red-200 dark:text-blue-900"
+              "border-b-4 border-red-600 dark:text-blue-900"
             }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
           >
             Others

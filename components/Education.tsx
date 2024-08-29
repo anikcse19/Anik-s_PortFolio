@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { TextRevealCard } from "./ui/TextRevealCard";
 import { HoverEffect } from "./ui/HoverCardEffect";
 import { FaUserGraduate } from "react-icons/fa";
@@ -6,7 +8,8 @@ import { PiExamFill } from "react-icons/pi";
 import { SiCoursera } from "react-icons/si";
 
 const Education = () => {
-  const educations = [
+  const [eduType, setEduType] = useState("academic");
+  const academicEducations = [
     {
       title: "Graduation",
       major: "Department of CSE",
@@ -14,6 +17,17 @@ const Education = () => {
       icon: <FaUserGraduate className="text-lg text-blue-400" />,
       link: "https://www.portcity.edu.bd/",
     },
+
+    {
+      title: "Higher Secondary",
+      major: "Science",
+      institute: "Hazera Taju University College",
+      icon: <PiExamFill className="text-lg text-blue-400" />,
+      link: "https://www.htdc.edu.bd/",
+    },
+  ];
+
+  const courseEducation = [
     {
       title: "Phitron",
       major: "Software Engineer",
@@ -35,30 +49,57 @@ const Education = () => {
       icon: <SiCoursera className="text-lg text-blue-400" />,
       link: "https://www.programming-hero.com/",
     },
-
-    {
-      title: "Higher Secondary",
-      major: "Science",
-      institute: "Hazera Taju University College",
-      icon: <PiExamFill className="text-lg text-blue-400" />,
-      link: "https://www.htdc.edu.bd/",
-    },
   ];
+
+  console.log("ed", eduType);
+
   return (
     <div className="my-16">
       {/* <TextRevealCard
         text="Education Courses and Recognition"
         revealText="Recognition Courses and Education "
       /> */}
-      <div className="flex justify-center mb-3">
+      {/* <div className="flex justify-center mb-3">
         <h1 className="text-base md:text-lg lg:text-xl text-blue-200 font-bold tracking-widest">
           Education and Courses
         </h1>
+      </div> */}
+
+      {/* tab */}
+      <div className="my-3 flex">
+        <div className="flex flex-col gap-y-3">
+          <span
+            onClick={() => {
+              setEduType("academic");
+            }}
+            className={`${
+              eduType == "academic" && " border-l-4 border-red-600 bg-slate-900"
+            } cursor-pointer px-5 py-1 rounded`}
+          >
+            Academic
+          </span>
+          <span
+            onClick={() => {
+              setEduType("course");
+            }}
+            className={`${
+              eduType == "course" && " border-l-4 border-red-600 bg-slate-900"
+            } cursor-pointer px-5 py-1 rounded`}
+          >
+            Courses
+          </span>
+        </div>
       </div>
       <div>
-        <div className="w-full mx-auto">
-          <HoverEffect items={educations} />
-        </div>
+        {eduType == "academic" ? (
+          <div className="w-full mx-auto">
+            <HoverEffect items={academicEducations} />
+          </div>
+        ) : (
+          <div className="w-full mx-auto">
+            <HoverEffect items={courseEducation} />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -12,11 +12,11 @@ import ConfettiButton from "./ui/ConfettiButton";
 const AboutMe = () => {
   return (
     <div id="about" className="mt-5 mb-10">
-      <div className="flex justify-center mb-3">
+      {/* <div className="flex justify-center mb-3">
         <h1 className="text-base md:text-lg lg:text-xl text-blue-200 font-bold tracking-widest">
           About Me
         </h1>
-      </div>
+      </div> */}
 
       {/* about */}
       <div className="flex flex-col gap-y-5 lg:flex-row justify-between group">

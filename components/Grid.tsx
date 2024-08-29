@@ -22,11 +22,11 @@ import SEOImg from "@/public/SEOImg.png";
 const Grid = () => {
   return (
     <section id="services" className="py-5">
-      <div className="flex justify-center mb-10">
+      {/* <div className="flex justify-center mb-10">
         <h1 className="text-base md:text-lg lg:text-xl text-blue-200 font-bold tracking-widest">
           Services
         </h1>
-      </div>
+      </div> */}
       <BentoGrid className="w-full mx-auto">
         {items.map((item, i) => (
           <BentoGridItem
