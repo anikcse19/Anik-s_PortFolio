@@ -25,12 +25,12 @@ const Hero = () => {
   };
 
   return (
-    <div className="mb-20 pt-16 md:pt-36 ">
+    <div className="mb-10 pt-16 md:pt-36 ">
       <div className="">
         {" "}
         <Spotlight
           className="-top-40 -left-10 md:left-22 md:-top-20 h-screen"
-          fill="white"
+          fill="blue"
         />
         <Spotlight
           className="h-[80vh] w-[50vw] top-10 left-full"
@@ -50,28 +50,28 @@ const Hero = () => {
       <div className=" flex justify-center my-15 z-50 relative">
         <div className="flex flex-col gap-y-3 items-center max-w-[89vw] md:max-w-2xl lg:max-w-[60vw]">
           <div className="text-sm md:text-base lg:text-lg mx-auto font-normal text-neutral-600 dark:text-blue-200">
-            Hi, I am Anik. I am a
+            Hi, I am Anik Chandra Deb. I am a
             <FlipWords words={words} />
           </div>
-          <TextGenerateEffect
+          {/* <TextGenerateEffect
             className="text-blue-300 tracking-wider text-sm"
             duration={2}
             // filter={false}
             words="Hello, How are You? Hope good! Let's Explore!"
-          />
+          /> */}
 
           {/* <p className="p-2 text-sm md:text-base tracking-wider">
             Hi i am anik, a next js developer bases in bangladesh
           </p> */}
-          <div className="flex items-center gap-2">
-            <a href="#projects">
+          <div className="flex items-center gap-2 mt-3">
+            {/* <a href="#projects">
               <MagicButton
                 title="Show my work"
                 icon={<FaLocationArrow />}
                 position="right"
                 from="work"
               />
-            </a>
+            </a> */}
             <p onClick={handleDownload}>
               <MagicButton
                 title="Download my Resume"

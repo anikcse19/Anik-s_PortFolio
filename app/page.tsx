@@ -17,25 +17,16 @@ import Experiences from "@/components/Experiences";
 import { useState } from "react";
 
 export default function Home() {
-  const [pageType, setPageType] = useState("about-me");
+  const [pageType, setPageType] = useState("projects");
   return (
     <main className="relative bg-black-100 flex justify-center items-center flex-col overflow-hidden mx-auto sm:px-10 px-5">
+      <Hero />
+      <AboutMe />
       <div className=" w-full flex flex-col gap-y-3 lg:gap-y-10 pt-10">
         {/* <FloatingNav className="hidden md:flex" navItems={navItems} /> */}
         {/* <Hero /> */}
-        <div className="flex justify-around">
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
-            <span
-              onClick={() => {
-                setPageType("about-me");
-              }}
-              className={`${
-                pageType == "about-me" && " border-b-4 border-red-600"
-              } cursor-pointer px-4 py-1 rounded text-[10px] text-sm text-center`}
-            >
-              About Me
-            </span>
-
+        <div className="flex justify-center">
+          <div className="flex justify-center flex-wrap lg:flex-nowrap gap-3">
             <span
               onClick={() => {
                 setPageType("projects");
@@ -86,21 +77,9 @@ export default function Home() {
             >
               Services
             </span>
-            <span
-              onClick={() => {
-                setPageType("testimonials");
-              }}
-              className={`${
-                pageType == "testimonials" && " border-b-4 border-red-600"
-              } cursor-pointer px-4 py-1 rounded text-[10px] text-sm text-center`}
-            >
-              Testimonials
-            </span>
           </div>
         </div>
-        {pageType == "about-me" ? (
-          <AboutMe />
-        ) : pageType == "projects" ? (
+        {pageType == "projects" ? (
           <ProjectShowCase />
         ) : pageType == "experience" ? (
           <Experiences />
@@ -108,12 +87,11 @@ export default function Home() {
           <Technologies />
         ) : pageType == "education" ? (
           <Education />
-        ) : pageType == "services" ? (
-          <Grid />
         ) : (
-          pageType == "testimonials" && <Testimonials />
+          pageType == "services" && <Grid />
         )}
 
+        <Testimonials />
         <Footer />
       </div>
     </main>
