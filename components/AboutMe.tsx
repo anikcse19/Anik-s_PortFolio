@@ -4,12 +4,19 @@ import aboutMe from "@/public/aboutMe.png";
 import ba from "@/public/businessAnaImg.png";
 import Image from "next/image";
 import { HoverBorderGradient } from "./ui/BorderGradiant";
-import { FaFacebook } from "react-icons/fa";
+import { FaCloudDownloadAlt, FaFacebook } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import ConfettiButton from "./ui/ConfettiButton";
+import { MagicButton } from "./ui/MagicButton";
 
 const AboutMe = () => {
+  const handleDownload = () => {
+    window.open(
+      "https://drive.google.com/file/d/1WI5jh-lnapKYkwHJd162tZPFbov1H69D/view?usp=sharing",
+      "_blank"
+    );
+  };
   return (
     <div id="about" className="mt-5 mb-10">
       {/* <div className="flex justify-center mb-3">
@@ -63,7 +70,17 @@ const AboutMe = () => {
               </HoverBorderGradient>
             </div>
             <div className="flex items-center justify-center mt-5">
-              <ConfettiButton />
+              <div className="flex items-center gap-4">
+                <p onClick={handleDownload}>
+                  <MagicButton
+                    title="Download my Resume"
+                    icon={<FaCloudDownloadAlt />}
+                    position="right"
+                    from="resume"
+                  />
+                </p>
+                <ConfettiButton />
+              </div>
             </div>
           </div>
         </div>

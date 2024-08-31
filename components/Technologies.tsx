@@ -97,58 +97,63 @@ const Technologies = () => {
     },
   ];
   return (
-    <div id="technologies" className="w-full min-h-[80vh]">
+    <div id="technologies" className="w-full min-h-[50vh]">
       {/* <div className="flex justify-center mb-3">
         <h1 className="text-base md:text-lg lg:text-xl text-blue-200 font-bold tracking-widest">
           Tech Stack
         </h1>
       </div> */}
-      <div className="flex justify-center mt-4">
-        <div className="flex items-center gap-4">
-          <span
-            onClick={() => {
-              setTechType("frontend");
-            }}
-            className={`${
-              techType == "frontend" &&
-              "border-b-4 border-red-600 dark:text-blue-900"
-            }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
-          >
-            Frontend
-          </span>
-          <span
-            onClick={() => {
-              setTechType("backend");
-            }}
-            className={`${
-              techType == "backend" &&
-              "border-b-4 border-red-600 dark:text-blue-900"
-            }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
-          >
-            Backend
-          </span>
-          <span
-            onClick={() => {
-              setTechType("database");
-            }}
-            className={`${
-              techType == "database" &&
-              "border-b-4 border-red-600 dark:text-blue-900"
-            }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
-          >
-            Database
-          </span>
-          <span
-            onClick={() => {
-              setTechType("others");
-            }}
-            className={`${
-              techType == "others" &&
-              "border-b-4 border-red-600 dark:text-blue-900"
-            }px-5 py-1 rounded-md cursor-pointer tex-[10px] md:text-sm `}
-          >
-            Others
-          </span>
+      <div className="flex my-4">
+        {/* tab */}
+        <div className="my-3 flex gap-4">
+          <div className="flex flex-col gap-y-3">
+            <span
+              onClick={() => {
+                setTechType("frontend");
+              }}
+              className={`${
+                techType == "frontend" &&
+                " border-l-4 border-red-600 bg-slate-900"
+              } cursor-pointer px-5 py-1 rounded`}
+            >
+              Frontend
+            </span>
+            <span
+              onClick={() => {
+                setTechType("backend");
+              }}
+              className={`${
+                techType == "backend" &&
+                " border-l-4 border-red-600 bg-slate-900"
+              } cursor-pointer px-5 py-1 rounded`}
+            >
+              Backend
+            </span>
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <span
+              onClick={() => {
+                setTechType("database");
+              }}
+              className={`${
+                techType == "database" &&
+                " border-l-4 border-red-600 bg-slate-900"
+              } cursor-pointer px-5 py-1 rounded`}
+            >
+              Database
+            </span>
+            <span
+              onClick={() => {
+                setTechType("others");
+              }}
+              className={`${
+                techType == "others" &&
+                " border-l-4 border-red-600 bg-slate-900"
+              } cursor-pointer px-5 py-1 rounded`}
+            >
+              Others
+            </span>
+          </div>
         </div>
       </div>
       <div className="flex flex-col">

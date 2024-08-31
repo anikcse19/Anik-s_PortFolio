@@ -17,15 +17,8 @@ const Hero = () => {
     "Software-Developer",
   ];
 
-  const handleDownload = () => {
-    window.open(
-      "https://drive.google.com/file/d/1WI5jh-lnapKYkwHJd162tZPFbov1H69D/view?usp=sharing",
-      "_blank"
-    );
-  };
-
   return (
-    <div className="mb-10 pt-16 md:pt-36 ">
+    <div className=" pt-16 md:pt-36 ">
       <div className="">
         {" "}
         <Spotlight
@@ -50,7 +43,7 @@ const Hero = () => {
       <div className=" flex justify-center my-15 z-50 relative">
         <div className="flex flex-col gap-y-3 items-center max-w-[89vw] md:max-w-2xl lg:max-w-[60vw]">
           <div className="text-sm md:text-base lg:text-lg mx-auto font-normal text-neutral-600 dark:text-blue-200">
-            Hi, I am Anik Chandra Deb. I am a
+            Hi, I am Anik Chandra Deb. <br className="block lg:hidden" /> I am a
             <FlipWords words={words} />
           </div>
           {/* <TextGenerateEffect
@@ -72,14 +65,6 @@ const Hero = () => {
                 from="work"
               />
             </a> */}
-            <p onClick={handleDownload}>
-              <MagicButton
-                title="Download my Resume"
-                icon={<FaCloudDownloadAlt />}
-                position="right"
-                from="resume"
-              />
-            </p>
           </div>
         </div>
       </div>
