@@ -51,8 +51,6 @@ const Education = () => {
     },
   ];
 
-  console.log("ed", eduType);
-
   return (
     <div className="my-16">
       {/* <TextRevealCard

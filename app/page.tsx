@@ -3,7 +3,7 @@ import AboutMe from "@/components/AboutMe";
 import Education from "@/components/Education";
 import Grid from "@/components/Grid";
 import Hero from "@/components/Hero";
-
+import { Toaster } from "react-hot-toast";
 import ProjectHeader from "@/components/ProjectHeader";
 import Projects from "@/components/ProjectHeader";
 import ProjectShowCase from "@/components/ProjectShowCase";
@@ -15,6 +15,7 @@ import { navItems } from "@/data";
 import Image from "next/image";
 import Experiences from "@/components/Experiences";
 import { useState } from "react";
+import ContactMe from "@/components/ContactMe";
 
 export default function Home() {
   const [pageType, setPageType] = useState("projects");
@@ -92,7 +93,9 @@ export default function Home() {
         )}
 
         <Testimonials />
+        <ContactMe />
         <Footer />
+        <Toaster />
       </div>
     </main>
   );
