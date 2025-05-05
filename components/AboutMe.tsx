@@ -13,10 +13,11 @@ import { MagicButton } from "./ui/MagicButton";
 const AboutMe = () => {
   const handleDownload = () => {
     window.open(
-      "https://drive.google.com/file/d/1WI5jh-lnapKYkwHJd162tZPFbov1H69D/view?usp=sharing",
+      "https://drive.google.com/file/d/1CxtSh_nHNHMd2GkRgclhWwtUOCS0lajZ/view?usp=sharing",
       "_blank"
     );
   };
+
   return (
     <div id="about" className="mt-5 mb-10">
       {/* <div className="flex justify-center mb-3">
