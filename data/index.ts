@@ -69,111 +69,108 @@ export const gridItems = [
   },
 ];
 
-
-
-
 export const projects = [
   {
     id: 1,
-    title: "Spinner App - Try Your Luck",
-    des: "An Online live streaming cassino game app directed by Web-Sockets, build with react,taiwind,laravell and web sockets",
+    title: "Bondhu Group MLM System",
+    des: "A complete MLM system for managing your business. It has a complete dashboard for admin and user.",
     img: "/p1.png",
     iconLists: [
       {
         id: 1,
-        title: "React Js",
-        image: "/re.svg"
+        title: "Next Js",
+        image: "/next.svg",
       },
       {
         id: 2,
-        title: 'Tailwind CSS',
-        image: "/tail.svg"
+        title: "Tailwind CSS",
+        image: "/tail.svg",
       },
       {
         id: 3,
-        title: 'Javascript',
-        image: "/javas.svg"
+        title: "Javascript",
+        image: "/javas.svg",
       },
       {
         id: 4,
-        title: 'Web Socket',
-        image: '/webSock.png'
+        title: "Web Socket",
+        image: "/webSock.png",
       },
       {
         id: 5,
         title: "Figma",
-        image: '/fm.svg'
-      }
+        image: "/fm.svg",
+      },
     ],
-    link: "https://spinner-site.vercel.app/",
+    link: "https://multi-level-marketing-bice.vercel.app/",
   },
   {
     id: 2,
-    title: "EasyTech - Techno E-commerce Site",
-    des: "Simplify your purchasing techno products. Implemented stripe as payment method and have a attractive dashboard for  super admin.",
+    title: "Modern E-commerce",
+    des: "Simplify your purchasing products. Implemented stripe as payment method and have a attractive dashboard for  super admin.",
     img: "/p2.png",
     iconLists: [
       {
         id: 1,
         title: "Next Js",
-        image: "/next.svg"
+        image: "/next.svg",
       },
       {
         id: 2,
-        title: 'Tailwind CSS',
-        image: "/tail.svg"
+        title: "Tailwind CSS",
+        image: "/tail.svg",
       },
       {
         id: 3,
-        title: 'Javascript',
-        image: "/javas.svg"
+        title: "Javascript",
+        image: "/javas.svg",
       },
       {
         id: 4,
-        title: 'Material UI',
-        image: '/mateUi.png'
+        title: "Material UI",
+        image: "/mateUi.png",
       },
       {
         id: 5,
         title: "Figma",
-        image: '/fm.svg'
-      }
+        image: "/fm.svg",
+      },
     ],
-    link: "https://easy-tech-ten.vercel.app/",
+    link: "https://modern-ecommerce-chi.vercel.app/",
   },
   {
     id: 3,
-    title: "Imdb Movies - Flims Related Artilces",
+    title: "Epick Movies - Flims Related Artilces",
     des: "A movie, web-series and any kinds of films blog site. Implemented Rich-Text-Editor for writing blog as authenticated user.",
     img: "/p3.png",
     iconLists: [
       {
         id: 1,
-        title: "Next Js",
-        image: "/next.svg"
+        title: "React Js",
+        image: "/re.svg",
       },
       {
         id: 2,
-        title: 'Tailwind CSS',
-        image: "/tail.svg"
+        title: "Tailwind CSS",
+        image: "/tail.svg",
       },
       {
         id: 3,
-        title: 'Javascript',
-        image: "/javas.svg"
+        title: "Javascript",
+        image: "/javas.svg",
       },
       {
         id: 4,
-        title: 'Material UI',
-        image: '/mateUi.png'
+        title: "Material UI",
+        image: "/mateUi.png",
       },
       {
         id: 5,
         title: "Figma",
-        image: '/fm.svg'
-      }
+        image: "/fm.svg",
+      },
     ],
-    link: "https://movie-blog-site.vercel.app/",
+    link: "https://epickmovies.com/",
   },
   {
     id: 4,
@@ -184,34 +181,32 @@ export const projects = [
       {
         id: 1,
         title: "React Js",
-        image: "/re.svg"
+        image: "/re.svg",
       },
       {
         id: 2,
-        title: 'Tailwind CSS',
-        image: "/tail.svg"
+        title: "Tailwind CSS",
+        image: "/tail.svg",
       },
       {
         id: 3,
-        title: 'TypeScript',
-        image: "/ts.svg"
+        title: "TypeScript",
+        image: "/ts.svg",
       },
       {
         id: 4,
-        title: 'Three Js',
-        image: '/three.svg'
+        title: "Three Js",
+        image: "/three.svg",
       },
       {
         id: 5,
         title: "Figma",
-        image: '/fm.svg'
-      }
+        image: "/fm.svg",
+      },
     ],
     link: "https://1ten365-react.vercel.app/",
   },
 ];
-
-
 
 // export const testimonials = [
 //   {
