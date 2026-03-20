@@ -13,7 +13,7 @@ const ProjectShowCase = () => {
           Review and Give Feedback of My Projects
         </h1>
         <div className="w-full">
-          <div className="w-full grid grid-cols-1 md:grid-cols-2  lg:gap-x-3">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  lg:gap-x-3">
             {projects.map((project) => (
               <CardContainer key={project.id} className="inter-var w-full">
                 <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-[#020817] dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">

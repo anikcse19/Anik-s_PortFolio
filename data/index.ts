@@ -72,8 +72,8 @@ export const gridItems = [
 export const projects = [
   {
     id: 1,
-    title: "Bondhu Group MLM System",
-    des: "A complete MLM system for managing your business. It has a complete dashboard for admin and user.",
+    title: "RexVet – Online Veterinary Telehealth Platform",
+    des: "A nonprofit platform providing affordable 24/7 veterinary telehealth services, connecting pet owners with licensed vets for remote consultations, guidance, and care.",
     img: "/p1.png",
     iconLists: [
       {
@@ -102,12 +102,12 @@ export const projects = [
         image: "/fm.svg",
       },
     ],
-    link: "https://multi-level-marketing-bice.vercel.app/",
+    link: "https://rexvet.org/",
   },
   {
     id: 2,
-    title: "Modern E-commerce",
-    des: "Simplify your purchasing products. Implemented stripe as payment method and have a attractive dashboard for  super admin.",
+    title: "Sales & Analytics Management System",
+    des: "Built an intuitive role-based access system for administrators, managers, and support staff to ensure secure and efficient workflow management.",
     img: "/p2.png",
     iconLists: [
       {
@@ -136,12 +136,12 @@ export const projects = [
         image: "/fm.svg",
       },
     ],
-    link: "https://modern-ecommerce-chi.vercel.app/",
+    link: "https://holygift.com.bd/admin/dashboard",
   },
   {
     id: 3,
-    title: "Epick Movies - Flims Related Artilces",
-    des: "A movie, web-series and any kinds of films blog site. Implemented Rich-Text-Editor for writing blog as authenticated user.",
+    title: "Darkak - A Multi Vendor e-Commerce",
+    des: "Developed and launched DarKak, a responsive e-commerce platform tailored for the Bangladeshi market, ensuring seamless user experience across devices.",
     img: "/p3.png",
     iconLists: [
       {
@@ -170,18 +170,18 @@ export const projects = [
         image: "/fm.svg",
       },
     ],
-    link: "https://epickmovies.com/",
+    link: "https://darkak.com.bd/",
   },
   {
     id: 4,
-    title: "AgList - List and maintainance of Agent",
-    des: "Keep the track of your all employee's information and activities and also track empolyee chain.",
+    title: "International Shipping & Logistics Web Platform",
+    des: "Integrated interactive components such as shipment tracking, load board access, and contact forms to enhance user engagement and support operational workflows.",
     img: "/p4.png",
     iconLists: [
       {
         id: 1,
-        title: "React Js",
-        image: "/re.svg",
+        title: "Next Js",
+        image: "/next.svg",
       },
       {
         id: 2,
@@ -204,7 +204,75 @@ export const projects = [
         image: "/fm.svg",
       },
     ],
-    link: "https://1ten365-react.vercel.app/",
+    link: "https://www.rexmarinecargo.com/",
+  },
+  {
+    id: 5,
+    title: "International Sailing School Web Platform",
+    des: "A professional sailing school and charter platform offering hands-on training, certifications, and adventure sailing experiences for all skill levels in the Caribbean.",
+    img: "/p5.png",
+    iconLists: [
+      {
+        id: 1,
+        title: "Next Js",
+        image: "/next.svg",
+      },
+      {
+        id: 2,
+        title: "Tailwind CSS",
+        image: "/tail.svg",
+      },
+      {
+        id: 3,
+        title: "TypeScript",
+        image: "/ts.svg",
+      },
+      {
+        id: 4,
+        title: "Three Js",
+        image: "/three.svg",
+      },
+      {
+        id: 5,
+        title: "Figma",
+        image: "/fm.svg",
+      },
+    ],
+    link: "https://www.rexsailing.com/en",
+  },
+  {
+    id: 6,
+    title: "Cuba Care Commerce Platform",
+    des: "A Spanish-language e-commerce platform that enables users abroad to purchase essential goods and send them directly to people in Cuba, facilitating fast delivery and family support services.",
+    img: "/p6.png",
+    iconLists: [
+      {
+        id: 1,
+        title: "Next Js",
+        image: "/next.svg",
+      },
+      {
+        id: 2,
+        title: "Tailwind CSS",
+        image: "/tail.svg",
+      },
+      {
+        id: 3,
+        title: "TypeScript",
+        image: "/ts.svg",
+      },
+      {
+        id: 4,
+        title: "Three Js",
+        image: "/three.svg",
+      },
+      {
+        id: 5,
+        title: "Figma",
+        image: "/fm.svg",
+      },
+    ],
+    link: "https://cubazo.com/es",
   },
 ];
 

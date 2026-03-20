@@ -13,8 +13,8 @@ import { MagicButton } from "./ui/MagicButton";
 const AboutMe = () => {
   const handleDownload = () => {
     window.open(
-      "https://drive.google.com/file/d/1CxtSh_nHNHMd2GkRgclhWwtUOCS0lajZ/view?usp=sharing",
-      "_blank"
+      "https://drive.google.com/file/d/1m2-fIuydChZ2q6GItzuNdJX7J0lfQIy8/view?usp=drive_link",
+      "_blank",
     );
   };
 
