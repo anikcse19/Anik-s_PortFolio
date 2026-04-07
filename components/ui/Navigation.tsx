@@ -33,7 +33,7 @@ export const Navigation: React.FC = () => {
             ))}
           </div>
 
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
         </div>
       </div>
     </nav>
