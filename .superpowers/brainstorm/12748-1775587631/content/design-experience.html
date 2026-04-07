@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experience Section Design</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+      min-height: 100vh;
+      color: #e0e0e0;
+      padding: 40px 20px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 32px; margin-bottom: 8px; background: linear-gradient(90deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: #888; margin-bottom: 40px; font-size: 16px; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #a78bfa;
+      margin-bottom: 8px;
+    }
+    .section-heading {
+      font-size: 42px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, #667eea, #764ba2, #667eea);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 32px;
+      padding: 24px;
+      transition: all 0.3s;
+    }
+    .timeline-item:hover {
+      transform: translateX(8px);
+      border-color: rgba(167, 139, 250, 0.3);
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -37px;
+      top: 28px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: 3px solid #0f0f23;
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .timeline-date {
+      font-size: 13px;
+      color: #a78bfa;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .timeline-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .timeline-company {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+    .timeline-company span {
+      color: #ccc;
+    }
+
+    .timeline-desc {
+      font-size: 14px;
+      color: #999;
+      line-height: 1.6;
+    }
+
+    .timeline-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .timeline-tag {
+      padding: 4px 10px;
+      background: rgba(167, 139, 250, 0.1);
+      border-radius: 6px;
+      font-size: 11px;
+      color: #a78bfa;
+    }
+
+    .note {
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid #667eea;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Experience Timeline</h1>
+    <p class="subtitle">Vertical timeline with glassmorphism cards</p>
+
+    <div class="section-header">
+      <p class="section-title">Career Journey</p>
+      <h2 class="section-heading">Work Experience</h2>
+    </div>
+
+    <div class="timeline">
+      <!-- Experience 1 -->
+      <div class="timeline-item glass">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2023 - Present</div>
+        <h3 class="timeline-title">Lead Frontend Developer</h3>
+        <p class="timeline-company"><span>Company Name</span> • Full-time</p>
+        <p class="timeline-desc">Leading frontend development for modern web applications. Architecting scalable React/Next.js solutions, mentoring junior developers, and implementing best practices for performance and accessibility.</p>
+        <div class="timeline-tags">
+          <span class="timeline-tag">React</span>
+          <span class="timeline-tag">Next.js</span>
+          <span class="timeline-tag">TypeScript</span>
+          <span class="timeline-tag">Leadership</span>
+        </div>
+      </div>
+
+      <!-- Experience 2 -->
+      <div class="timeline-item glass">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2022 - 2023</div>
+        <h3 class="timeline-title">Freelance Full Stack Developer</h3>
+        <p class="timeline-company"><span>Self-Employed</span> • Contract</p>
+        <p class="timeline-desc">Delivered full-stack solutions for multiple clients including e-commerce platforms, dashboards, and logistics systems. End-to-end development from concept to deployment.</p>
+        <div class="timeline-tags">
+          <span class="timeline-tag">Full Stack</span>
+          <span class="timeline-tag">Node.js</span>
+          <span class="timeline-tag">PostgreSQL</span>
+          <span class="timeline-tag">Client Work</span>
+        </div>
+      </div>
+
+      <!-- Experience 3 -->
+      <div class="timeline-item glass">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2021 - 2022</div>
+        <h3 class="timeline-title">Mobile App Developer</h3>
+        <p class="timeline-company"><span>JSM Tech</span> • Full-time</p>
+        <p class="timeline-desc">Designed and developed mobile applications for both iOS and Android platforms using React Native. Built cross-platform solutions with native performance and smooth user experiences.</p>
+        <div class="timeline-tags">
+          <span class="timeline-tag">React Native</span>
+          <span class="timeline-tag">Mobile</span>
+          <span class="timeline-tag">iOS</span>
+          <span class="timeline-tag">Android</span>
+        </div>
+      </div>
+
+      <!-- Experience 4 -->
+      <div class="timeline-item glass">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2020 - 2021</div>
+        <h3 class="timeline-title">Frontend Engineer Intern</h3>
+        <p class="timeline-company"><span>Tech Company</span> • Internship</p>
+        <p class="timeline-desc">Assisted in the development of web-based platforms using React.js. Enhanced interactivity, implemented responsive designs, and collaborated with senior developers on feature development.</p>
+        <div class="timeline-tags">
+          <span class="timeline-tag">React</span>
+          <span class="timeline-tag">JavaScript</span>
+          <span class="timeline-tag">CSS</span>
+          <span class="timeline-tag">Learning</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Design Notes:</strong> Vertical timeline with gradient line. Each experience is a glassmorphism card with a glowing dot on the timeline. Shows date, title, company, description, and tech tags. Hover slides card right. Timeline flows from most recent at top to oldest at bottom.
+    </div>
+  </div>
+</body>
+</html>

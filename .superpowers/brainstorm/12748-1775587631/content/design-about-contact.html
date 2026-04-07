@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About & Contact Sections</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+      min-height: 100vh;
+      color: #e0e0e0;
+      padding: 40px 20px;
+    }
+    .container { max-width: 1000px; margin: 0 auto; }
+    h1 { font-size: 32px; margin-bottom: 8px; background: linear-gradient(90deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: #888; margin-bottom: 40px; font-size: 16px; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #a78bfa;
+      margin-bottom: 8px;
+    }
+    .section-heading {
+      font-size: 42px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+    }
+
+    /* About Section */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    .about-image {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .about-content h3 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .about-content p {
+      font-size: 15px;
+      color: #aaa;
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .about-content .highlight {
+      color: #a78bfa;
+      font-weight: 500;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .about-stat {
+      text-align: left;
+    }
+    .about-stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .about-stat-label {
+      font-size: 13px;
+      color: #888;
+    }
+
+    /* Contact Section */
+    .contact-wrapper {
+      margin-top: 80px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    .contact-info {
+      padding: 32px;
+    }
+
+    .contact-info h3 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .contact-info p {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 24px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      text-decoration: none;
+      color: #ccc;
+      transition: all 0.3s;
+    }
+    .contact-link:hover {
+      background: rgba(167, 139, 250, 0.1);
+      color: #a78bfa;
+      transform: translateX(4px);
+    }
+    .contact-link-icon {
+      font-size: 20px;
+    }
+    .contact-link-text {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .contact-form {
+      padding: 32px;
+    }
+
+    .contact-form h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: rgba(167, 139, 250, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .note {
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid #667eea;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>About & Contact Sections</h1>
+    <p class="subtitle">Personal introduction and ways to connect</p>
+
+    <!-- About Section -->
+    <div class="section-header">
+      <p class="section-title">Introduction</p>
+      <h2 class="section-heading">About Me</h2>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-image glass">👨‍💻</div>
+      <div class="about-content">
+        <h3>Hello, I'm Anik</h3>
+        <p>I'm a <span class="highlight">Full Stack Developer</span> based in Bangladesh with a passion for building beautiful, functional web applications.</p>
+        <p>With expertise in <span class="highlight">React, Next.js, and Node.js</span>, I create seamless user experiences backed by robust server-side architecture.</p>
+        <p>I love turning complex problems into simple, elegant solutions. When I'm not coding, you'll find me exploring new technologies, contributing to open source, or sharing knowledge with the developer community.</p>
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="about-stat-value">4+</div>
+            <div class="about-stat-label">Years Coding</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-value">15+</div>
+            <div class="about-stat-label">Projects</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-value">10+</div>
+            <div class="about-stat-label">Happy Clients</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-wrapper">
+      <div class="section-header">
+        <p class="section-title">Get In Touch</p>
+        <h2 class="section-heading">Let's Work Together</h2>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info glass">
+          <h3>Contact Information</h3>
+          <p>Feel free to reach out through any of these channels</p>
+
+          <div class="contact-links">
+            <a href="mailto:anik@example.com" class="contact-link">
+              <span class="contact-link-icon">📧</span>
+              <span class="contact-link-text">anik@example.com</span>
+            </a>
+            <a href="#" class="contact-link">
+              <span class="contact-link-icon">💼</span>
+              <span class="contact-link-text">LinkedIn</span>
+            </a>
+            <a href="#" class="contact-link">
+              <span class="contact-link-icon">🐙</span>
+              <span class="contact-link-text">GitHub</span>
+            </a>
+            <a href="#" class="contact-link">
+              <span class="contact-link-icon">🐦</span>
+              <span class="contact-link-text">Twitter</span>
+            </a>
+            <div class="contact-link" style="cursor:default;">
+              <span class="contact-link-icon">📍</span>
+              <span class="contact-link-text">Bangladesh</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form glass">
+          <h3>Send a Message</h3>
+          <form>
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea placeholder="Tell me about your project..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message →</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Design Notes:</strong> About section has two-column layout with image placeholder (replace with your photo) and bio text with stats. Contact section splits into info cards (email, social links, location) and a simple form. All cards use glassmorphism. Form has focus states on inputs.
+    </div>
+  </div>
+</body>
+</html>

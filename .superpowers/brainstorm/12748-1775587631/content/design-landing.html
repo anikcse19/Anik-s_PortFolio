@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anik's Portfolio Design</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+      min-height: 100vh;
+      color: #e0e0e0;
+      padding: 40px 20px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { font-size: 32px; margin-bottom: 8px; background: linear-gradient(90deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: #888; margin-bottom: 40px; font-size: 16px; }
+    .section-label {
+      display: inline-block;
+      background: rgba(167, 139, 250, 0.2);
+      color: #a78bfa;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    /* Glassmorphism Preview */
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+    }
+
+    /* Navigation */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      margin-bottom: 30px;
+    }
+    .logo { font-size: 24px; font-weight: 700; color: #fff; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-link { color: #888; text-decoration: none; transition: color 0.3s; }
+    .nav-link:hover { color: #a78bfa; }
+
+    /* Bento Grid Hero */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-main {
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .card-stats {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .card-cta {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 160px;
+    }
+
+    /* Card Content */
+    .greeting { color: #a78bfa; font-size: 18px; margin-bottom: 8px; }
+    .name { font-size: 56px; font-weight: 800; color: #fff; margin-bottom: 16px; line-height: 1.1; }
+    .role { font-size: 20px; color: #888; margin-bottom: 24px; }
+    .role span { color: #60a5fa; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      margin-left: 12px;
+    }
+
+    /* Stats */
+    .stat {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label { color: #888; font-size: 14px; }
+
+    /* Floating elements */
+    .floating-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.3;
+      animation: float 8s ease-in-out infinite;
+    }
+    .orb-1 { width: 200px; height: 200px; background: #667eea; top: -50px; right: -50px; }
+    .orb-2 { width: 150px; height: 150px; background: #764ba2; bottom: -30px; left: -30px; animation-delay: -4s; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(20px, -20px); }
+    }
+
+    .note {
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid #667eea;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="section-label">SECTION 1: LANDING & HERO</span>
+    <h1>Portfolio Design: Hero Section</h1>
+    <p class="subtitle">Glassmorphism Bento Grid Layout</p>
+
+    <!-- Navigation -->
+    <div class="nav glass">
+      <div class="logo">AD.</div>
+      <div class="nav-links">
+        <a href="#" class="nav-link">About</a>
+        <a href="#" class="nav-link">Projects</a>
+        <a href="#" class="nav-link">Experience</a>
+        <a href="#" class="nav-link">Contact</a>
+      </div>
+      <button class="glass" style="padding: 8px 16px; border-radius: 8px; color: #fff; cursor: pointer;">
+        🌓
+      </button>
+    </div>
+
+    <!-- Bento Grid Hero -->
+    <div class="hero-grid">
+      <!-- Main Card -->
+      <div class="card card-main glass">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <p class="greeting">Hi, I'm</p>
+        <h1 class="name">Anik Chandra Deb</h1>
+        <p class="role">Full Stack Developer specializing in <span>Next.js</span> <span>React</span> <span>Node.js</span></p>
+        <div>
+          <a href="#" class="btn">View Projects →</a>
+          <a href="#" class="btn btn-secondary">↓ Resume</a>
+        </div>
+      </div>
+
+      <!-- Stats Card -->
+      <div class="card card-stats glass">
+        <div class="stat">
+          <div class="stat-value">4+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">15+</div>
+          <div class="stat-label">Projects Delivered</div>
+        </div>
+      </div>
+
+      <!-- CTA Card -->
+      <div class="card card-cta glass">
+        <p style="color: #a78bfa; margin-bottom: 8px;">🚀 Available for work</p>
+        <p style="color: #888; font-size: 14px; margin-bottom: 16px;">Open to full-time opportunities</p>
+        <a href="#" class="btn" style="font-size: 14px; padding: 10px 20px;">Let's Talk</a>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Design Notes:</strong> Bento grid layout with glassmorphism cards. Main card introduces you, stats card shows credibility numbers, CTA card encourages contact. Floating orbs add depth. Theme toggle in nav. Responsive: stacks vertically on mobile.
+    </div>
+  </div>
+</body>
+</html>

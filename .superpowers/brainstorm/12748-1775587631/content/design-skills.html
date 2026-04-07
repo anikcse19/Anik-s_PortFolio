@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills Section Design</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+      min-height: 100vh;
+      color: #e0e0e0;
+      padding: 40px 20px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { font-size: 32px; margin-bottom: 8px; background: linear-gradient(90deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: #888; margin-bottom: 40px; font-size: 16px; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #a78bfa;
+      margin-bottom: 8px;
+    }
+    .section-heading {
+      font-size: 42px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .skill-card {
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .skill-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(167, 139, 250, 0.3);
+    }
+
+    .skill-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .skill-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .skill-desc {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 16px;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-tag {
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      font-size: 12px;
+      color: #ccc;
+      transition: all 0.2s;
+    }
+    .skill-tag:hover {
+      background: rgba(167, 139, 250, 0.2);
+      color: #a78bfa;
+    }
+
+    /* Skill Icon Gradients */
+    .icon-frontend { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .icon-backend { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .icon-database { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .icon-devops { background: linear-gradient(135deg, #fa709a, #fee140); }
+    .icon-tools { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+    .icon-mobile { background: linear-gradient(135deg, #ff0844, #ffb199); }
+
+    .note {
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid #667eea;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Skills & Tech Stack</h1>
+    <p class="subtitle">Organized by category with visual icons</p>
+
+    <div class="section-header">
+      <p class="section-title">Expertise</p>
+      <h2 class="section-heading">Skills & Technologies</h2>
+    </div>
+
+    <div class="skills-grid">
+      <!-- Frontend -->
+      <div class="skill-card glass">
+        <div class="skill-icon icon-frontend">⚛️</div>
+        <h3 class="skill-title">Frontend Development</h3>
+        <p class="skill-desc">Building responsive, performant user interfaces</p>
+        <div class="skill-list">
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">Next.js</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">Tailwind CSS</span>
+          <span class="skill-tag">Framer Motion</span>
+        </div>
+      </div>
+
+      <!-- Backend -->
+      <div class="skill-card glass">
+        <div class="skill-icon icon-backend">🔧</div>
+        <h3 class="skill-title">Backend Development</h3>
+        <p class="skill-desc">Scalable server-side applications and APIs</p>
+        <div class="skill-list">
+          <span class="skill-tag">Node.js</span>
+          <span class="skill-tag">Express</span>
+          <span class="skill-tag">Next.js API</span>
+          <span class="skill-tag">REST APIs</span>
+          <span class="skill-tag">GraphQL</span>
+        </div>
+      </div>
+
+      <!-- Database -->
+      <div class="skill-card glass">
+        <div class="skill-icon icon-database">🗄️</div>
+        <h3 class="skill-title">Database & Storage</h3>
+        <p class="skill-desc">Efficient data modeling and management</p>
+        <div class="skill-list">
+          <span class="skill-tag">PostgreSQL</span>
+          <span class="skill-tag">MongoDB</span>
+          <span class="skill-tag">Redis</span>
+          <span class="skill-tag">Prisma</span>
+          <span class="skill-tag">Mongoose</span>
+        </div>
+      </div>
+
+      <!-- DevOps -->
+      <div class="skill-card glass">
+        <div class="skill-icon icon-devops">🚀</div>
+        <h3 class="skill-title">DevOps & Deployment</h3>
+        <p class="skill-desc">CI/CD pipelines and cloud infrastructure</p>
+        <div class="skill-list">
+          <span class="skill-tag">Vercel</span>
+          <span class="skill-tag">Docker</span>
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">GitHub Actions</span>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div class="skill-card glass">
+        <div class="skill-icon icon-tools">🎨</div>
+        <h3 class="skill-title">Design & Tools</h3>
+        <p class="skill-desc">UI/UX design and development tools</p>
+        <div class="skill-list">
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">VS Code</span>
+          <span class="skill-tag">Postman</span>
+          <span class="skill-tag">Chrome DevTools</span>
+        </div>
+      </div>
+
+      <!-- Mobile -->
+      <div class="skill-card glass">
+        <div class="skill-icon icon-mobile">📱</div>
+        <h3 class="skill-title">Mobile Development</h3>
+        <p class="skill-desc">Cross-platform mobile applications</p>
+        <div class="skill-list">
+          <span class="skill-tag">React Native</span>
+          <span class="skill-tag">Expo</span>
+          <span class="skill-tag">iOS</span>
+          <span class="skill-tag">Android</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Design Notes:</strong> Grid layout with glassmorphism cards. Each category has a gradient icon (emoji for now, can be replaced with SVG icons). Skills shown as interactive tags. Hover effects on cards and tags. Categories: Frontend, Backend, Database, DevOps, Design/Tools, Mobile.
+    </div>
+  </div>
+</body>
+</html>

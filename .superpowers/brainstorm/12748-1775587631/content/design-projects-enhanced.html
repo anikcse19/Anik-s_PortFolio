@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Projects Section</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+      min-height: 100vh;
+      color: #e0e0e0;
+      padding: 40px 20px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { font-size: 32px; margin-bottom: 8px; background: linear-gradient(90deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: #888; margin-bottom: 30px; font-size: 16px; }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #a78bfa;
+      margin-bottom: 8px;
+    }
+    .section-heading {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .option-card {
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    .option-card:hover {
+      border-color: rgba(167, 139, 250, 0.5);
+      transform: translateY(-4px);
+    }
+    .option-card.selected {
+      border-color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .option-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #667eea;
+      margin-bottom: 8px;
+    }
+    .option-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .option-desc {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    /* Preview Styles */
+    .preview-area {
+      margin-top: 30px;
+    }
+
+    /* Style 1: Bento Grid */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 220px);
+      gap: 16px;
+    }
+    .bento-item {
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .bento-item:hover {
+      transform: scale(1.02);
+      z-index: 2;
+    }
+    .bento-item:hover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+    }
+    .bento-large { grid-column: span 2; grid-row: span 2; }
+    .bento-wide { grid-column: span 2; }
+    .bento-tall { grid-row: span 2; }
+    .bento-image {
+      width: 100%;
+      height: 120px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+    .bento-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .bento-large .bento-title { font-size: 24px; }
+    .bento-desc {
+      font-size: 12px;
+      color: #888;
+    }
+    .bento-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .bento-item:hover .bento-overlay { opacity: 1; }
+    .bento-overlay span {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .bento-large, .bento-wide, .bento-tall { grid-column: span 1; grid-row: span 1; }
+    }
+
+    .note {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid #667eea;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Enhanced Projects Section</h1>
+    <p class="subtitle">Choose an option to make it more impressive</p>
+
+    <div class="options">
+      <div class="option-card glass" onclick="selectOption(1)">
+        <div class="option-label">Option 1</div>
+        <div class="option-title">🎯 Bento Grid</div>
+        <div class="option-desc">Different sized cards create visual interest. Featured projects get larger tiles.</div>
+      </div>
+      <div class="option-card glass" onclick="selectOption(2)">
+        <div class="option-label">Option 2</div>
+        <div class="option-title">🃏 3D Flip Cards</div>
+        <div class="option-desc">Cards flip on hover to show project details. Interactive and memorable.</div>
+      </div>
+      <div class="option-card glass" onclick="selectOption(3)">
+        <div class="option-label">Option 3</div>
+        <div class="option-title">🖼️ Image Gallery</div>
+        <div class="option-desc">Large screenshots with overlay info. Visual-first approach.</div>
+      </div>
+      <div class="option-card glass" onclick="selectOption(4)">
+        <div class="option-label">Option 4</div>
+        <div class="option-title">✨ Gradient Glow</div>
+        <div class="option-desc">Each card has unique animated gradient. Dynamic and colorful.</div>
+      </div>
+    </div>
+
+    <div class="preview-area">
+      <div class="section-header">
+        <p class="section-title">Preview</p>
+        <h2 class="section-heading">Bento Grid Layout</h2>
+      </div>
+
+      <div class="bento-grid">
+        <!-- Large featured project -->
+        <div class="bento-item bento-large glass">
+          <div class="bento-image" style="background: linear-gradient(135deg, #667eea, #764ba2);">🐾</div>
+          <span style="background:rgba(102,126,234,0.3);padding:4px 10px;border-radius:12px;font-size:11px;color:#a78bfa;">⭐ Featured</span>
+          <div class="bento-title">RexVet – Veterinary Telehealth</div>
+          <div class="bento-desc">24/7 platform connecting pet owners with licensed vets. Real-time consultations, prescription management, and pet health tracking.</div>
+          <div class="bento-overlay"><span>View Project →</span></div>
+        </div>
+
+        <!-- Standard projects -->
+        <div class="bento-item glass">
+          <div class="bento-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);">📊</div>
+          <div class="bento-title">Analytics Dashboard</div>
+          <div class="bento-desc">Sales & analytics management</div>
+          <div class="bento-overlay"><span>View →</span></div>
+        </div>
+
+        <div class="bento-item glass">
+          <div class="bento-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">🛒</div>
+          <div class="bento-title">Darkak</div>
+          <div class="bento-desc">Multi-vendor e-commerce</div>
+          <div class="bento-overlay"><span>View →</span></div>
+        </div>
+
+        <div class="bento-item glass">
+          <div class="bento-image" style="background: linear-gradient(135deg, #fa709a, #fee140);">🚢</div>
+          <div class="bento-title">Rex Marine Cargo</div>
+          <div class="bento-desc">International logistics platform</div>
+          <div class="bento-overlay"><span>View →</span></div>
+        </div>
+
+        <div class="bento-item glass">
+          <div class="bento-image" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">⛵</div>
+          <div class="bento-title">Rex Sailing</div>
+          <div class="bento-desc">International sailing school</div>
+          <div class="bento-overlay"><span>View →</span></div>
+        </div>
+
+        <div class="bento-item bento-wide glass">
+          <div class="bento-image" style="background: linear-gradient(135deg, #ff0844, #ffb199);">🛍️</div>
+          <div class="bento-title">Cuba Care Commerce</div>
+          <div class="bento-desc">E-commerce for Cuba deliveries</div>
+          <div class="bento-overlay"><span>View →</span></div>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>Bento Grid Preview:</strong> Featured projects span multiple grid cells for emphasis. Hover scales up card and shows gradient overlay with "View Project" call-to-action. Each project has unique gradient and emoji for visual distinction. Click any option above to see different styles!
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function selectOption(num) {
+      document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+    }
+  </script>
+</body>
+</html>
