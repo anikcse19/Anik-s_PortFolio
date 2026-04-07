@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 export const ThemeToggle: React.FC = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -22,14 +22,14 @@ export const ThemeToggle: React.FC = () => {
 
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 transition-colors flex items-center justify-center"
       aria-label="Toggle theme"
     >
-      {theme === "dark" ? (
-        <span className="text-lg">☀️</span>
-      ) : (
+      {resolvedTheme === "dark" ? (
         <span className="text-lg">🌙</span>
+      ) : (
+        <span className="text-lg">☀️</span>
       )}
     </button>
   );
