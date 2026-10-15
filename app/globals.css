@@ -1,195 +1,203 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* {
-  font-family: "Roboto Mono", monospace;
-  font-optical-sizing: auto;
-}
-
+/* ---------------------------------------------------------------------------
+   Design tokens
+   Colors are RGB triplets so Tailwind can apply alpha (see tailwind.config.ts).
+   All text/background pairs below were checked for WCAG 2.2 AA contrast.
+--------------------------------------------------------------------------- */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --paper: 247 245 240;
+    --surface: 239 236 229;
+    --surface-2: 229 225 216;
+    --ink: 21 21 19;
+    --ink-2: 74 72 66;
+    --ink-3: 104 101 94;
+    --rule: 216 211 201;
+    --rule-strong: 176 171 161;
+    --accent: 184 58 10;
+    --accent-ink: 255 255 255;
+    --danger: 180 35 24;
+    --success: 30 110 60;
+    --warning: 135 88 0;
+
+    --container: 1240px;
+    --gutter: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+    --header-h: 4rem;
+    --motion-fast: 140ms;
+    --motion-base: 260ms;
+    color-scheme: light;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --paper: 14 14 13;
+    --surface: 22 22 20;
+    --surface-2: 32 32 29;
+    --ink: 236 233 226;
+    --ink-2: 179 175 166;
+    --ink-3: 142 138 130;
+    --rule: 40 39 36;
+    --rule-strong: 74 72 67;
+    --accent: 255 122 77;
+    --accent-ink: 14 14 13;
+    --danger: 255 128 112;
+    --success: 120 200 140;
+    --warning: 230 182 86;
+    color-scheme: dark;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
+  /* Accent presets (light first, then dark). */
+  :root[data-accent="cobalt"] { --accent: 31 79 209; }
+  :root[data-accent="moss"] { --accent: 62 97 21; }
+  :root[data-accent="ochre"] { --accent: 135 88 0; }
+  :root[data-accent="graphite"] { --accent: 21 21 19; --accent-ink: 247 245 240; }
+  .dark[data-accent="cobalt"] { --accent: 138 174 255; }
+  .dark[data-accent="moss"] { --accent: 163 201 133; }
+  .dark[data-accent="ochre"] { --accent: 230 182 86; }
+  .dark[data-accent="graphite"] { --accent: 236 233 226; --accent-ink: 14 14 13; }
+
+  /* Typography presets: map semantic font roles to the loaded families. */
+  :root,
+  :root[data-typography="journal"] {
+    --font-display: var(--font-schibsted);
+    --font-body: var(--font-schibsted);
+    --font-mono: var(--font-jetbrains);
   }
+  :root[data-typography="editorial"] {
+    --font-display: var(--font-newsreader);
+    --font-body: var(--font-instrument);
+    --font-mono: var(--font-jetbrains);
+  }
+  :root[data-typography="technical"] {
+    --font-display: var(--font-plex-sans);
+    --font-body: var(--font-plex-sans);
+    --font-mono: var(--font-plex-mono);
+  }
+
+  :root[data-container="narrow"] { --container: 1080px; }
+  :root[data-container="wide"] { --container: 1400px; }
+
+  :root[data-motion="none"] { --motion-fast: 0ms; --motion-base: 0ms; }
+  :root[data-motion="reduced"] { --motion-fast: 80ms; --motion-base: 120ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root { --motion-fast: 0ms; --motion-base: 0ms; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: calc(var(--header-h) + 1.5rem);
+  }
+  :root:not([data-motion="none"]) { scroll-behavior: smooth; }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-paper font-sans text-ink antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  ::selection { background: rgb(var(--accent) / 0.25); color: rgb(var(--ink)); }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1, h2, h3, h4 { @apply font-display; text-wrap: balance; }
+  p { text-wrap: pretty; }
+}
+
+/* ---------------------------------------------------------------------------
+   Layout primitives
+--------------------------------------------------------------------------- */
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: calc(var(--container) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* Editorial 12-column grid with a left "rail" for section labels. */
+  .grid-page {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 1.25rem;
+  }
+  @media (min-width: 768px) { .grid-page { grid-template-columns: repeat(8, minmax(0, 1fr)); column-gap: 1.5rem; } }
+  @media (min-width: 1024px) { .grid-page { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 2rem; } }
+
+  .label {
+    @apply font-mono text-label uppercase text-ink-3;
+  }
+
+  .rule-top { border-top: 1px solid rgb(var(--rule)); }
+
+  .link {
+    @apply underline decoration-rule-strong decoration-1 underline-offset-[0.22em] transition-colors duration-fast hover:text-accent hover:decoration-accent;
+  }
+
+  .tag {
+    @apply inline-flex items-center gap-1 rounded-sm border border-rule px-1.5 py-0.5 font-mono text-[0.6875rem] uppercase leading-none tracking-wide text-ink-2;
+  }
+
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-ink;
   }
 }
 
-@layer utilities {
-  .glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* ---------------------------------------------------------------------------
+   Rich content (sanitized HTML from the CMS)
+--------------------------------------------------------------------------- */
+@layer components {
+  .prose-journal {
+    @apply text-ink-2;
+    max-width: 68ch;
   }
-
-  .glass-dark {
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .text-gradient {
-    background: linear-gradient(90deg, #a78bfa, #60a5fa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .bg-gradient-primary {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-  }
-
-  .bg-gradient-secondary {
-    background: linear-gradient(135deg, #f093fb, #f5576c);
-  }
-
-  .bg-gradient-tertiary {
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
-  }
-
-  .bg-gradient-quaternary {
-    background: linear-gradient(135deg, #fa709a, #fee140);
-  }
-
-  .bg-gradient-quinary {
-    background: linear-gradient(135deg, #a8edea, #fed6e3);
-  }
-
-  .bg-gradient-senary {
-    background: linear-gradient(135deg, #ff0844, #ffb199);
-  }
-
-  /* Flip card utilities */
-  .flip-card {
-    perspective: 1000px;
-  }
-
-  .flip-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-style: preserve-3d;
-  }
-
-  .flip-card:hover .flip-card-inner {
-    transform: rotateY(180deg);
-  }
-
-  .flip-card-front,
-  .flip-card-back {
+  .prose-journal > * + * { margin-top: 1.1em; }
+  .prose-journal h2 { @apply mt-[2em] text-title-3 font-semibold text-ink; }
+  .prose-journal h3 { @apply mt-[1.8em] text-lg font-semibold text-ink; }
+  .prose-journal h4 { @apply mt-[1.6em] font-semibold text-ink; }
+  .prose-journal strong { @apply font-semibold text-ink; }
+  .prose-journal a { @apply link text-ink; }
+  .prose-journal ul, .prose-journal ol { padding-left: 1.25em; }
+  .prose-journal ul { list-style: none; }
+  .prose-journal ul > li { position: relative; }
+  .prose-journal ul > li::before {
+    content: "";
     position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    left: -1.05em;
+    top: 0.78em;
+    width: 0.45em;
+    height: 1px;
+    background: rgb(var(--ink-3));
   }
-
-  .flip-card-back {
-    transform: rotateY(180deg);
+  .prose-journal ol { list-style: decimal; }
+  .prose-journal ol > li::marker { @apply font-mono text-sm text-ink-3; }
+  .prose-journal li + li { margin-top: 0.4em; }
+  .prose-journal blockquote {
+    @apply border-l-2 border-accent pl-5 font-display text-lead text-ink;
   }
-
-  /* Timeline styles */
-  .timeline-line {
-    position: absolute;
-    left: 7px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(180deg, #667eea, #764ba2, #667eea);
+  .prose-journal code {
+    @apply rounded-sm bg-surface-2 px-1 py-0.5 font-mono text-[0.875em] text-ink;
   }
-
-  .timeline-dot {
-    position: absolute;
-    left: -37px;
-    top: 28px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border: 3px solid #0f0f23;
-    box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+  .prose-journal pre {
+    @apply overflow-x-auto rounded border border-rule bg-surface p-4 font-mono text-sm leading-relaxed text-ink;
   }
-
-  /* Animation keyframes */
-  @keyframes float {
-    0%, 100% {
-      transform: translate(0, 0);
-    }
-    50% {
-      transform: translate(20px, -20px);
-    }
-  }
-
-  .animate-float {
-    animation: float 8s ease-in-out infinite;
-  }
-
-  .animate-float-delayed {
-    animation: float 8s ease-in-out infinite;
-    animation-delay: -4s;
-  }
+  .prose-journal pre code { @apply bg-transparent p-0; }
+  .prose-journal hr { @apply my-10 border-rule; }
 }
+
+/* Mermaid output inherits the site palette. */
+.diagram-render svg { max-width: 100%; height: auto; }
