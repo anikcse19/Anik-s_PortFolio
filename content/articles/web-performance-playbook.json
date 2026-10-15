@@ -1,0 +1,205 @@
+{
+  "title": "From a 40s Mobile Score to 90+: My Web Performance Playbook",
+  "slug": "web-performance-playbook",
+  "excerpt": "Our mobile Lighthouse score had quietly drifted into the 40s, with no single bad commit to blame. This is the playbook I built afterwards: Core Web Vitals, images, JavaScript, CSS, fonts, caching, and the PR checklist that keeps a site fast from day one.",
+  "category": "Performance",
+  "tags": ["web-performance", "core-web-vitals", "lighthouse", "nextjs", "react", "frontend"],
+  "coverImage": null,
+  "publishedAt": "",
+  "relatedProjectIds": [],
+  "featured": true,
+  "status": "draft",
+  "seo": {
+    "title": "Web Performance Playbook: Building Fast UIs from Day One",
+    "description": "How a mobile Lighthouse score drifts into the 40s, and the habits that keep it above 90: Core Web Vitals, images, JS, CSS, fonts, caching and a PR checklist.",
+    "ogImage": ""
+  },
+  "blocks": [
+    {
+      "type": "rich",
+      "html": "<p>A few months into a project, we ran Lighthouse on mobile and the score was in the 40s. Nobody had broken anything on purpose. There was no single bad commit to revert. The score had drifted down one small decision at a time: an unsized image here, a whole library imported for one function there, a font loaded as render-blocking, a \"temporary\" tracking script that never left.</p><p>Fixing it took weeks of rework. Preventing it would have taken minutes per pull request. This article is the playbook I put together afterwards so that it never happens again: performance designed in from day one, not patched in at the end.</p>"
+    },
+    {
+      "type": "callout",
+      "tone": "note",
+      "title": "The core principle",
+      "html": "<p>A slow site is a sum of small negligences; a fast site is a sum of small disciplines. Every image you don't size, every library you import whole, every font you load blocking — each costs 1–3 points. Fifty of them cost you fifty points.</p>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>1. How performance is measured</h2><p>You cannot maintain what you do not measure. Three <strong>Core Web Vitals</strong> are the industry-standard user-experience metrics, and they drive both your Lighthouse score and Google search ranking.</p><ul><li><p><strong>LCP (Largest Contentful Paint)</strong> — how fast the main content becomes visible. Good ≤ 2.5 s · Needs work 2.5–4 s · Poor &gt; 4 s</p></li><li><p><strong>INP (Interaction to Next Paint)</strong> — how fast the page responds to clicks, taps and keys. Good ≤ 200 ms · Needs work 200–500 ms · Poor &gt; 500 ms</p></li><li><p><strong>CLS (Cumulative Layout Shift)</strong> — how much content jumps around while loading. Good ≤ 0.1 · Needs work 0.1–0.25 · Poor &gt; 0.25</p></li></ul><p>Supporting diagnostic metrics: <strong>TTFB</strong> (server response, target &lt; 800 ms), <strong>FCP</strong> (first paint, target &lt; 1.8 s), <strong>TBT</strong> (Total Blocking Time — Lighthouse's lab proxy for INP, target &lt; 200 ms).</p><h3>Lab data vs field data</h3><ul><li><p><strong>Lab data</strong> (Lighthouse, DevTools): a simulated run on throttled hardware. Reproducible and great for catching regressions in CI. This is where that 40-something mobile score came from.</p></li><li><p><strong>Field data</strong> (CrUX, real-user monitoring): what real visitors on real devices actually experience. This is what Google ranks you on. A perfect lab score with poor field data means your users are on slower networks and devices than the lab assumes.</p></li></ul><h3>The toolbox</h3><ul><li><p><a href=\"https://pagespeed.web.dev/\">PageSpeed Insights</a> — lab + field data for any public URL</p></li><li><p><strong>Lighthouse</strong> (Chrome DevTools) — local audits during development</p></li><li><p><strong>DevTools Performance panel</strong> — long tasks, layout thrash, render bottlenecks</p></li><li><p><strong>DevTools Network panel</strong> — payload sizes, waterfall, caching behaviour</p></li><li><p><a href=\"https://www.webpagetest.org/\">WebPageTest</a> — deep waterfall analysis, filmstrips, multi-location tests</p></li><li><p><code>webpack-bundle-analyzer</code> / <code>source-map-explorer</code> — what's actually inside your JS bundle</p></li><li><p><strong>Lighthouse CI</strong> — automated performance budgets in your pipeline</p></li></ul>"
+    },
+    {
+      "type": "callout",
+      "tone": "decision",
+      "title": "Always audit mobile, throttled",
+      "html": "<p>Mobile is the worst case and the majority of traffic. If mobile is fast, desktop is fast.</p>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>2. The golden rules</h2><p>These five rules prevent the \"big app, 45 score\" situation. Everything after this section is an application of them.</p><p><strong>Rule 1 — Set a performance budget on day one.</strong> A budget is a hard limit the build fails against, not a wish. A sensible starting budget for a content or product site (compressed, initial load):</p><ul><li><p>JavaScript: ≤ 170 KB</p></li><li><p>CSS: ≤ 50 KB</p></li><li><p>Images above the fold: ≤ 200 KB</p></li><li><p>Fonts: ≤ 100 KB (2–3 files max)</p></li><li><p>Total initial page weight: ≤ 500 KB–1 MB</p></li><li><p>Lighthouse mobile score: ≥ 90 (fail CI below 85)</p></li></ul><p><strong>Rule 2 — Measure continuously, not at the end.</strong> Run Lighthouse on every PR. A 3-point regression caught today is a 5-minute fix; fifty of them found next year is a rewrite.</p><p><strong>Rule 3 — Ship less.</strong> The fastest byte is the one you never send. Before adding any library, image, font or tracking script, ask: <em>what does this cost, and is it worth it?</em> <code>npm install</code> is a performance decision.</p><p><strong>Rule 4 — Prioritize the critical path.</strong> The user needs to see and use the above-the-fold content fast. Everything else — below-fold images, modals, analytics, chat widgets — loads after, lazily.</p><p><strong>Rule 5 — Build for the worst device, not your MacBook.</strong> Your dev machine is 5–10× faster than a median Android phone on 4G. Test throttled (CPU 4× slowdown, Fast 4G/3G network) at least weekly.</p>"
+    },
+    {
+      "type": "callout",
+      "tone": "warning",
+      "title": "Anti-patterns that create performance debt",
+      "html": "<ul><li><p>\"We'll optimize later\" — later never comes cheaply; the cost grows with the codebase.</p></li><li><p>Treating performance as one person's job — it's a review criterion, like correctness.</p></li><li><p>Only testing on desktop broadband — that's exactly how our low mobile score stayed invisible for months.</p></li><li><p>Adding dependencies without checking their size — <a href=\"https://bundlephobia.com/\">bundlephobia.com</a> takes 10 seconds.</p></li></ul>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>3. Images &amp; media — the #1 offender</h2><p>Images are typically 50–70% of page weight and the most common cause of poor LCP and CLS. Most image problems are fixed by five habits.</p><p><strong>❌ Never do this:</strong></p>"
+    },
+    {
+      "type": "code",
+      "language": "html",
+      "filename": "",
+      "code": "<!-- 4000px camera photo, no dimensions, eager loaded -->\n<img src=\"hero.png\">"
+    },
+    {
+      "type": "rich",
+      "html": "<p>This one line commits four sins: oversized file, wrong format (PNG for a photo), no width/height (causes CLS), and it loads even when it's off-screen.</p><p><strong>✅ Do this instead:</strong></p>"
+    },
+    {
+      "type": "code",
+      "language": "html",
+      "filename": "",
+      "code": "<img\n  src=\"hero-800.webp\"\n  srcset=\"hero-400.webp 400w, hero-800.webp 800w, hero-1600.webp 1600w\"\n  sizes=\"(max-width: 600px) 100vw, 800px\"\n  width=\"800\" height=\"450\"\n  alt=\"Product dashboard\"\n  fetchpriority=\"high\"\n>"
+    },
+    {
+      "type": "rich",
+      "html": "<h3>The five habits</h3><ol><li><p><strong>Modern formats.</strong> WebP or AVIF for everything; AVIF is ~30% smaller than WebP. Keep JPEG/PNG only as a <code>&lt;picture&gt;</code> fallback. SVG for icons and logos.</p></li><li><p><strong>Serve the size displayed.</strong> Never let the browser downscale a 4000px image into a 400px slot. Use <code>srcset</code>/<code>sizes</code>, or an image CDN (Cloudinary, imgix, Next.js <code>&lt;Image&gt;</code>) that resizes on the fly.</p></li><li><p><strong>Always set <code>width</code> and <code>height</code></strong> (or CSS <code>aspect-ratio</code>). The browser reserves the space before the image loads — this alone eliminates most CLS.</p></li><li><p><strong>Lazy-load everything below the fold</strong> with <code>loading=\"lazy\"</code>. But <strong>never</strong> lazy-load the LCP/hero image — give it <code>fetchpriority=\"high\"</code> instead.</p></li><li><p><strong>Compress.</strong> Quality 75–85 is visually indistinguishable from 100 and half the size. Automate it in the build or CDN — never rely on humans remembering.</p></li></ol><p><strong>Video:</strong> never use GIF for animation (a 5 MB GIF is a 300 KB MP4/WebM). Use <code>&lt;video autoplay muted loop playsinline&gt;</code> with <code>preload=\"none\"</code> or a <code>poster</code> for below-fold video. Embed YouTube with a façade (thumbnail + click-to-load) — a raw YouTube iframe pulls ~500 KB of JS on page load.</p><h3>What these mistakes typically cost</h3><ul><li><p>Unoptimized hero photo (2–4 MB): LCP +2–5 s, 10–20 Lighthouse points</p></li><li><p>Missing width/height on images: CLS 0.1–0.4, 5–15 points</p></li><li><p>Eager-loading 30 below-fold images: LCP +1–2 s on mobile</p></li><li><p>GIF instead of video: 2–10 MB wasted</p></li></ul>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>4. JavaScript discipline</h2><p>JavaScript is the most expensive resource byte-for-byte: it must be downloaded, parsed, compiled <strong>and executed</strong> — all on the main thread. 1 MB of JS hurts far more than 1 MB of image. In large apps, uncontrolled JS growth is the usual reason mobile scores drift from 90 to 45.</p><p><strong>❌ Never do this:</strong></p>"
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "filename": "",
+      "code": "// Imports the ENTIRE library (~70 KB) for one function\nimport _ from 'lodash';\n_.debounce(fn, 300);\n\n// Imports a 500 KB chart library on every page,\n// even pages with no charts\nimport Chart from 'chart.js';\n\n// moment.js: 300 KB with locales, for date formatting\nimport moment from 'moment';"
+    },
+    {
+      "type": "rich",
+      "html": "<p><strong>✅ Do this instead:</strong></p>"
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "filename": "",
+      "code": "// Import only what you use (tree-shakeable)\nimport debounce from 'lodash-es/debounce';   // ~2 KB\n\n// Load heavy components only when needed\nconst Chart = lazy(() => import('./ChartPanel'));\n\n// Pick small alternatives\nimport { format } from 'date-fns';            // ~7 KB used\n// or use the built-in Intl.DateTimeFormat    // 0 KB"
+    },
+    {
+      "type": "rich",
+      "html": "<h3>The rules</h3><ol><li><p><strong>Code-split by route.</strong> Every page loads only its own JS. Next.js, Nuxt and SvelteKit do this by default — don't defeat it by importing everything in a shared root layout.</p></li><li><p><strong>Lazy-load heavy, conditional UI:</strong> modals, editors, charts, maps, admin panels. If it's not visible on first paint, it shouldn't be in the first bundle.</p></li><li><p><strong>Audit every dependency.</strong> Prefer small or native alternatives: <code>date-fns</code> or <code>Intl</code> over <code>moment</code>, native <code>fetch</code> over <code>axios</code> when sufficient, CSS over JS animation libraries.</p></li><li><p><strong>Inspect the bundle quarterly.</strong> Teams are routinely shocked to find two chart libraries, three date libraries and a 200 KB polyfill nobody needs.</p></li><li><p><strong>Defer non-critical scripts:</strong> <code>defer</code> for app code; load analytics, chat and tracking after the page is interactive (<code>requestIdleCallback</code> or on first interaction).</p></li><li><p><strong>Keep the main thread free.</strong> Break up long tasks (&gt; 50 ms) — they are what destroys INP. Use <code>scheduler.yield()</code> or <code>setTimeout</code> chunking for big loops, and web workers for heavy computation.</p></li><li><p><strong>Avoid re-render storms:</strong> a keystroke that re-renders a 500-row table is an INP killer.</p></li></ol>"
+    },
+    {
+      "type": "callout",
+      "tone": "warning",
+      "title": "Third-party scripts — the silent killer",
+      "html": "<p>Tag managers, A/B testing, chat widgets and ad scripts often add 500 KB–2 MB of JS you don't control. Every third-party tag needs an owner and a justification; load them after interactivity; review the list quarterly and delete dead ones. One tag manager left to grow freely can single-handedly cost 20 Lighthouse points.</p>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>5. CSS, rendering &amp; layout stability</h2><p>CSS blocks rendering: the browser paints nothing until all CSS in <code>&lt;head&gt;</code> is downloaded and parsed. After first paint, careless DOM and CSS work causes layout shift and jank.</p><h3>Keep CSS small and render-friendly</h3><ul><li><p>Ship only the CSS each page uses. Tailwind purges unused classes automatically; with plain CSS, audit with DevTools → Coverage.</p></li><li><p>Inline the <strong>critical CSS</strong> (~10–15 KB) in <code>&lt;head&gt;</code> and load the rest asynchronously if you're chasing the last few hundred ms of FCP.</p></li><li><p>Avoid <code>@import</code> in CSS files — it chains requests serially.</p></li></ul><h3>Reserve space for everything that arrives late</h3>"
+    },
+    {
+      "type": "code",
+      "language": "css",
+      "filename": "",
+      "code": "/* ❌ Content jumps down when the banner/ad/image loads */\n.ad-slot { }\n\n/* ✅ Space is reserved before it loads */\n.ad-slot { min-height: 250px; }\nimg, video { aspect-ratio: 16 / 9; width: 100%; }"
+    },
+    {
+      "type": "rich",
+      "html": "<p>Common CLS causes and their fixes:</p><ul><li><p><strong>Images without dimensions</strong> → <code>width</code>/<code>height</code> attributes or <code>aspect-ratio</code></p></li><li><p><strong>Ads, embeds, banners injected at the top</strong> → reserve a fixed-size slot</p></li><li><p><strong>Web fonts swapping in</strong> → <code>font-display: swap</code> + a <code>size-adjust</code> fallback (see Fonts)</p></li><li><p><strong>Content injected above existing content</strong> → insert below the viewport, or reserve space</p></li><li><p><strong>Skeleton that doesn't match the final layout</strong> → make the skeleton the same size as the content</p></li></ul><h3>Animate cheaply — only <code>transform</code> and <code>opacity</code></h3>"
+    },
+    {
+      "type": "code",
+      "language": "css",
+      "filename": "",
+      "code": "/* ❌ Animating layout properties: recalculates layout every frame */\n.card:hover { margin-top: -8px; width: 320px; }\n\n/* ✅ Compositor-only: GPU handles it, main thread stays free */\n.card { transition: transform 0.2s; }\n.card:hover { transform: translateY(-8px) scale(1.02); }"
+    },
+    {
+      "type": "rich",
+      "html": "<p>Never animate <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code> or <code>margin</code> — they trigger layout and paint on every frame and drop you below 60 fps on mobile.</p><h3>Avoid layout thrashing in JS</h3>"
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "filename": "",
+      "code": "// ❌ Read-write-read-write: forces a synchronous layout each iteration\nitems.forEach(el => { el.style.height = el.offsetHeight * 2 + 'px'; });\n\n// ✅ Batch: read everything, then write everything\nconst heights = items.map(el => el.offsetHeight);\nitems.forEach((el, i) => { el.style.height = heights[i] * 2 + 'px'; });"
+    },
+    {
+      "type": "rich",
+      "html": "<p>For very long lists (feeds, tables with 1000+ rows), virtualize — render only visible rows with <code>react-window</code> or <code>vue-virtual-scroller</code> — or use <code>content-visibility: auto</code> on off-screen sections.</p>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>6. Fonts</h2><p>Fonts block text rendering (invisible text, FOIT) or cause layout shift when they swap in (FOUT). A careless font setup costs 5–10 points; the fix takes an hour.</p><ol><li><p><strong>Use WOFF2 only</strong> — supported everywhere and 30% smaller than WOFF.</p></li><li><p><strong>Limit yourself to 2–3 font files.</strong> Every weight and style is a separate download. Prefer a variable font if you need many weights.</p></li><li><p><strong>Self-host.</strong> Third-party font CSS adds an extra DNS lookup and connection on the critical path. Serve WOFF2 from your own domain with long cache headers.</p></li><li><p><strong>Always set <code>font-display: swap</code></strong> — text shows immediately in a fallback font, then swaps.</p></li><li><p><strong>Preload the one font used above the fold.</strong></p></li><li><p><strong>Kill the swap-shift</strong> with a size-matched fallback.</p></li><li><p><strong>Subset</strong> — a full multi-script font can be 300 KB; a Latin subset is 20–40 KB.</p></li><li><p><strong>The system font stack is a valid choice.</strong> <code>font-family: system-ui, sans-serif</code> costs 0 KB and 0 ms.</p></li></ol>"
+    },
+    {
+      "type": "code",
+      "language": "html",
+      "filename": "",
+      "code": "<link rel=\"preload\" href=\"/fonts/inter-var.woff2\"\n      as=\"font\" type=\"font/woff2\" crossorigin>"
+    },
+    {
+      "type": "code",
+      "language": "css",
+      "filename": "",
+      "code": "@font-face {\n  font-family: 'Inter';\n  src: url('/fonts/inter-var.woff2') format('woff2');\n  font-display: swap;\n}\n@font-face {\n  font-family: 'Inter-fallback';\n  src: local('Arial');\n  size-adjust: 107%;        /* match Inter's metrics */\n  ascent-override: 90%;\n}\nbody { font-family: 'Inter', 'Inter-fallback', sans-serif; }"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>7. Network, caching &amp; data</h2><p>Even perfect assets are slow if delivered badly. These are mostly one-time infrastructure settings — set them once, verify them in CI.</p><ul><li><p><strong>CDN in front of everything.</strong> TTFB from another continent without a CDN is 300–800 ms before a single byte arrives.</p></li><li><p><strong>Compression on:</strong> Brotli (preferred) or gzip for all text responses. Uncompressed JS is 3–5× larger.</p></li><li><p><strong>HTTP/2 or HTTP/3</strong> — parallel requests on one connection.</p></li><li><p><strong>Immutable caching for fingerprinted assets:</strong> <code>Cache-Control: public, max-age=31536000, immutable</code>.</p></li><li><p><strong>Short or no cache for HTML</strong> so deploys show up immediately.</p></li></ul><h3>Resource hints</h3>"
+    },
+    {
+      "type": "code",
+      "language": "html",
+      "filename": "",
+      "code": "<!-- Open the connection to critical third-party origins early -->\n<link rel=\"preconnect\" href=\"https://cdn.example.com\" crossorigin>\n\n<!-- Preload the LCP image / critical font (use sparingly: 2–3 max) -->\n<link rel=\"preload\" as=\"image\" href=\"/hero-800.webp\" fetchpriority=\"high\">"
+    },
+    {
+      "type": "rich",
+      "html": "<p>Don't preload everything — preloading 10 things is the same as preloading nothing.</p><h3>API &amp; data discipline</h3><ul><li><p><strong>Don't over-fetch.</strong> Paginate, select only needed fields, and avoid request waterfalls. Fire independent requests in parallel; fetch critical data on the server or at route level.</p></li><li><p><strong>Cache API responses client-side</strong> (TanStack Query, SWR) so navigating back is instant.</p></li><li><p><strong>Debounce</strong> search-as-you-type (250–300 ms).</p></li><li><p><strong>Watch JSON size.</strong> A 2 MB payload must be downloaded <em>and</em> parsed on the main thread. Question anything over ~100 KB.</p></li><li><p><strong>TTFB belongs to the backend too.</strong> If TTFB &gt; 800 ms, no frontend trick saves you — fix the server first.</p></li></ul>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>8. Framework-specific practices</h2><p>Choosing the right rendering strategy per page often separates a 50 from a 90:</p><ul><li><p><strong>SSG (static)</strong> — marketing, docs, blogs. Pre-built HTML from a CDN: the fastest possible.</p></li><li><p><strong>ISR / cached SSR</strong> — product pages, listings. Static speed with periodic freshness.</p></li><li><p><strong>SSR</strong> — personalized, SEO-critical dynamic pages. Content in the first response; watch TTFB.</p></li><li><p><strong>Client-side SPA</strong> — logged-in dashboards and internal tools. Fine when first load matters less — but still budget the JS.</p></li></ul>"
+    },
+    {
+      "type": "callout",
+      "tone": "tradeoff",
+      "title": "The classic failure",
+      "html": "<p>Building the public, SEO-facing site as a pure client-side SPA. Users stare at a blank page while 1.5 MB of JS downloads, parses, executes, then fetches data. If first paint depends on JavaScript finishing, a mobile score of 40–50 is the natural result.</p>"
+    },
+    {
+      "type": "rich",
+      "html": "<h3>React / Next.js</h3><ul><li><p>Use <code>next/image</code>, <code>next/font</code> and <code>next/dynamic</code>. Plain <code>&lt;img&gt;</code> in a Next.js app is a review flag.</p></li><li><p>Keep client components small — <code>'use client'</code> pushes everything below it into the browser bundle. Fetch data in server components where possible.</p></li><li><p>Don't put frequently-changing state in a top-level context; memoize expensive children <em>after profiling</em>, not by habit.</p></li><li><p>Lists over ~100 complex rows: virtualize with <code>react-window</code> or <code>@tanstack/virtual</code>.</p></li></ul><h3>Vue / Nuxt</h3><ul><li><p>Use <code>&lt;NuxtImg&gt;</code>, <code>defineAsyncComponent</code> and route-level code splitting.</p></li><li><p>Choose <code>v-show</code> vs <code>v-if</code> deliberately; use <code>shallowRef</code> for large objects and <code>v-once</code>/<code>v-memo</code> for static-heavy lists.</p></li></ul><h3>Universal SPA pitfalls</h3><ul><li><p>A shared bundle that grows forever because everything is imported in the root layout or store.</p></li><li><p>Rendering 2,000 off-screen DOM nodes.</p></li><li><p>Blocking route transitions on all data — show the shell immediately, stream the data.</p></li><li><p>State libraries re-rendering the whole tree on any change — select narrow slices.</p></li><li><p>Shipping dev builds or source-map-bloated bundles to production.</p></li></ul>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>9. See the difference yourself</h2><p>Reading numbers is not the same as seeing them move. Each exercise is a before/after experiment: measure, change one thing, measure again. Run them in Chrome DevTools → Lighthouse, <strong>Mobile</strong> mode, in an incognito window.</p><ol><li><p><strong>The unoptimized image (30 min).</strong> Use a 3–4 MB JPEG hero as a plain <code>&lt;img src&gt;</code>. Audit. Convert to WebP at quality 80, resize to display width, add <code>width</code>/<code>height</code> and <code>fetchpriority=\"high\"</code>. Audit again. <em>Expected: LCP drops by seconds; score jumps 10–25 points.</em></p></li><li><p><strong>The library you didn't need (30 min).</strong> Import all of <code>lodash</code> and <code>moment</code> to format one date and debounce one input. Replace them with <code>Intl.DateTimeFormat</code> and a 10-line debounce. <em>Expected: ~350 KB → a few KB.</em></p></li><li><p><strong>Layout shift hunt (20 min).</strong> An image without dimensions, a late-injected banner and a swapping web font, all above existing text. Watch it on Slow 4G, then apply the fixes. <em>Expected: CLS from ~0.3 to ~0.</em></p></li><li><p><strong>The blocking long task (30 min).</strong> Sort a 100k-item array synchronously on click and try using the page. Move the work to a Web Worker or chunk it with <code>await scheduler.yield()</code>. <em>Expected: page stays responsive; INP/TBT recovers.</em></p></li><li><p><strong>Lazy vs eager (20 min).</strong> 30 large images, all eager. Audit. Add <code>loading=\"lazy\"</code> below the fold. <em>Expected: initial payload drops by megabytes.</em></p></li><li><p><strong>Feel the real device (15 min).</strong> Open your production app with CPU 4× slowdown and Fast 4G. Everything that annoys you is what a median mobile user feels every day.</p></li><li><p><strong>Audit a real site (45 min).</strong> Run PageSpeed Insights on a slow public site and write a one-page diagnosis: the three biggest problems and the fix for each.</p></li></ol>"
+    },
+    {
+      "type": "callout",
+      "tone": "note",
+      "title": "Record your results",
+      "html": "<p>Keep a simple note per exercise: metric → before → after. The habit of \"measure, change, measure\" <em>is</em> the skill.</p>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>10. The checklist I now use on every PR</h2><ul><li><p>New images: modern format, sized to display, <code>width</code>/<code>height</code> set, lazy if below the fold</p></li><li><p>LCP/hero element is <strong>not</strong> lazy-loaded and has <code>fetchpriority=\"high\"</code></p></li><li><p>New dependency: size checked on bundlephobia, no smaller or native alternative exists</p></li><li><p>Heavy component (chart, editor, map, modal) is dynamically imported</p></li><li><p>No new render-blocking script or stylesheet in <code>&lt;head&gt;</code> without justification</p></li><li><p>Animations use <code>transform</code>/<code>opacity</code> only</p></li><li><p>Lists that can grow large are paginated or virtualized</p></li><li><p>API calls: no waterfall, no over-fetching, debounced where user-driven</p></li><li><p>Anything injected after load (banner, embed, ad) has reserved space</p></li><li><p>New third-party script: owner named, loaded post-interactive</p></li></ul><h3>Automate the guardrails — humans forget</h3><ul><li><p>Lighthouse CI on every PR: fail below a mobile score of 85, warn below 90</p></li><li><p>Bundle-size check (<code>size-limit</code> / bundlesize): fail if initial JS grows past budget</p></li><li><p>Image optimization enforced in the build or CDN, not left to authors</p></li><li><p>Compression and cache headers verified in a deploy smoke test</p></li></ul><h3>Recurring rituals</h3><ul><li><p><strong>Every PR:</strong> Lighthouse CI + bundle-size check (automated)</p></li><li><p><strong>Weekly:</strong> one dev browses the app on throttled mobile settings</p></li><li><p><strong>Monthly:</strong> review field data (CrUX / RUM) against targets</p></li><li><p><strong>Quarterly:</strong> bundle analysis + third-party script audit; delete the dead weight</p></li></ul>"
+    },
+    {
+      "type": "callout",
+      "tone": "warning",
+      "title": "Red flags that predict a future 45 score",
+      "html": "<ul><li><p>The initial JS bundle crossed 300 KB and nobody noticed</p></li><li><p>\"Temporary\" tag-manager scripts that are now 18 months old</p></li><li><p>Lighthouse hasn't been run in over a month</p></li><li><p>Plain <code>&lt;img&gt;</code> tags in a framework that provides an image component</p></li><li><p>A page that fetches data in 4+ sequential round trips</p></li><li><p>The phrase \"we'll optimize before launch\"</p></li></ul>"
+    },
+    {
+      "type": "rich",
+      "html": "<h2>Wrapping up</h2><p>None of this is advanced. That's the point. The 40-something score didn't come from a hard problem — it came from a hundred easy ones nobody was watching. Set a budget, measure on every PR, ship less, and test on the worst device. Performance stops being a rescue project and becomes just another part of writing good code.</p><h3>Further reading</h3><ul><li><p><a href=\"https://web.dev/performance\">web.dev — Core Web Vitals &amp; performance guides</a></p></li><li><p><a href=\"https://developer.mozilla.org/en-US/docs/Web/Performance\">MDN Web Performance</a></p></li><li><p><a href=\"https://developer.chrome.com/docs/devtools\">Chrome DevTools documentation</a></p></li><li><p><a href=\"https://github.com/GoogleChrome/lighthouse-ci\">Lighthouse CI</a></p></li><li><p><a href=\"https://bundlephobia.com/\">bundlephobia.com</a></p></li></ul>"
+    }
+  ]
+}
