@@ -6,7 +6,7 @@ import { SiteImage } from "@/components/ui/site-image";
 import { getSiteSettings } from "@/lib/data/public";
 import { sanitizeRichText } from "@/lib/sanitize";
 import { pageMeta, personJsonLd } from "@/lib/seo";
-import { padIndex } from "@/lib/utils";
+import { resumeHref } from "@/lib/resume";
 import { ABOUT_SECTION_KEYS, ABOUT_SECTION_LABELS } from "@/lib/validation/settings";
 
 export const revalidate = 3600;
@@ -25,19 +25,19 @@ export default async function AboutPage() {
       <JsonLd data={personJsonLd(settings)} />
       <SectionHeader as="h1" label="About" heading={about.headline || `About ${profile.name.split(" ")[0]}`} />
 
-      <div className="grid-page mt-12 gap-y-10">
+      <div className="mt-12 grid gap-10 md:grid-cols-[16rem_minmax(0,1fr)] lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-16">
         {profile.portrait?.url ? (
-          <figure className="col-span-4 md:col-span-3 lg:col-span-3">
-            <SiteImage src={profile.portrait.url} alt={profile.portrait.alt} aspect="4 / 5" sizes="(min-width: 1024px) 300px, 50vw" priority className="border border-rule grayscale-[15%]" />
+          <figure>
+            <SiteImage src={profile.portrait.url} alt={profile.portrait.alt} aspect="4 / 5" sizes="(min-width: 1024px) 320px, 50vw" priority className="rounded-2xl border border-rule" />
             {profile.portrait.caption ? <figcaption className="mt-2 text-sm text-ink-3">{profile.portrait.caption}</figcaption> : null}
           </figure>
         ) : null}
-        <div className={profile.portrait?.url ? "col-span-4 md:col-span-5 lg:col-span-8 lg:col-start-5" : "col-span-4 md:col-span-8 lg:col-span-9 lg:col-start-4"}>
+        <div className={profile.portrait?.url ? "max-w-3xl" : "max-w-3xl md:col-span-2"}>
           {intro ? <RichText html={about.sections[intro]} className="text-lead [&_p]:text-ink" /> : <p className="text-lead text-ink-2">{profile.positioning}</p>}
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/contact">Get in touch</ButtonLink>
-            {profile.resumeUrl ? (
-              <ButtonLink href={profile.resumeUrl} variant="secondary">
+            {resumeHref(settings) ? (
+              <ButtonLink href={resumeHref(settings)} variant="secondary">
                 Résumé
               </ButtonLink>
             ) : null}
@@ -46,13 +46,13 @@ export default async function AboutPage() {
       </div>
 
       {rest.length ? (
-        <div className="mt-24 space-y-16">
-          {rest.map((key, i) => (
-            <section key={key} aria-labelledby={`about-${key}`} className="grid-page gap-y-4 border-t border-rule pt-5">
-              <h2 id={`about-${key}`} className="col-span-4 md:col-span-2 lg:col-span-3 label !text-ink-2">
-                <span className="text-accent">{padIndex(i)}</span> — {ABOUT_SECTION_LABELS[key]}
+        <div className="mt-24 space-y-14">
+          {rest.map((key) => (
+            <section key={key} aria-labelledby={`about-${key}`} className="grid gap-4 border-t border-rule pt-8 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-16">
+              <h2 id={`about-${key}`} className="text-title-3 font-semibold">
+                {ABOUT_SECTION_LABELS[key]}
               </h2>
-              <div className="col-span-4 md:col-span-6 lg:col-span-8">
+              <div className="max-w-3xl">
                 <RichText html={about.sections[key]} />
               </div>
             </section>

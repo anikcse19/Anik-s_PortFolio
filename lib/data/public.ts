@@ -64,7 +64,8 @@ export const getSiteSettings = cached(
     const byKey = new Map(docs.map((d) => [d.key, d.value]));
     return Object.fromEntries(SETTINGS_KEYS.map((k) => [k, parseStoredSettings(k, byKey.get(k))])) as SiteSettings;
   },
-  "site-settings",
+  // The key list is part of the cache key, so adding a settings section never serves a stale shape.
+  `site-settings:${SETTINGS_KEYS.join(",")}`,
   [TAGS.settings],
   defaultSiteSettings,
 );
@@ -72,7 +73,7 @@ export const getSiteSettings = cached(
 /* ------------------------------------------------------------------ Projects */
 
 const PROJECT_LIST_FIELDS =
-  "title slug summary type category year organization role technologies coverImage liveUrl repoUrl featured status sortOrder seo publishedAt createdAt updatedAt";
+  "title slug summary type category year organization role technologies impact outcomes coverImage liveUrl repoUrl featured status sortOrder seo publishedAt createdAt updatedAt";
 
 export type ProjectListItem = Pick<
   Project,
@@ -86,6 +87,8 @@ export type ProjectListItem = Pick<
   | "organization"
   | "role"
   | "technologies"
+  | "impact"
+  | "outcomes"
   | "coverImage"
   | "liveUrl"
   | "repoUrl"

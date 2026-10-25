@@ -19,6 +19,7 @@ const serverEnvSchema = z.object({
   SMTP_PASS: z.string().optional(),
   CONTACT_TO_EMAIL: z.string().trim().optional(),
   CONTACT_FROM_EMAIL: z.string().trim().optional(),
+  SITE_GATE_PASSWORD: z.string().optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
@@ -57,6 +58,12 @@ export function getAuthSecret(): string {
     throw new Error("AUTH_SECRET must be set to a random string of at least 32 characters in production.");
   }
   return "development-only-secret-do-not-use-in-production";
+}
+
+/** Password for moving between the portfolio and the studio. Null when not configured (crossing is then impossible). */
+export function getGatePassword(): string | null {
+  const value = getEnv().SITE_GATE_PASSWORD;
+  return value && value.length >= 4 ? value : null;
 }
 
 export function isMailConfigured(): boolean {

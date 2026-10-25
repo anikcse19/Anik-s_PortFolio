@@ -11,7 +11,7 @@ export default function SiteError({ error, reset }: { error: Error & { digest?: 
 
   return (
     <section className="container-page py-24">
-      <p className="label">Something went wrong</p>
+      <p className="eyebrow">Something went wrong</p>
       <h1 className="mt-4 text-title-2 font-semibold">This page could not be loaded.</h1>
       <p className="mt-4 max-w-prose text-ink-2">It’s probably temporary. Please try again in a moment.</p>
       <Button className="mt-8" onClick={reset}>

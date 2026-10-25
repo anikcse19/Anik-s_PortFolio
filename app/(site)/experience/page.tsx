@@ -1,4 +1,4 @@
-import { ExperienceList, SkillLegend, SkillsGrid } from "@/components/site/content-lists";
+import { ExperienceList, SkillLegend, SkillsGrid, visibleSkillCategories } from "@/components/site/content-lists";
 import { EmptyState, SectionHeader } from "@/components/site/section-header";
 import { getPublishedExperience, getPublishedSkillCategories, getSiteSettings } from "@/lib/data/public";
 import { pageMeta } from "@/lib/seo";
@@ -10,7 +10,8 @@ export async function generateMetadata() {
 }
 
 export default async function ExperiencePage() {
-  const [settings, entries, skills] = await Promise.all([getSiteSettings(), getPublishedExperience(), getPublishedSkillCategories()]);
+  const [settings, entries, allSkills] = await Promise.all([getSiteSettings(), getPublishedExperience(), getPublishedSkillCategories()]);
+  const skills = visibleSkillCategories(allSkills, settings.appearance.showLearningSkills);
   return (
     <div className="container-page space-y-24 pt-12 md:pt-16">
       <section>
@@ -21,7 +22,7 @@ export default async function ExperiencePage() {
       </section>
       {skills.length ? (
         <section aria-labelledby="skills-heading">
-          <SectionHeader label="Capabilities" heading="Skills" id="skills-heading" intro="Grouped by area. Labels show where I have production experience, project experience, or am still learning.">
+          <SectionHeader label="Stack" heading="Skills" id="skills-heading" intro="The tools and practices I use to ship and run production software.">
             <div className="mt-6">
               <SkillLegend categories={skills} />
             </div>

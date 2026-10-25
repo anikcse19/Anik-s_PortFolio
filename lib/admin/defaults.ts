@@ -23,6 +23,7 @@ export function emptyProject(): ProjectInput {
     features: [],
     challenges: [],
     outcomes: [],
+    impact: [],
     coverImage: null,
     gallery: [],
     liveUrl: "",

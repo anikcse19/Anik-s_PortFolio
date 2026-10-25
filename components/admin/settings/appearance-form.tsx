@@ -108,6 +108,12 @@ export function AppearanceForm({ initial }: { initial: AppearanceSettings }) {
           <FormSection title="Sections" description="Disabled sections disappear from navigation, the homepage, the sitemap, and return 404.">
             <Toggle label="Case studies" checked={v.caseStudiesEnabled} onChange={(c) => set(["caseStudiesEnabled"], c)} />
             <Toggle label="Writing / engineering notes" checked={v.writingEnabled} onChange={(c) => set(["writingEnabled"], c)} />
+            <Toggle
+              label="Show “currently learning” skills"
+              description="Off hides skills marked as learning from public skill lists, so the site leads with what you already do in production."
+              checked={v.showLearningSkills}
+              onChange={(c) => set(["showLearningSkills"], c)}
+            />
           </FormSection>
         </>
       )}

@@ -31,6 +31,7 @@ const config = {
       fontSize: {
         label: ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.06em" }],
         display: ["clamp(2.75rem, 1.4rem + 5.6vw, 6.75rem)", { lineHeight: "0.94", letterSpacing: "-0.035em" }],
+        hero: ["clamp(2.5rem, 1.55rem + 3.8vw, 4.75rem)", { lineHeight: "1.02", letterSpacing: "-0.032em" }],
         "title-1": ["clamp(2.25rem, 1.55rem + 2.9vw, 4.25rem)", { lineHeight: "1", letterSpacing: "-0.03em" }],
         "title-2": ["clamp(1.75rem, 1.4rem + 1.5vw, 2.625rem)", { lineHeight: "1.08", letterSpacing: "-0.022em" }],
         "title-3": ["clamp(1.25rem, 1.15rem + 0.45vw, 1.5rem)", { lineHeight: "1.25", letterSpacing: "-0.012em" }],

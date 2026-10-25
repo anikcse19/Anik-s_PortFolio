@@ -101,3 +101,14 @@ export const yearMonthSchema = z
   .string()
   .trim()
   .regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Use the format YYYY-MM");
+
+/**
+ * Impact numbers ("40%" / "faster checkout"). Only enter results you can stand behind;
+ * they are shown prominently to recruiters and clients.
+ */
+export const metricListSchema = (maxItems: number) =>
+  z
+    .array(z.object({ value: requiredText(16, "Value"), label: requiredText(90, "Label") }))
+    .max(maxItems, `Use at most ${maxItems} entries`)
+    .default([]);
+export type Metric = { value: string; label: string };

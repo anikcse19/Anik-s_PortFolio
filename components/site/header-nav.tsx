@@ -4,25 +4,26 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { buttonClasses } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { isExternalHref } from "@/lib/urls";
+import { isExternalHref, isFileHref } from "@/lib/urls";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "./nav";
 
-function isActive(pathname: string, href: string): boolean {
+function isActive(pathname: string, href: string, homeHref: string): boolean {
   const path = href.split(/[?#]/)[0];
-  if (!path || path === "/") return false;
+  if (!path || path === "/" || path === homeHref) return false;
   return pathname === path || pathname.startsWith(`${path}/`);
 }
 
-function NavLink({ item, pathname, className, onNavigate }: { item: NavItem; pathname: string; className?: string; onNavigate?: () => void }) {
-  const active = isActive(pathname, item.href);
-  if (isExternalHref(item.href)) {
+function NavLink({ item, active, className, onNavigate }: { item: NavItem; active: boolean; className?: string; onNavigate?: () => void }) {
+  if (isExternalHref(item.href) || isFileHref(item.href) || item.href.startsWith("mailto:")) {
+    const external = isExternalHref(item.href) || isFileHref(item.href);
     return (
-      <a href={item.href} target="_blank" rel="noopener noreferrer" className={className}>
+      <a href={item.href} className={className} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
         {item.label}
-        <span aria-hidden> ↗</span>
-        <span className="sr-only"> (opens in a new tab)</span>
+        {external ? <span aria-hidden> ↗</span> : null}
+        {external ? <span className="sr-only"> (opens in a new tab)</span> : null}
       </a>
     );
   }
@@ -33,8 +34,8 @@ function NavLink({ item, pathname, className, onNavigate }: { item: NavItem; pat
   );
 }
 
-export function HeaderNav({ items, name }: { items: NavItem[]; name: string }) {
-  const pathname = usePathname() ?? "/";
+export function HeaderNav({ items, name, homeHref = "/", cta }: { items: NavItem[]; name: string; homeHref?: string; cta?: NavItem | null }) {
+  const pathname = usePathname() ?? homeHref;
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   // Close the mobile menu after client-side navigation.
@@ -43,22 +44,25 @@ export function HeaderNav({ items, name }: { items: NavItem[]; name: string }) {
   }, [pathname]);
 
   const linkClass =
-    "relative py-1 text-[0.9375rem] text-ink-2 transition-colors duration-fast hover:text-ink data-[active]:text-ink after:absolute after:inset-x-0 after:-bottom-[1.3rem] after:h-px after:bg-accent after:opacity-0 data-[active]:after:opacity-100";
+    "rounded-md px-3 py-1.5 text-[0.9375rem] text-ink-2 transition-colors duration-fast hover:bg-surface hover:text-ink data-[active]:bg-surface data-[active]:font-medium data-[active]:text-ink";
 
   return (
     <>
-      <nav aria-label="Primary" className="hidden items-center gap-7 md:flex">
-        {items.map((item) => (
-          <NavLink key={item.href + item.label} item={item} pathname={pathname} className={linkClass} />
-        ))}
-        <ThemeToggle className="-mr-2" />
-      </nav>
+      <div className="hidden items-center gap-1 md:flex">
+        <nav aria-label="Primary" className="flex items-center gap-0.5">
+          {items.map((item) => (
+            <NavLink key={item.href + item.label} item={item} active={isActive(pathname, item.href, homeHref)} className={linkClass} />
+          ))}
+        </nav>
+        <ThemeToggle className="ml-1" />
+        {cta ? <NavLink item={cta} active={false} className={buttonClasses("primary", "sm", "ml-2 h-9 px-4")} /> : null}
+      </div>
 
       <div className="flex items-center gap-1 md:hidden">
         <ThemeToggle />
         <button
           type="button"
-          className="inline-flex h-9 items-center gap-2 rounded-sm px-2 text-sm text-ink hover:bg-surface"
+          className="inline-flex h-9 items-center gap-2 rounded-md px-2.5 text-sm text-ink hover:bg-surface"
           aria-haspopup="dialog"
           onClick={() => dialogRef.current?.showModal()}
         >
@@ -77,30 +81,27 @@ export function HeaderNav({ items, name }: { items: NavItem[]; name: string }) {
       >
         <div className="container-page flex h-[var(--header-h)] items-center justify-between border-b border-rule">
           <span className="font-display text-[0.9375rem] font-semibold">{name}</span>
-          <button
-            type="button"
-            className="inline-flex h-9 items-center gap-2 rounded-sm px-2 text-sm hover:bg-surface"
-            onClick={() => dialogRef.current?.close()}
-          >
+          <button type="button" className="inline-flex h-9 items-center gap-2 rounded-md px-2.5 text-sm hover:bg-surface" onClick={() => dialogRef.current?.close()}>
             <X aria-hidden className="h-4 w-4" />
             Close
           </button>
         </div>
-        <nav aria-label="Primary" className="container-page pt-6">
-          <ul className="divide-y divide-rule border-b border-rule">
+        <nav aria-label="Primary" className="container-page pt-4">
+          <ul className="divide-y divide-rule">
             {items.map((item) => (
               <li key={item.href + item.label}>
                 <NavLink
                   item={item}
-                  pathname={pathname}
+                  active={isActive(pathname, item.href, homeHref)}
                   onNavigate={() => dialogRef.current?.close()}
-                  className={cn(
-                    "flex items-baseline gap-4 py-4 font-display text-2xl font-medium tracking-tight text-ink data-[active]:text-accent",
-                  )}
+                  className={cn("flex py-4 font-display text-2xl font-medium tracking-tight text-ink data-[active]:text-accent")}
                 />
               </li>
             ))}
           </ul>
+          {cta ? (
+            <NavLink item={cta} active={false} onNavigate={() => dialogRef.current?.close()} className={buttonClasses("primary", "md", "mt-8 w-full")} />
+          ) : null}
         </nav>
       </dialog>
     </>

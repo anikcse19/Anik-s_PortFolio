@@ -15,9 +15,11 @@
     "db:seed": "tsx scripts/onboard.ts",
     "db:indexes": "tsx scripts/sync-indexes.ts",
     "article:seed": "tsx scripts/seed-article.ts",
-    "onboard": "tsx scripts/onboard.ts"
+    "onboard": "tsx scripts/onboard.ts",
+    "copy:senior": "tsx scripts/apply-senior-copy.ts"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.9.0",
     "@tiptap/pm": "^3.32.0",
     "@tiptap/react": "^3.32.0",
     "@tiptap/starter-kit": "^3.32.0",

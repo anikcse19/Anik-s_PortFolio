@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MetricList } from "@/components/admin/metric-list";
 import { AddButton, Field, FieldGrid, FormSection, Input, ListControls, moveItem, Notice, Select, SlugInput, StringList, TagInput, TextArea, Toggle } from "@/components/admin/fields";
 import { EditorHeader, useDocumentEditor } from "@/components/admin/editor-shell";
 import { GalleryField, ImageUrlField } from "@/components/admin/image-url-field";
@@ -109,7 +110,7 @@ export function ProjectEditor({
             />
           </FormSection>
 
-          <FormSection title="Features, challenges & outcomes" invalid={["features", "challenges", "outcomes"].some((k) => form.hasErrorsUnder([k]))}>
+          <FormSection title="Features, challenges & outcomes" invalid={["features", "challenges", "outcomes", "impact"].some((k) => form.hasErrorsUnder([k]))}>
             <StringList label="Key features" itemLabel="feature" value={v.features} onChange={(x) => set(["features"], x)} errorAt={(i) => error(["features", i])} />
             <div className="border-t border-rule pt-5">
               <p className="mb-3 text-sm font-medium">Challenges & solutions</p>
@@ -118,6 +119,14 @@ export function ProjectEditor({
                 onChange={(items) => set(["challenges"], items.map((i) => ({ challenge: i.a, solution: i.b })))}
                 labels={{ a: "Challenge", b: "Solution", item: "challenge" }}
                 errorAt={(i, k) => error(["challenges", i, k === "a" ? "challenge" : "solution"])}
+              />
+            </div>
+            <div className="border-t border-rule pt-5">
+              <MetricList
+                value={v.impact}
+                onChange={(x) => set(["impact"], x)}
+                errorAt={(i, k) => error(["impact", i, k])}
+                hint="Shown on project cards and at the top of the write-up, e.g. “2×” / “faster checkout”. Only results you can verify."
               />
             </div>
             <div className="border-t border-rule pt-5">

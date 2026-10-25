@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { ContactForm } from "@/components/site/contact-form";
 import { SectionHeader } from "@/components/site/section-header";
 import { getSiteSettings } from "@/lib/data/public";
+import { resumeHref } from "@/lib/resume";
 import { pageMeta } from "@/lib/seo";
 
 export const revalidate = 3600;
@@ -21,12 +22,12 @@ export default async function ContactPage() {
         heading="Get in touch"
         intro={contact.formIntro || settings.seo.pages.contact.description || "For roles, collaborations or project enquiries, send a message or email me directly."}
       />
-      <div className="grid-page mt-14 gap-y-12">
-        <aside className="col-span-4 md:col-span-8 lg:col-span-4">
-          <dl className="space-y-6 border-t border-rule pt-5">
+      <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-10">
+        <aside>
+          <dl className="card space-y-6 p-6">
             {contact.email ? (
               <div>
-                <dt className="label">Email</dt>
+                <dt className="meta">Email</dt>
                 <dd className="mt-1.5">
                   <a href={`mailto:${contact.email}`} className="link break-all text-lead text-ink">
                     {contact.email}
@@ -36,19 +37,19 @@ export default async function ContactPage() {
             ) : null}
             {profile.availability ? (
               <div>
-                <dt className="label">Availability</dt>
+                <dt className="meta">Availability</dt>
                 <dd className="mt-1.5 text-ink">{profile.availability}</dd>
               </div>
             ) : null}
             {profile.location ? (
               <div>
-                <dt className="label">Based in</dt>
+                <dt className="meta">Based in</dt>
                 <dd className="mt-1.5 text-ink">{profile.location}</dd>
               </div>
             ) : null}
             {contact.socials.length ? (
               <div>
-                <dt className="label">Elsewhere</dt>
+                <dt className="meta">Elsewhere</dt>
                 <dd className="mt-1.5">
                   <ul className="space-y-1.5">
                     {contact.socials.map((s) => (
@@ -64,11 +65,11 @@ export default async function ContactPage() {
                 </dd>
               </div>
             ) : null}
-            {profile.resumeUrl ? (
+            {resumeHref(settings) ? (
               <div>
-                <dt className="label">Résumé</dt>
+                <dt className="meta">Résumé</dt>
                 <dd className="mt-1.5">
-                  <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" className="link inline-flex items-center gap-1 text-ink">
+                  <a href={resumeHref(settings)} target="_blank" rel="noopener noreferrer" className="link inline-flex items-center gap-1 text-ink">
                     View résumé <ArrowUpRight aria-hidden className="h-3.5 w-3.5" />
                     <span className="sr-only">(opens in a new tab)</span>
                   </a>
@@ -77,11 +78,11 @@ export default async function ContactPage() {
             ) : null}
           </dl>
         </aside>
-        <div className="col-span-4 md:col-span-8 lg:col-span-7 lg:col-start-6">
+        <div className="card p-6 md:p-8">
           {contact.formEnabled ? (
             <ContactForm responseNote={contact.responseNote} />
           ) : (
-            <p className="border-t border-rule pt-5 text-ink-2">
+            <p className="text-ink-2">
               The contact form is closed at the moment.{contact.email ? " Please use the email address listed here." : ""}
             </p>
           )}

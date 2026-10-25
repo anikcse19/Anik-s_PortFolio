@@ -11,6 +11,15 @@ const messageSchema = new Schema(
     /** "stored" = saved only, "emailed" = notification sent, "email_failed" = SMTP error. */
     delivery: { type: String, enum: ["stored", "emailed", "email_failed"], default: "stored" },
     ipHash: { type: String, default: "" },
+    /** Which presentation the message came from: the portfolio contact form or a studio project inquiry. */
+    source: { type: String, enum: ["portfolio", "studio"], default: "portfolio" },
+    /** Project details for studio inquiries (company, service, budget, timeline). */
+    details: {
+      company: { type: String, default: "" },
+      service: { type: String, default: "" },
+      budget: { type: String, default: "" },
+      timeline: { type: String, default: "" },
+    },
   },
   baseOptions,
 );

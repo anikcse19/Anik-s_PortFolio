@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { Fragment, useTransition } from "react";
 import { deleteMessageAction, setMessageReadAction } from "@/app/admin/_actions/messages";
 import { Button } from "@/components/ui/button";
 import type { ContactMessage } from "@/lib/types";
@@ -13,6 +13,13 @@ const DELIVERY: Record<ContactMessage["delivery"], string> = {
   emailed: "Saved and emailed",
   email_failed: "Saved — email notification failed",
 };
+
+const DETAIL_FIELDS = [
+  ["company", "Company"],
+  ["service", "Service"],
+  ["budget", "Budget"],
+  ["timeline", "Timeline"],
+] as const;
 
 export function MessageList({ messages }: { messages: ContactMessage[] }) {
   const router = useRouter();
@@ -35,6 +42,7 @@ export function MessageList({ messages }: { messages: ContactMessage[] }) {
             <summary className="grid cursor-pointer list-none gap-1 px-3 py-3 hover:bg-surface md:grid-cols-[1fr_14rem_10rem]">
               <span className={cn("truncate", !m.read && "font-semibold")}>
                 {!m.read ? <span className="mr-2 inline-block h-2 w-2 rounded-full bg-accent" aria-label="Unread" /> : null}
+                {m.source === "studio" ? <span className="tag mr-2 align-middle">Studio</span> : null}
                 {m.subject || m.message.slice(0, 80)}
               </span>
               <span className="truncate text-sm text-ink-2">{m.name}</span>
@@ -52,6 +60,14 @@ export function MessageList({ messages }: { messages: ContactMessage[] }) {
                   </a>
                   &gt;
                 </dd>
+                {DETAIL_FIELDS.map(([key, label]) =>
+                  m.details?.[key] ? (
+                    <Fragment key={key}>
+                      <dt className="text-ink-3">{label}</dt>
+                      <dd>{m.details[key]}</dd>
+                    </Fragment>
+                  ) : null,
+                )}
                 <dt className="text-ink-3">Delivery</dt>
                 <dd>{DELIVERY[m.delivery]}</dd>
               </dl>

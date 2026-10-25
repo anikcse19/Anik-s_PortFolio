@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getPublishedArticles, getPublishedCaseStudies, getPublishedProjects, getSiteSettings } from "@/lib/data/public";
 import { absoluteUrl } from "@/lib/seo";
+import { STUDIO_ROUTES } from "@/lib/studio";
 
 export const revalidate = 3600;
 
@@ -24,5 +25,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...projects.map((p) => ({ url: absoluteUrl(`/projects/${p.slug}`), lastModified: p.updatedAt, priority: 0.8 })),
     ...caseStudies.map((c) => ({ url: absoluteUrl(`/case-studies/${c.slug}`), lastModified: c.updatedAt, priority: 0.8 })),
     ...articles.map((a) => ({ url: absoluteUrl(`/writing/${a.slug}`), lastModified: a.updatedAt, priority: 0.6 })),
+    // The studio is opt-in (Admin › Studio) so search results don't connect it to the portfolio.
+    ...(settings.studio.indexable
+      ? [
+          ...[STUDIO_ROUTES.home, STUDIO_ROUTES.work, STUDIO_ROUTES.start].map((path) => ({ url: absoluteUrl(path), priority: path === STUDIO_ROUTES.home ? 0.9 : 0.6 })),
+          ...projects.map((p) => ({ url: absoluteUrl(`${STUDIO_ROUTES.work}/${p.slug}`), lastModified: p.updatedAt, priority: 0.5 })),
+        ]
+      : []),
   ];
 }

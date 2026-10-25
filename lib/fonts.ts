@@ -1,11 +1,13 @@
-import { IBM_Plex_Mono, IBM_Plex_Sans, Instrument_Sans, JetBrains_Mono, Newsreader, Schibsted_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono, IBM_Plex_Mono, IBM_Plex_Sans, Instrument_Sans, JetBrains_Mono, Newsreader, Schibsted_Grotesk } from "next/font/google";
 
 /**
  * Typography presets (selected in Admin › Appearance). Fonts are self-hosted by
  * next/font; only the default preset is preloaded, the others load on demand.
  */
-export const schibsted = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-schibsted", display: "swap" });
-export const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap" });
+export const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+export const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
+export const schibsted = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-schibsted", display: "swap", preload: false });
+export const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap", preload: false });
 export const newsreader = Newsreader({
   subsets: ["latin"],
   variable: "--font-newsreader",
@@ -23,4 +25,4 @@ export const plexMono = IBM_Plex_Mono({
   preload: false,
 });
 
-export const fontVariables = [schibsted, jetbrains, newsreader, instrument, plexSans, plexMono].map((f) => f.variable).join(" ");
+export const fontVariables = [geist, geistMono, schibsted, jetbrains, newsreader, instrument, plexSans, plexMono].map((f) => f.variable).join(" ");

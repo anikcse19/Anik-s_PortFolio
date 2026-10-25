@@ -32,7 +32,7 @@ export default async function MessagesPage({ searchParams }: PageProps<"/admin/m
     <>
       <PageHeader
         title="Messages"
-        description="Submissions from the contact form. Messages are stored even when email delivery is not configured."
+        description="Submissions from the portfolio contact form and studio project inquiries. Messages are stored even when email delivery is not configured."
         action={
           <div className="flex gap-2 text-sm">
             <Link href="/admin/messages" className={buttonClasses(params.filter === "unread" ? "ghost" : "secondary", "sm")}>

@@ -1,16 +1,16 @@
 import Link from "next/link";
 import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode } from "react";
-import { isExternalHref } from "@/lib/urls";
+import { isExternalHref, isFileHref } from "@/lib/urls";
 import { cn } from "@/lib/utils";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger" | "link";
 type Size = "sm" | "md";
 
 const base =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm font-medium transition-colors duration-fast ease-out disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg font-medium transition-colors duration-fast ease-out disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-accent text-accent-ink hover:bg-accent/90",
+  primary: "bg-ink text-paper hover:bg-ink/85",
   secondary: "border border-rule-strong text-ink hover:border-ink hover:bg-surface",
   ghost: "text-ink-2 hover:bg-surface hover:text-ink",
   danger: "border border-danger/60 text-danger hover:bg-danger hover:text-paper",
@@ -45,8 +45,8 @@ type ButtonLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
 /** Link styled as a button. External links open in a new tab with a safe rel. */
 export function ButtonLink({ href, variant = "primary", size = "md", className, children, ...props }: ButtonLinkProps) {
   const classes = buttonClasses(variant, size, className);
-  if (isExternalHref(href) || href.startsWith("mailto:")) {
-    const external = isExternalHref(href);
+  if (isExternalHref(href) || isFileHref(href) || href.startsWith("mailto:")) {
+    const external = isExternalHref(href) || isFileHref(href);
     return (
       <a
         href={href}

@@ -72,6 +72,11 @@ export function isSafeHref(raw: string): boolean {
   return isHttpUrl(value);
 }
 
+/** Internal link to a file (e.g. /resume.pdf) rather than a page: open it with a normal link, not client navigation. */
+export function isFileHref(href: string): boolean {
+  return href.startsWith("/") && /\.[a-z0-9]{2,5}($|[?#])/i.test(href);
+}
+
 export function isExternalHref(href: string): boolean {
   return /^https?:\/\//i.test(href);
 }

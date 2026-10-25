@@ -1,58 +1,50 @@
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ArticleListItem, CaseStudyListItem } from "@/lib/data/public";
 import { employmentPeriod, formatDate } from "@/lib/dates";
 import type { Experience, SkillCategory } from "@/lib/types";
-import { padIndex } from "@/lib/utils";
-import {
-  CASE_STUDY_KIND_LABELS,
-  CASE_STUDY_TOPIC_LABELS,
-  EMPLOYMENT_TYPE_LABELS,
-  SKILL_LEVEL_LABELS,
-  SKILL_LEVEL_SHORT,
-  SKILL_LEVELS,
-} from "@/lib/validation/content";
+import { cn } from "@/lib/utils";
+import { CASE_STUDY_KIND_LABELS, CASE_STUDY_TOPIC_LABELS, EMPLOYMENT_TYPE_LABELS, SKILL_LEVEL_LABELS, SKILL_LEVELS } from "@/lib/validation/content";
+import { ChipList } from "./project-list";
 
 /* ---------------------------------------------------------------- Experience */
 
+function capitalize(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/** Vertical timeline: dates on the left, role details on the right. */
 export function ExperienceList({ entries, detailed = false }: { entries: Experience[]; detailed?: boolean }) {
   return (
-    <ol className="border-b border-rule">
-      {entries.map((entry) => {
+    <ol>
+      {entries.map((entry, i) => {
         const period = employmentPeriod(entry);
+        const meta = [entry.employmentType ? EMPLOYMENT_TYPE_LABELS[entry.employmentType] : "", entry.location, entry.workMode ? capitalize(entry.workMode) : ""].filter(Boolean);
+        const last = i === entries.length - 1;
         return (
-          <li key={entry.id} className="grid-page gap-y-3 border-t border-rule py-7">
-            <div className="col-span-4 md:col-span-2 lg:col-span-3">
-              {period.range ? <p className="font-mono text-sm text-ink">{period.range}</p> : null}
-              {period.duration ? <p className="mt-1 font-mono text-xs text-ink-3">{period.duration}</p> : null}
-              {entry.isCurrent ? (
-                <p className="mt-2 inline-flex items-center gap-1.5 text-xs text-ink-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-                  Current role
-                </p>
-              ) : null}
+          <li key={entry.id} className="grid gap-x-8 gap-y-2 md:grid-cols-[11rem_1fr]">
+            <div className="md:pt-0.5 md:text-right">
+              {period.range ? <p className="font-mono text-[0.8125rem] text-ink">{period.range}</p> : null}
+              {period.duration ? <p className="meta mt-0.5">{period.duration}</p> : null}
             </div>
-            <div className="col-span-4 md:col-span-6 lg:col-span-9">
-              <h3 className="text-title-3 font-semibold">
-                {entry.title}
-                <span className="text-ink-3"> · </span>
+            <div className={cn("relative border-l border-rule pl-7", !last && "pb-10")}>
+              <span
+                aria-hidden
+                className={cn("absolute -left-[5px] top-2 h-[9px] w-[9px] rounded-full ring-4 ring-paper", entry.isCurrent ? "bg-accent" : "bg-rule-strong")}
+              />
+              <h3 className="text-lg font-semibold tracking-tight">{entry.title}</h3>
+              <p className="mt-0.5 text-ink-2">
                 {entry.organizationUrl ? (
-                  <a href={entry.organizationUrl} target="_blank" rel="noopener noreferrer" className="link">
+                  <a href={entry.organizationUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-ink underline decoration-rule-strong underline-offset-4 hover:decoration-ink">
                     {entry.organization}
+                    <span className="sr-only"> (opens in a new tab)</span>
                   </a>
                 ) : (
-                  entry.organization
+                  <span className="font-medium text-ink">{entry.organization}</span>
                 )}
-              </h3>
-              {[entry.employmentType ? EMPLOYMENT_TYPE_LABELS[entry.employmentType] : "", entry.location, entry.workMode ? capitalize(entry.workMode) : ""]
-                .filter(Boolean)
-                .length ? (
-                <p className="mt-1 text-sm text-ink-3">
-                  {[entry.employmentType ? EMPLOYMENT_TYPE_LABELS[entry.employmentType] : "", entry.location, entry.workMode ? capitalize(entry.workMode) : ""]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </p>
-              ) : null}
-              {entry.summary ? <p className="mt-4 max-w-prose text-ink-2">{entry.summary}</p> : null}
+                {meta.length ? <span className="text-ink-3"> · {meta.join(" · ")}</span> : null}
+              </p>
+              {entry.summary ? <p className="mt-3 max-w-prose text-ink-2">{entry.summary}</p> : null}
               {detailed && entry.achievements.length ? (
                 <ul className="prose-journal mt-4">
                   {entry.achievements.map((a) => (
@@ -60,15 +52,7 @@ export function ExperienceList({ entries, detailed = false }: { entries: Experie
                   ))}
                 </ul>
               ) : null}
-              {entry.technologies.length ? (
-                <ul className="mt-5 flex flex-wrap gap-1.5" aria-label="Technologies used">
-                  {entry.technologies.slice(0, detailed ? 30 : 6).map((t) => (
-                    <li key={t} className="tag">
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
+              <ChipList items={entry.technologies} max={detailed ? 30 : 6} label="Technologies used" className="mt-4" />
             </div>
           </li>
         );
@@ -77,20 +61,25 @@ export function ExperienceList({ entries, detailed = false }: { entries: Experie
   );
 }
 
-function capitalize(s: string) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
 /* -------------------------------------------------------------------- Skills */
+
+const LEVEL_DOT: Record<(typeof SKILL_LEVELS)[number], string> = {
+  production: "bg-accent",
+  hands_on: "bg-ink-3",
+  learning: "border border-ink-3 bg-transparent",
+};
 
 export function SkillLegend({ categories }: { categories: SkillCategory[] }) {
   const used = new Set(categories.flatMap((c) => c.skills.map((s) => s.level)).filter(Boolean));
-  if (!used.size) return null;
+  if (used.size < 2) return null;
   return (
-    <dl className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink-3" aria-label="Skill label legend">
+    <dl className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink-3" aria-label="Skill legend">
       {SKILL_LEVELS.filter((l) => used.has(l)).map((level) => (
         <div key={level} className="flex items-center gap-2">
-          <dt className="tag">{SKILL_LEVEL_SHORT[level]}</dt>
+          <dt>
+            <span aria-hidden className={cn("block h-2 w-2 rounded-full", LEVEL_DOT[level])} />
+            <span className="sr-only">Marker</span>
+          </dt>
           <dd>{SKILL_LEVEL_LABELS[level]}</dd>
         </div>
       ))}
@@ -98,28 +87,35 @@ export function SkillLegend({ categories }: { categories: SkillCategory[] }) {
   );
 }
 
+/**
+ * Removes skills marked "learning" (unless the site shows them) and any
+ * category left empty, so public skill lists lead with production work.
+ */
+export function visibleSkillCategories(categories: SkillCategory[], showLearning: boolean): SkillCategory[] {
+  if (showLearning) return categories;
+  return categories
+    .map((c) => ({ ...c, skills: c.skills.filter((s) => s.level !== "learning") }))
+    .filter((c) => c.skills.length > 0);
+}
+
+/** Compact stack table: one row per category, skills as chips. */
 export function SkillsGrid({ categories }: { categories: SkillCategory[] }) {
   return (
-    <div className="grid grid-cols-1 gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
-      {categories.map((category, i) => (
-        <section key={category.id} aria-labelledby={`skill-cat-${category.id}`} className="border-t border-rule pb-10 pt-6">
-          <p className="font-mono text-xs text-ink-3">{padIndex(i)}</p>
-          <h3 id={`skill-cat-${category.id}`} className="mt-2 text-lg font-semibold">
-            {category.name}
-          </h3>
-          {category.description ? <p className="mt-2 text-[0.9375rem] text-ink-2">{category.description}</p> : null}
-          <ul className="mt-5 space-y-2">
+    <div className="card divide-y divide-rule">
+      {categories.map((category) => (
+        <section key={category.id} aria-labelledby={`skill-cat-${category.id}`} className="grid gap-3 px-5 py-5 md:grid-cols-[17rem_minmax(0,1fr)] md:gap-8 md:px-7">
+          <div>
+            <h3 id={`skill-cat-${category.id}`} className="font-medium text-ink">
+              {category.name}
+            </h3>
+            {category.description ? <p className="mt-1 text-sm text-ink-3">{category.description}</p> : null}
+          </div>
+          <ul className="flex flex-wrap content-start gap-1.5">
             {category.skills.map((skill) => (
-              <li key={skill.name} className="flex items-baseline justify-between gap-4 border-b border-dotted border-rule pb-2 text-[0.9375rem]">
-                <span className="text-ink" title={skill.note || undefined}>
-                  {skill.name}
-                </span>
-                {skill.level ? (
-                  <span className="tag shrink-0" title={SKILL_LEVEL_LABELS[skill.level]}>
-                    {SKILL_LEVEL_SHORT[skill.level]}
-                    <span className="sr-only"> — {SKILL_LEVEL_LABELS[skill.level]}</span>
-                  </span>
-                ) : null}
+              <li key={skill.name} className="chip" title={[skill.level ? SKILL_LEVEL_LABELS[skill.level] : "", skill.note].filter(Boolean).join(" — ") || undefined}>
+                {skill.level ? <span aria-hidden className={cn("h-1.5 w-1.5 rounded-full", LEVEL_DOT[skill.level])} /> : null}
+                {skill.name}
+                {skill.level ? <span className="sr-only"> — {SKILL_LEVEL_LABELS[skill.level]}</span> : null}
               </li>
             ))}
           </ul>
@@ -133,30 +129,32 @@ export function SkillsGrid({ categories }: { categories: SkillCategory[] }) {
 
 export function CaseStudyList({ items }: { items: CaseStudyListItem[] }) {
   return (
-    <ol className="border-b border-rule">
-      {items.map((item, i) => (
-        <li key={item.id} className="border-t border-rule">
-          <Link href={`/case-studies/${item.slug}`} className="group grid-page gap-y-3 py-8 transition-colors duration-fast hover:bg-surface/60">
-            <div className="col-span-4 md:col-span-2 lg:col-span-3">
-              <p className="label">
-                <span className="text-accent">{padIndex(i)}</span> · {CASE_STUDY_KIND_LABELS[item.kind]}
-              </p>
-              {item.context ? <p className="mt-2 text-sm text-ink-3">{item.context}</p> : null}
-            </div>
-            <div className="col-span-4 md:col-span-6 lg:col-span-9">
-              <h3 className="text-title-2 font-semibold transition-colors duration-fast group-hover:text-accent">{item.title}</h3>
-              <p className="mt-3 max-w-prose text-ink-2">{item.summary}</p>
-              {item.topics.length ? (
-                <p className="mt-4 text-sm text-ink-3">
-                  <span className="sr-only">Covers: </span>
-                  {item.topics.map((t) => CASE_STUDY_TOPIC_LABELS[t as keyof typeof CASE_STUDY_TOPIC_LABELS] ?? t).join(" · ")}
-                </p>
-              ) : null}
-            </div>
-          </Link>
+    <ul className={cn("grid grid-cols-1 gap-5", items.length > 1 && "md:grid-cols-2", items.length % 3 === 0 && "lg:grid-cols-3")}>
+      {items.map((item) => (
+        <li key={item.id}>
+          <article className="card card-link group relative flex h-full flex-col p-6">
+            <p className="meta">
+              <span className="font-medium text-accent">{CASE_STUDY_KIND_LABELS[item.kind]}</span>
+              {item.context ? ` · ${item.context}` : ""}
+            </p>
+            <h3 className="mt-2 text-title-3 font-semibold">
+              <Link href={`/case-studies/${item.slug}`} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none group-hover:text-accent">
+                {item.title}
+              </Link>
+            </h3>
+            <p className="mt-3 line-clamp-4 text-ink-2">{item.summary}</p>
+            {item.topics.length ? (
+              <ChipList
+                items={item.topics.map((t) => CASE_STUDY_TOPIC_LABELS[t as keyof typeof CASE_STUDY_TOPIC_LABELS] ?? t)}
+                max={4}
+                label="Topics covered"
+                className="mt-auto pt-6"
+              />
+            ) : null}
+          </article>
         </li>
       ))}
-    </ol>
+    </ul>
   );
 }
 
@@ -164,21 +162,21 @@ export function CaseStudyList({ items }: { items: CaseStudyListItem[] }) {
 
 export function ArticleList({ items }: { items: ArticleListItem[] }) {
   return (
-    <ol className="border-b border-rule">
+    <ul className="card divide-y divide-rule overflow-hidden">
       {items.map((item) => (
-        <li key={item.id} className="border-t border-rule">
-          <Link href={`/writing/${item.slug}`} className="group grid-page gap-y-2 py-6 transition-colors duration-fast hover:bg-surface/60">
-            <p className="col-span-4 font-mono text-sm text-ink-3 md:col-span-2 lg:col-span-3">
-              <time dateTime={item.publishedAt ?? undefined}>{formatDate(item.publishedAt, "short")}</time>
-            </p>
-            <div className="col-span-4 md:col-span-5 lg:col-span-7">
-              <h3 className="text-title-3 font-semibold transition-colors duration-fast group-hover:text-accent">{item.title}</h3>
-              <p className="mt-2 line-clamp-2 text-ink-2">{item.excerpt}</p>
+        <li key={item.id}>
+          <Link href={`/writing/${item.slug}`} className="group flex items-start gap-6 p-5 transition-colors duration-fast hover:bg-surface md:p-6">
+            <div className="min-w-0 flex-1">
+              <p className="meta">
+                <time dateTime={item.publishedAt ?? undefined}>{formatDate(item.publishedAt, "short")}</time> · {item.readingMinutes} min read
+              </p>
+              <h3 className="mt-1 text-lg font-semibold tracking-tight transition-colors duration-fast group-hover:text-accent">{item.title}</h3>
+              <p className="mt-1.5 line-clamp-2 text-[0.9375rem] text-ink-2">{item.excerpt}</p>
             </div>
-            <p className="col-span-4 text-sm text-ink-3 md:col-span-1 md:text-right lg:col-span-2">{item.readingMinutes} min read</p>
+            <ArrowUpRight aria-hidden className="mt-1 h-5 w-5 shrink-0 text-ink-3 transition-transform duration-fast group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
           </Link>
         </li>
       ))}
-    </ol>
+    </ul>
   );
 }

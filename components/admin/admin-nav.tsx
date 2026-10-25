@@ -12,9 +12,12 @@ import {
   Layers,
   Navigation,
   Palette,
+  RefreshCw,
+  ScrollText,
   Search,
   Shield,
   SquareUser,
+  Store,
   UserRound,
   Wrench,
 } from "lucide-react";
@@ -23,7 +26,13 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const GROUPS = [
-  { label: "Overview", items: [{ href: "/admin", label: "Dashboard", icon: Gauge }] },
+  {
+    label: "Overview",
+    items: [
+      { href: "/admin", label: "Dashboard", icon: Gauge },
+      { href: "/admin/sync", label: "Profile sync", icon: RefreshCw },
+    ],
+  },
   {
     label: "Content",
     items: [
@@ -40,12 +49,14 @@ const GROUPS = [
     items: [
       { href: "/admin/homepage", label: "Homepage", icon: Home },
       { href: "/admin/profile", label: "Profile & hero", icon: UserRound },
+      { href: "/admin/resume", label: "Résumé", icon: ScrollText },
       { href: "/admin/navigation", label: "Navigation & footer", icon: Navigation },
       { href: "/admin/contact", label: "Contact & social", icon: SquareUser },
       { href: "/admin/seo", label: "SEO", icon: Search },
       { href: "/admin/appearance", label: "Appearance", icon: Palette },
     ],
   },
+  { label: "Services", items: [{ href: "/admin/studio", label: "Studio", icon: Store }] },
   {
     label: "Library",
     items: [

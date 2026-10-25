@@ -24,8 +24,8 @@ export function ContactForm({ responseNote }: { responseNote?: string }) {
 
   if (state.status === "success") {
     return (
-      <div ref={statusRef} tabIndex={-1} role="status" className="border border-rule bg-surface p-6 outline-none">
-        <p className="label text-success">Message received</p>
+      <div ref={statusRef} tabIndex={-1} role="status" className="rounded-xl border border-rule bg-surface p-6 outline-none">
+        <p className="text-sm font-medium text-success">Message received</p>
         <p className="mt-3 text-lead text-ink">{state.message}</p>
         {responseNote ? <p className="mt-2 text-ink-2">{responseNote}</p> : null}
       </div>
@@ -42,7 +42,7 @@ export function ContactForm({ responseNote }: { responseNote?: string }) {
         if (startedAtRef.current && !startedAtRef.current.value) startedAtRef.current.value = String(Date.now());
       }} className="space-y-6" aria-describedby={state.status === "error" ? "contact-status" : undefined}>
       {state.status === "error" ? (
-        <div ref={statusRef} id="contact-status" tabIndex={-1} role="alert" className="border-l-2 border-danger bg-surface px-4 py-3 text-[0.9375rem] text-ink outline-none">
+        <div ref={statusRef} id="contact-status" tabIndex={-1} role="alert" className="rounded-lg border border-danger/50 bg-danger/5 px-4 py-3 text-[0.9375rem] text-ink outline-none">
           {state.message}
         </div>
       ) : null}
@@ -79,19 +79,19 @@ export function ContactForm({ responseNote }: { responseNote?: string }) {
   );
 }
 
-function describe(id: string, error?: string, hasHint = false) {
+export function describe(id: string, error?: string, hasHint = false) {
   const ids = [hasHint ? `${id}-hint` : "", error ? `${id}-error` : ""].filter(Boolean).join(" ");
   return { "aria-invalid": error ? true : undefined, "aria-describedby": ids || undefined } as const;
 }
 
-function inputClass(error?: string) {
+export function inputClass(error?: string) {
   return cn(
-    "h-11 w-full rounded-sm border bg-paper px-3 text-ink placeholder:text-ink-3 focus:outline-none",
+    "h-11 w-full rounded-lg border bg-paper px-3 text-ink placeholder:text-ink-3 focus:outline-none",
     error ? "border-danger focus:border-danger" : "border-rule-strong focus:border-ink",
   );
 }
 
-function Field({ id, label, optional, hint, error, children }: { id: string; label: string; optional?: boolean; hint?: string; error?: string; children: React.ReactNode }) {
+export function Field({ id, label, optional, hint, error, children }: { id: string; label: string; optional?: boolean; hint?: string; error?: string; children: React.ReactNode }) {
   return (
     <div>
       <label htmlFor={id} className="mb-2 flex items-baseline justify-between text-sm font-medium text-ink">

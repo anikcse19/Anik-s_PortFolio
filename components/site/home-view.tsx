@@ -1,12 +1,17 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, Download, Mail } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
+import { SiteImage } from "@/components/ui/site-image";
+import { careerSummary } from "@/lib/career";
 import type { ArticleListItem, CaseStudyListItem, ProjectListItem, SiteSettings } from "@/lib/data/public";
 import type { Experience, SkillCategory } from "@/lib/types";
 import { isExternalHref } from "@/lib/urls";
-import { padIndex } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import type { Metric } from "@/lib/validation/common";
 import type { HomeConfig, HomeSection } from "@/lib/validation/settings";
-import { ArticleList, CaseStudyList, ExperienceList, SkillLegend, SkillsGrid } from "./content-lists";
-import { ProjectGrid, ProjectLead, ProjectLedger } from "./project-list";
+import { ArticleList, CaseStudyList, ExperienceList, SkillsGrid, visibleSkillCategories } from "./content-lists";
+import { MetricGrid } from "./metrics";
+import { ProjectLedger, ProjectShowcase } from "./project-list";
+import { resumeHref } from "@/lib/resume";
 import { SectionHeader } from "./section-header";
 
 export type HomeData = {
@@ -18,7 +23,7 @@ export type HomeData = {
 };
 
 /** Manually selected items in their chosen order, else featured items, else the first N. */
-export function pickItems<T extends { id: string; featured: boolean }>(all: T[], section: HomeSection): T[] {
+export function pickItems<T extends { id: string; featured: boolean }>(all: T[], section: Pick<HomeSection, "itemIds" | "limit">): T[] {
   if (section.itemIds.length) {
     return section.itemIds
       .map((id) => all.find((item) => item.id === id))
@@ -36,19 +41,36 @@ function paragraphs(text: string): string[] {
     .filter(Boolean);
 }
 
+/** Distinct employers in display order (current first), e.g. for the "worked with" strip. */
+export function employers(experience: Experience[]): string[] {
+  return Array.from(new Set(experience.map((e) => e.organization.trim()).filter(Boolean)));
+}
+
+/** Hero numbers: the ones entered in Admin › Profile, else facts computed from published content. */
+export function headlineMetrics(entered: Metric[], experience: Experience[], projects: ProjectListItem[]): Metric[] {
+  if (entered.length) return entered;
+  const career = careerSummary(experience);
+  const shipped = projects.filter((p) => p.type === "professional").length;
+  return [
+    ...(career.years > 0 ? [{ value: `${career.years}+`, label: "Years in production" }] : []),
+    ...(shipped > 0 ? [{ value: String(shipped), label: "Products shipped" }] : []),
+    ...(career.companies > 0 ? [{ value: String(career.companies), label: "Companies" }] : []),
+  ];
+}
+
 export function HomeView({ config, settings, data }: { config: HomeConfig; settings: SiteSettings; data: HomeData }) {
   const rendered: { key: string; node: React.ReactNode }[] = [];
   for (const section of config.sections) {
     if (!section.enabled) continue;
-    const index = padIndex(rendered.length);
-    const node = renderSection(section, index, settings, data);
+    const node = renderSection(section, settings, data);
     if (node) rendered.push({ key: section.type, node });
   }
 
   return (
     <>
       <Hero config={config} settings={settings} data={data} />
-      <div className="container-page space-y-24 md:space-y-32">
+      <WorkedWith names={employers(data.experience)} />
+      <div className="container-page mt-24 space-y-28 md:mt-32 md:space-y-36">
         {rendered.map((r) => (
           <div key={r.key}>{r.node}</div>
         ))}
@@ -57,98 +79,156 @@ export function HomeView({ config, settings, data }: { config: HomeConfig; setti
   );
 }
 
+/* ---------------------------------------------------------------------- Hero */
+
+export function AvailabilityPill({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="inline-flex items-center gap-2 rounded-full border border-rule bg-surface/60 px-3 py-1 font-mono text-[0.75rem] text-ink-2">
+      <span aria-hidden className="relative flex h-1.5 w-1.5">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-60 motion-reduce:hidden" />
+        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
+      </span>
+      {children}
+    </p>
+  );
+}
+
 function Hero({ config, settings, data }: { config: HomeConfig; settings: SiteSettings; data: HomeData }) {
   const { profile } = settings;
   const { hero } = config;
   const statement = hero.statement || profile.positioning;
-  const focus = data.skills.slice(0, 3).map((c) => c.name);
-  const facts: { term: string; value: string }[] = [
-    { term: "Role", value: profile.title },
-    ...(profile.location ? [{ term: "Based in", value: profile.location }] : []),
-    ...(focus.length ? [{ term: "Focus", value: focus.join(", ") }] : []),
-    ...(profile.availability ? [{ term: "Availability", value: profile.availability }] : []),
-  ];
   const ctas = [hero.primaryCta, hero.secondaryCta].filter((c) => c.label && c.href);
-  const nameParts = profile.name.split(" ");
-  const lastWord = nameParts.pop();
+  const metrics = headlineMetrics(profile.highlights, data.experience, data.projects);
 
   return (
-    <section aria-labelledby="hero-title" className="container-page pb-20 pt-8 md:pb-28 md:pt-12">
-      <div className="label flex items-center justify-between border-b border-rule pb-3">
-        <span>{hero.eyebrow || "Portfolio"}</span>
-        <span className="hidden sm:inline">{profile.title}</span>
-      </div>
-
-      {hero.variant === "statement" ? (
-        <div className="grid-page mt-12 gap-y-10 md:mt-16">
-          <div className="col-span-4 md:col-span-8 lg:col-span-10">
-            <h1 id="hero-title" className="text-lead font-medium text-ink-2">
-              {profile.name}
-              <span className="text-ink-3"> — {profile.title}</span>
-            </h1>
-            <p className="mt-6 font-display text-title-1 font-semibold text-ink">{statement}</p>
-          </div>
-          <HeroActions ctas={ctas} resumeUrl={profile.resumeUrl} className="col-span-4 md:col-span-8" />
-          {hero.showFacts ? <HeroFacts facts={facts} className="col-span-4 md:col-span-8 lg:col-span-12 lg:grid-cols-4" /> : null}
-        </div>
-      ) : (
-        <div className="grid-page mt-10 gap-y-12 md:mt-14">
-          <h1 id="hero-title" className="col-span-4 text-display font-semibold md:col-span-8 lg:col-span-11">
-            {nameParts.join(" ")} <span className="text-ink-3">{lastWord}</span>
+    <section aria-labelledby="hero-title" className="relative overflow-hidden">
+      <div aria-hidden className="bg-grid pointer-events-none absolute inset-x-0 top-0 h-[44rem]" />
+      <div className="container-page relative grid items-center gap-14 pb-20 pt-14 md:pb-28 md:pt-24 lg:grid-cols-[minmax(0,1fr)_29rem] lg:gap-16">
+        <div>
+          {profile.availability ? <AvailabilityPill>{profile.availability}</AvailabilityPill> : hero.eyebrow ? <p className="eyebrow">{hero.eyebrow}</p> : null}
+          <h1 id="hero-title" className={cn("text-hero font-semibold", (profile.availability || hero.eyebrow) && "mt-7")}>
+            {profile.name}
           </h1>
-          <div className="col-span-4 md:col-span-5 lg:col-span-6">
-            <p className="text-lead text-ink-2">{statement}</p>
-            <HeroActions ctas={ctas} resumeUrl={profile.resumeUrl} className="mt-8" />
+          <p className="mt-4 font-mono text-[0.9375rem] text-ink-2">
+            {[profile.title, profile.location].filter(Boolean).join("  ·  ")}
+          </p>
+          {statement ? <p className="mt-7 max-w-2xl text-lead text-ink-2">{statement}</p> : null}
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            {ctas[0] ? (
+              <ButtonLink href={ctas[0].href} className="h-11 px-5">
+                {ctas[0].label} <ArrowRight aria-hidden className="h-4 w-4" />
+              </ButtonLink>
+            ) : null}
+            {resumeHref(settings) ? (
+              <ButtonLink href={resumeHref(settings)} variant="secondary" className="h-11 px-5">
+                <Download aria-hidden className="h-4 w-4" />
+                Download résumé
+              </ButtonLink>
+            ) : null}
+            {ctas[1] ? (
+              <ButtonLink href={ctas[1].href} variant="ghost" className="h-11 px-4">
+                {ctas[1].label}
+              </ButtonLink>
+            ) : null}
           </div>
-          {hero.showFacts ? <HeroFacts facts={facts} className="col-span-4 md:col-span-3 lg:col-span-4 lg:col-start-9" /> : null}
+          {metrics.length ? <MetricGrid metrics={metrics} className="mt-14 max-w-2xl" /> : null}
         </div>
-      )}
+        <ProfileTerminal settings={settings} data={data} />
+      </div>
     </section>
   );
 }
 
-function HeroActions({
-  ctas,
-  resumeUrl,
-  className,
-}: {
-  ctas: { label: string; href: string }[];
-  resumeUrl: string;
-  className?: string;
-}) {
-  if (!ctas.length && !resumeUrl) return null;
-  return (
-    <div className={`flex flex-wrap items-center gap-x-3 gap-y-4 ${className ?? ""}`}>
-      {ctas.map((cta, i) => (
-        <ButtonLink key={cta.href + cta.label} href={cta.href} variant={i === 0 ? "primary" : "secondary"}>
-          {cta.label}
-          {i === 0 ? <span aria-hidden>→</span> : null}
-        </ButtonLink>
-      ))}
-      {resumeUrl ? (
-        <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="link ml-2 inline-flex items-center gap-1 text-[0.9375rem] text-ink">
-          Résumé <ArrowUpRight aria-hidden className="h-4 w-4" />
-          <span className="sr-only">(opens in a new tab)</span>
-        </a>
-      ) : null}
-    </div>
-  );
-}
+/**
+ * A terminal-style summary built entirely from real profile data:
+ * current role, employers, primary stack and status.
+ */
+function ProfileTerminal({ settings, data }: { settings: SiteSettings; data: HomeData }) {
+  const { profile, contact } = settings;
+  const career = careerSummary(data.experience);
+  // Headline tools only: three from the first category, two from the second, one from the third.
+  const stack = visibleSkillCategories(data.skills, false)
+    .slice(0, 3)
+    .flatMap((c, i) => c.skills.slice(0, [3, 2, 1][i]).map((s) => s.name));
+  const companies = employers(data.experience);
 
-function HeroFacts({ facts, className }: { facts: { term: string; value: string }[]; className?: string }) {
+  type Line = { cmd: string; out: React.ReactNode };
+  const lines = ([
+    { cmd: "whoami", out: profile.name },
+    ...(career.current ? [{ cmd: "cat role.txt", out: `${career.current.title} @ ${career.current.organization}` }] : []),
+    ...(companies.length ? [{ cmd: "ls experience/", out: companies.join("   ") }] : []),
+    ...(stack.length ? [{ cmd: "stack --primary", out: stack.join(" · ") }] : []),
+    profile.availability
+      ? { cmd: "status", out: <span className="text-success">● {profile.availability}</span> }
+      : profile.location
+        ? { cmd: "locate", out: profile.location }
+        : null,
+  ] as (Line | null)[]).filter((l): l is Line => l !== null);
+
   return (
-    <dl className={`grid grid-cols-1 gap-px self-end border-y border-rule ${className ?? ""}`}>
-      {facts.map((fact) => (
-        <div key={fact.term} className="grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b border-rule py-3 last:border-b-0 lg:grid-cols-[6.5rem_1fr]">
-          <dt className="label">{fact.term}</dt>
-          <dd className="text-[0.9375rem] text-ink">{fact.value}</dd>
+    <aside aria-label="Profile summary" className="overflow-hidden rounded-xl border border-rule bg-surface/70 shadow-[0_30px_80px_-40px_rgb(0_0_0/0.8)] backdrop-blur-sm">
+      <div className="flex h-10 items-center gap-3 border-b border-rule px-4">
+        <span aria-hidden className="flex gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-rule-strong" />
+          <span className="h-2.5 w-2.5 rounded-full bg-rule-strong" />
+          <span className="h-2.5 w-2.5 rounded-full bg-rule-strong" />
+        </span>
+        <span className="font-mono text-[0.75rem] text-ink-3">~/{profile.name.split(" ")[0].toLowerCase()}</span>
+        {profile.portrait?.url ? (
+          <SiteImage src={profile.portrait.url} alt="" aspect="1 / 1" sizes="28px" className="ml-auto h-7 w-7 rounded-full border border-rule" imgClassName="object-top" />
+        ) : null}
+      </div>
+      <dl className="space-y-4 p-5 font-mono text-[0.8125rem] leading-relaxed md:p-6">
+        {lines.map((line) => (
+          <div key={line.cmd}>
+            <dt className="text-ink-3">
+              <span aria-hidden className="text-accent">$ </span>
+              {line.cmd}
+            </dt>
+            <dd className="mt-1 text-ink">{line.out}</dd>
+          </div>
+        ))}
+        <div aria-hidden className="text-ink-3">
+          <span className="text-accent">$ </span>
+          <span className="inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-ink-2 motion-reduce:animate-none" />
         </div>
-      ))}
-    </dl>
+      </dl>
+      {contact.socials.length ? (
+        <ul className="flex flex-wrap gap-x-5 gap-y-1 border-t border-rule px-5 py-3 font-mono text-[0.75rem] md:px-6">
+          {contact.socials.map((s) => (
+            <li key={s.url}>
+              <a href={s.url} className="text-ink-3 transition-colors duration-fast hover:text-ink" {...(isExternalHref(s.url) ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+                {s.label.toLowerCase()} ↗
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </aside>
   );
 }
 
-function renderSection(section: HomeSection, index: string, settings: SiteSettings, data: HomeData): React.ReactNode {
+export function WorkedWith({ names, label = "Worked with" }: { names: string[]; label?: string }) {
+  if (names.length < 2) return null;
+  return (
+    <section aria-label={label} className="border-y border-rule bg-surface/30">
+      <div className="container-page flex flex-col gap-4 py-7 md:flex-row md:items-center md:gap-12">
+        <p className="eyebrow shrink-0">{label}</p>
+        <ul className="flex flex-wrap items-center gap-x-10 gap-y-3">
+          {names.map((name) => (
+            <li key={name} className="font-display text-lg font-semibold tracking-tight text-ink-3 transition-colors duration-fast hover:text-ink">
+              {name}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ Sections */
+
+function renderSection(section: HomeSection, settings: SiteSettings, data: HomeData): React.ReactNode {
   const cta = section.cta.label && section.cta.href ? section.cta : null;
   const headingId = `home-${section.type}`;
 
@@ -157,17 +237,17 @@ function renderSection(section: HomeSection, index: string, settings: SiteSettin
       const parts = paragraphs(section.intro);
       if (!parts.length) return null;
       return (
-        <section aria-labelledby={headingId} className="grid-page gap-y-4 border-t border-rule pt-5">
-          <p className="label col-span-4 md:col-span-2 lg:col-span-3">
-            <span className="text-accent">{index}</span> — {section.eyebrow || "Introduction"}
-          </p>
-          <div className="col-span-4 md:col-span-6 lg:col-span-8">
-            <h2 id={headingId} className={section.heading ? "text-title-3 font-semibold text-ink-3" : "sr-only"}>
+        <section aria-labelledby={headingId} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
+          <div>
+            <p className="eyebrow">{section.eyebrow || "About"}</p>
+            <h2 id={headingId} className="mt-4 text-title-2 font-semibold">
               {section.heading || "Introduction"}
             </h2>
-            <div className="mt-5 space-y-5">
+          </div>
+          <div>
+            <div className="space-y-5">
               {parts.map((p, i) => (
-                <p key={i} className={i === 0 ? "font-display text-title-3 font-medium leading-snug text-ink md:text-[1.75rem]" : "max-w-prose text-lead text-ink-2"}>
+                <p key={i} className={i === 0 ? "text-title-3 font-medium leading-snug text-ink" : "max-w-prose text-[1.0625rem] text-ink-2"}>
                   {p}
                 </p>
               ))}
@@ -185,38 +265,28 @@ function renderSection(section: HomeSection, index: string, settings: SiteSettin
     case "projects": {
       const items = pickItems(data.projects, section);
       if (!items.length) return null;
-      const [lead, ...rest] = items;
-      const useLead = section.layout === "ledger" && Boolean(lead.coverImage?.url);
+      // The first projects carry the page as full case-study rows; any extras follow as a compact list.
+      const showcase = items.slice(0, 3);
+      const rest = items.slice(3);
       return (
         <section aria-labelledby={headingId}>
-          <SectionHeader index={index} label={section.eyebrow || "Work"} heading={section.heading || "Selected work"} intro={section.intro} id={headingId} cta={cta} />
-          <div className="mt-10">
-            {section.layout === "grid" ? (
-              <ProjectGrid projects={items} />
-            ) : useLead ? (
-              <>
-                <ProjectLead project={lead} />
-                {rest.length ? <ProjectLedger projects={rest} startIndex={1} /> : null}
-              </>
-            ) : (
-              <ProjectLedger projects={items} />
-            )}
+          <SectionHeader label={section.eyebrow || "Work"} heading={section.heading || "Selected work"} intro={section.intro} id={headingId} cta={cta} />
+          <div className="mt-12 space-y-6">
+            <ProjectShowcase projects={showcase} />
+            {rest.length ? <ProjectLedger projects={rest} /> : null}
           </div>
         </section>
       );
     }
 
     case "focus": {
-      if (!data.skills.length) return null;
+      const categories = visibleSkillCategories(data.skills, settings.appearance.showLearningSkills);
+      if (!categories.length) return null;
       return (
         <section aria-labelledby={headingId}>
-          <SectionHeader index={index} label={section.eyebrow || "Capabilities"} heading={section.heading || "Technical focus"} intro={section.intro} id={headingId} cta={cta}>
-            <div className="mt-6">
-              <SkillLegend categories={data.skills} />
-            </div>
-          </SectionHeader>
-          <div className="mt-10">
-            <SkillsGrid categories={data.skills.slice(0, section.limit > 3 ? section.limit : 6)} />
+          <SectionHeader label={section.eyebrow || "Stack"} heading={section.heading || "Technical focus"} intro={section.intro} id={headingId} cta={cta} />
+          <div className="mt-12">
+            <SkillsGrid categories={categories} />
           </div>
         </section>
       );
@@ -227,8 +297,8 @@ function renderSection(section: HomeSection, index: string, settings: SiteSettin
       if (!entries.length) return null;
       return (
         <section aria-labelledby={headingId}>
-          <SectionHeader index={index} label={section.eyebrow || "Career"} heading={section.heading || "Experience"} intro={section.intro} id={headingId} cta={cta} />
-          <div className="mt-10">
+          <SectionHeader label={section.eyebrow || "Career"} heading={section.heading || "Experience"} intro={section.intro} id={headingId} cta={cta} />
+          <div className="mt-12">
             <ExperienceList entries={entries} />
           </div>
         </section>
@@ -241,8 +311,8 @@ function renderSection(section: HomeSection, index: string, settings: SiteSettin
       if (!items.length) return null;
       return (
         <section aria-labelledby={headingId}>
-          <SectionHeader index={index} label={section.eyebrow || "Engineering"} heading={section.heading || "Case studies"} intro={section.intro} id={headingId} cta={cta} />
-          <div className="mt-10">
+          <SectionHeader label={section.eyebrow || "Engineering"} heading={section.heading || "Case studies"} intro={section.intro} id={headingId} cta={cta} />
+          <div className="mt-12">
             <CaseStudyList items={items} />
           </div>
         </section>
@@ -255,8 +325,8 @@ function renderSection(section: HomeSection, index: string, settings: SiteSettin
       if (!items.length) return null;
       return (
         <section aria-labelledby={headingId}>
-          <SectionHeader index={index} label={section.eyebrow || "Notes"} heading={section.heading || "Engineering notes"} intro={section.intro} id={headingId} cta={cta} />
-          <div className="mt-10">
+          <SectionHeader label={section.eyebrow || "Writing"} heading={section.heading || "Engineering notes"} intro={section.intro} id={headingId} cta={cta} />
+          <div className="mt-12">
             <ArticleList items={items} />
           </div>
         </section>
@@ -264,61 +334,44 @@ function renderSection(section: HomeSection, index: string, settings: SiteSettin
     }
 
     case "contact":
-      return <ContactBand section={section} index={index} settings={settings} headingId={headingId} />;
+      return <ContactBand section={section} settings={settings} headingId={headingId} />;
 
     default:
       return null;
   }
 }
 
-function ContactBand({ section, index, settings, headingId }: { section: HomeSection; index: string; settings: SiteSettings; headingId: string }) {
-  const { contact, profile } = settings;
+function ContactBand({ section, settings, headingId }: { section: HomeSection; settings: SiteSettings; headingId: string }) {
+  const { contact } = settings;
   const cta = section.cta.label && section.cta.href ? section.cta : contact.formEnabled ? { label: "Send a message", href: "/contact" } : null;
   return (
-    <section aria-labelledby={headingId} className="grid-page gap-y-8 border-t border-rule pt-5">
-      <p className="label col-span-4 md:col-span-2 lg:col-span-3">
-        <span className="text-accent">{index}</span> — {section.eyebrow || "Contact"}
-      </p>
-      <div className="col-span-4 md:col-span-6 lg:col-span-9">
-        <h2 id={headingId} className="text-title-1 font-semibold">
+    <section aria-labelledby={headingId} className="card relative overflow-hidden px-6 py-16 text-center md:px-12 md:py-20">
+      <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_60%_80%_at_50%_100%,black,transparent)]" />
+      <div className="relative">
+        <p className="eyebrow">{section.eyebrow || "Contact"}</p>
+        <h2 id={headingId} className="mx-auto mt-5 max-w-3xl text-title-1 font-semibold">
           {section.heading || "Get in touch"}
         </h2>
-        {section.intro ? <p className="mt-5 max-w-prose text-lead text-ink-2">{section.intro}</p> : null}
-        {contact.email ? (
-          <p className="mt-8">
-            <a href={`mailto:${contact.email}`} className="link break-all font-display text-title-3 font-medium text-ink">
-              {contact.email}
-            </a>
-          </p>
-        ) : null}
-        <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-4">
+        {section.intro ? <p className="mx-auto mt-5 max-w-2xl text-lead text-ink-2">{section.intro}</p> : null}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           {cta ? (
-            <ButtonLink href={cta.href}>
-              {cta.label} <span aria-hidden>→</span>
+            <ButtonLink href={cta.href} className="h-11 px-5">
+              {cta.label} <ArrowRight aria-hidden className="h-4 w-4" />
             </ButtonLink>
           ) : null}
-          {profile.resumeUrl ? (
-            <ButtonLink href={profile.resumeUrl} variant="secondary">
+          {contact.email ? (
+            <ButtonLink href={`mailto:${contact.email}`} variant="secondary" className="h-11 px-5">
+              <Mail aria-hidden className="h-4 w-4" />
+              {contact.email}
+            </ButtonLink>
+          ) : null}
+          {resumeHref(settings) ? (
+            <ButtonLink href={resumeHref(settings)} variant="ghost" className="h-11 px-4">
+              <Download aria-hidden className="h-4 w-4" />
               Résumé
             </ButtonLink>
           ) : null}
         </div>
-        {contact.socials.length ? (
-          <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-rule pt-5 text-[0.9375rem]">
-            {contact.socials.map((s) => (
-              <li key={s.url}>
-                <a
-                  href={s.url}
-                  className="link inline-flex items-center gap-1 text-ink-2"
-                  {...(isExternalHref(s.url) ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  {s.label}
-                  <ArrowUpRight aria-hidden className="h-3.5 w-3.5" />
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : null}
       </div>
     </section>
   );

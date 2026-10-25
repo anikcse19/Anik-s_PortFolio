@@ -76,7 +76,7 @@ describe("content schemas", () => {
   });
   it("repairs invalid stored settings field by field", () => {
     const appearance = parseStoredSettings("appearance", { accent: "neon-pink", writingEnabled: true });
-    expect(appearance.accent).toBe("signal");
+    expect(appearance.accent).toBe("cobalt");
     expect(appearance.writingEnabled).toBe(true);
   });
 });

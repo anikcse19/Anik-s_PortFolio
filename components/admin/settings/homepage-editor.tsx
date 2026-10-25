@@ -11,7 +11,7 @@ import { useForm } from "@/components/admin/use-form";
 import { Button } from "@/components/ui/button";
 import { HOME_SECTION_LABELS, type HomeConfig, type HomeSection } from "@/lib/validation/settings";
 
-type Option = { id: string; label: string; status: string; featured: boolean };
+export type Option = { id: string; label: string; status: string; featured: boolean };
 type Options = { projects: Option[]; caseStudies: Option[]; articles: Option[] };
 
 const SECTION_HELP: Record<HomeSection["type"], string> = {
@@ -245,7 +245,7 @@ function SectionCard({
   );
 }
 
-function ItemPicker({ options, value, onChange }: { options: Option[]; value: string[]; onChange: (ids: string[]) => void }) {
+export function ItemPicker({ options, value, onChange }: { options: Option[]; value: string[]; onChange: (ids: string[]) => void }) {
   const byId = new Map(options.map((o) => [o.id, o]));
   const available = options.filter((o) => !value.includes(o.id));
   return (

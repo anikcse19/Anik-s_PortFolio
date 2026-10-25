@@ -3,11 +3,12 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Blocks, RichText } from "@/components/ui/rich-content";
 import { SiteImage } from "@/components/ui/site-image";
+import { BrowserFrame } from "./browser-frame";
+import { MetricGrid } from "./metrics";
 import type { ProjectListItem } from "@/lib/data/public";
 import { formatDate } from "@/lib/dates";
 import { sanitizeRichText } from "@/lib/sanitize";
 import type { Article, CaseStudy, Project } from "@/lib/types";
-import { padIndex } from "@/lib/utils";
 import { CASE_STUDY_KIND_LABELS, CASE_STUDY_TOPIC_LABELS, PROJECT_TYPE_LABELS } from "@/lib/validation/content";
 
 /* ------------------------------------------------------------ Shared pieces */
@@ -15,7 +16,7 @@ import { CASE_STUDY_KIND_LABELS, CASE_STUDY_TOPIC_LABELS, PROJECT_TYPE_LABELS } 
 function Breadcrumb({ href, label }: { href: string; label: string }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-8">
-      <Link href={href} className="inline-flex items-center gap-1.5 text-sm text-ink-3 transition-colors duration-fast hover:text-ink">
+      <Link href={href} className="inline-flex items-center gap-1.5 rounded-full border border-rule px-3 py-1 text-sm text-ink-2 transition-colors duration-fast hover:border-rule-strong hover:text-ink">
         <ArrowLeft aria-hidden className="h-3.5 w-3.5" />
         {label}
       </Link>
@@ -38,16 +39,15 @@ type TocEntry = { id: string; label: string };
 /** Two-column article body: sticky table of contents on large screens, content on the right. */
 function DocumentBody({ toc, children }: { toc: TocEntry[]; children: ReactNode }) {
   return (
-    <div className="grid-page mt-16 gap-y-10">
+    <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-8">
       {toc.length > 1 ? (
-        <nav aria-label="On this page" className="col-span-4 md:col-span-8 lg:col-span-3">
+        <nav aria-label="On this page" className="lg:col-span-3">
           <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
-            <p className="label mb-3">On this page</p>
+            <p className="mb-3 text-sm font-medium text-ink">On this page</p>
             <ol className="space-y-1.5 border-l border-rule text-sm">
-              {toc.map((entry, i) => (
+              {toc.map((entry) => (
                 <li key={entry.id}>
                   <a href={`#${entry.id}`} className="-ml-px block border-l border-transparent py-0.5 pl-4 text-ink-2 transition-colors duration-fast hover:border-accent hover:text-ink">
-                    <span className="mr-2 font-mono text-xs text-ink-3">{padIndex(i)}</span>
                     {entry.label}
                   </a>
                 </li>
@@ -56,7 +56,7 @@ function DocumentBody({ toc, children }: { toc: TocEntry[]; children: ReactNode 
           </div>
         </nav>
       ) : null}
-      <div className={toc.length > 1 ? "col-span-4 space-y-16 md:col-span-8 lg:col-span-8 lg:col-start-5" : "col-span-4 space-y-16 md:col-span-8 lg:col-span-8 lg:col-start-3"}>
+      <div className={toc.length > 1 ? "space-y-16 lg:col-span-8 lg:col-start-5" : "space-y-16 lg:col-span-8 lg:col-start-3"}>
         {children}
       </div>
     </div>
@@ -66,7 +66,7 @@ function DocumentBody({ toc, children }: { toc: TocEntry[]; children: ReactNode 
 function DocSection({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
     <section aria-labelledby={id} className="scroll-mt-28">
-      <h2 id={id} className="mb-6 border-t border-rule pt-4 text-title-3 font-semibold">
+      <h2 id={id} className="mb-6 text-title-3 font-semibold">
         {title}
       </h2>
       {children}
@@ -79,7 +79,7 @@ function TagList({ items, label }: { items: string[]; label: string }) {
   return (
     <ul className="flex flex-wrap gap-1.5" aria-label={label}>
       {items.map((t) => (
-        <li key={t} className="tag">
+        <li key={t} className="chip">
           {t}
         </li>
       ))}
@@ -97,10 +97,17 @@ export function ProjectDetail({
   project,
   relatedCaseStudies = [],
   neighbors,
+  basePath = "/projects",
+  backLabel = "All projects",
+  footer,
 }: {
   project: Project;
   relatedCaseStudies?: { slug: string; title: string; kind: CaseStudy["kind"] }[];
   neighbors?: { prev: ProjectListItem | null; next: ProjectListItem | null };
+  /** Where project links point; the studio passes its own path so links never cross zones. */
+  basePath?: string;
+  backLabel?: string;
+  footer?: ReactNode;
 }) {
   const sections: { id: string; label: string; node: ReactNode }[] = [];
   if (hasHtml(project.overview)) sections.push({ id: "overview", label: "Overview", node: <RichText html={project.overview} /> });
@@ -118,8 +125,8 @@ export function ProjectDetail({
       node: (
         <ol className="space-y-6">
           {project.decisions.map((d, i) => (
-            <li key={i} className="grid grid-cols-[2.5rem_1fr] gap-x-2">
-              <span className="font-mono text-sm text-ink-3">{padIndex(i)}</span>
+            <li key={i} className="grid grid-cols-[2.25rem_1fr] gap-x-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-surface-2 text-sm font-medium text-ink-2">{i + 1}</span>
               <div>
                 <h3 className="font-semibold text-ink">{d.title}</h3>
                 <p className="mt-1.5 max-w-prose whitespace-pre-line text-ink-2">{d.body}</p>
@@ -148,7 +155,7 @@ export function ProjectDetail({
       id: "challenges",
       label: "Challenges & solutions",
       node: (
-        <dl className="divide-y divide-rule border-y border-rule">
+        <dl className="card divide-y divide-rule px-5">
           {project.challenges.map((c, i) => (
             <div key={i} className="grid gap-2 py-5 md:grid-cols-2 md:gap-8">
               <dt className="font-medium text-ink">{c.challenge}</dt>
@@ -180,7 +187,7 @@ export function ProjectDetail({
         <div className="grid gap-6 sm:grid-cols-2">
           {project.gallery.map((img, i) => (
             <figure key={img.url + i} className={project.gallery.length === 1 ? "sm:col-span-2" : undefined}>
-              <SiteImage src={img.url} alt={img.alt} aspect="16 / 10" fit="contain" sizes="(min-width: 640px) 50vw, 100vw" className="border border-rule" />
+              <SiteImage src={img.url} alt={img.alt} aspect="16 / 10" fit="contain" sizes="(min-width: 640px) 50vw, 100vw" className="rounded-xl border border-rule" />
               {img.caption ? <figcaption className="mt-2 text-sm text-ink-3">{img.caption}</figcaption> : null}
             </figure>
           ))}
@@ -199,25 +206,26 @@ export function ProjectDetail({
 
   return (
     <article className="container-page pt-10 md:pt-14">
-      <Breadcrumb href="/projects" label="All projects" />
-      <header className="grid-page gap-y-10">
-        <div className="col-span-4 md:col-span-8 lg:col-span-8">
-          <p className="label">
+      <Breadcrumb href={basePath} label={backLabel} />
+      <header className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-end lg:gap-14">
+        <div>
+          <p className="eyebrow">
             {PROJECT_TYPE_LABELS[project.type]}
             {project.category ? ` · ${project.category}` : ""}
           </p>
-          <h1 className="mt-4 text-title-1 font-semibold">{project.title}</h1>
+          <h1 className="mt-3 text-title-1 font-semibold">{project.title}</h1>
           <p className="mt-6 max-w-prose text-lead text-ink-2">{project.summary}</p>
+          {project.impact?.length ? <MetricGrid metrics={project.impact} className="mt-10 max-w-2xl" /> : null}
           <div className="mt-8">
             <TagList items={project.technologies} label="Technologies" />
           </div>
         </div>
         {facts.length ? (
-          <dl className="col-span-4 self-end border-t border-rule md:col-span-8 lg:col-span-4">
+          <dl className="card divide-y divide-rule px-5">
             {facts.map((f) => (
-              <div key={f.term} className="grid grid-cols-[6rem_1fr] gap-4 border-b border-rule py-3 text-[0.9375rem]">
-                <dt className="label pt-0.5">{f.term}</dt>
-                <dd className="text-ink">{f.value}</dd>
+              <div key={f.term} className="grid grid-cols-[5.5rem_1fr] gap-4 py-3 text-[0.9375rem]">
+                <dt className="text-ink-3">{f.term}</dt>
+                <dd className="font-medium text-ink">{f.value}</dd>
               </div>
             ))}
           </dl>
@@ -226,14 +234,7 @@ export function ProjectDetail({
 
       {project.coverImage?.url ? (
         <figure className="mt-14">
-          <SiteImage
-            src={project.coverImage.url}
-            alt={project.coverImage.alt}
-            aspect="16 / 9"
-            priority
-            sizes="(min-width: 1400px) 1400px, 100vw"
-            className="border border-rule"
-          />
+          <BrowserFrame src={project.coverImage.url} alt={project.coverImage.alt} url={project.liveUrl} priority sizes="(min-width: 1400px) 1400px, 100vw" />
           {project.coverImage.caption ? <figcaption className="mt-3 text-sm text-ink-3">{project.coverImage.caption}</figcaption> : null}
         </figure>
       ) : null}
@@ -246,8 +247,8 @@ export function ProjectDetail({
             </DocSection>
           ))}
           {relatedCaseStudies.length ? (
-            <aside className="border border-rule bg-surface p-6">
-              <p className="label mb-3">Deeper dive</p>
+            <aside className="card p-6">
+              <p className="mb-3 text-sm font-medium text-ink">Deeper dive</p>
               <ul className="space-y-2">
                 {relatedCaseStudies.map((cs) => (
                   <li key={cs.slug}>
@@ -263,19 +264,21 @@ export function ProjectDetail({
         </DocumentBody>
       ) : null}
 
+      {footer}
+
       {neighbors && (neighbors.prev || neighbors.next) ? (
-        <nav aria-label="More projects" className="mt-24 grid grid-cols-1 border-t border-rule sm:grid-cols-2">
+        <nav aria-label="More projects" className="mt-24 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {neighbors.prev ? (
-            <Link href={`/projects/${neighbors.prev.slug}`} className="group py-6 sm:pr-6">
-              <span className="label">Previous</span>
+            <Link href={`${basePath}/${neighbors.prev.slug}`} className="card card-link group p-6">
+              <span className="meta">← Previous</span>
               <span className="mt-2 block text-title-3 font-semibold group-hover:text-accent">{neighbors.prev.title}</span>
             </Link>
           ) : (
-            <span />
+            <span className="hidden sm:block" />
           )}
           {neighbors.next ? (
-            <Link href={`/projects/${neighbors.next.slug}`} className="group border-t border-rule py-6 sm:border-l sm:border-t-0 sm:pl-6 sm:text-right">
-              <span className="label">Next</span>
+            <Link href={`${basePath}/${neighbors.next.slug}`} className="card card-link group p-6 sm:text-right">
+              <span className="meta">Next →</span>
               <span className="mt-2 block text-title-3 font-semibold group-hover:text-accent">{neighbors.next.title}</span>
             </Link>
           ) : null}
@@ -301,31 +304,31 @@ export function CaseStudyDetail({ study, relatedProject }: { study: CaseStudy; r
   return (
     <article className="container-page pt-10 md:pt-14">
       <Breadcrumb href="/case-studies" label="All case studies" />
-      <header className="grid-page gap-y-8">
-        <div className="col-span-4 md:col-span-8 lg:col-span-9">
-          <p className="label">
-            <span className="text-accent">{CASE_STUDY_KIND_LABELS[study.kind]}</span>
+      <header className="grid gap-8">
+        <div className="max-w-4xl">
+          <p className="eyebrow">
+            <span>{CASE_STUDY_KIND_LABELS[study.kind]}</span>
             {study.context ? ` · ${study.context}` : ""}
           </p>
           <h1 className="mt-4 text-title-1 font-semibold">{study.title}</h1>
           <p className="mt-6 max-w-prose text-lead text-ink-2">{study.summary}</p>
         </div>
-        <div className="col-span-4 space-y-5 md:col-span-8 lg:col-span-9">
+        <div className="max-w-4xl space-y-5">
           {notice ? (
-            <p className="max-w-prose border-l-2 border-accent bg-surface px-4 py-3 text-[0.9375rem] text-ink-2" role="note">
+            <p className="max-w-prose rounded-xl border border-rule bg-surface px-4 py-3 text-[0.9375rem] text-ink-2" role="note">
               {notice}
             </p>
           ) : null}
           <dl className="flex flex-wrap gap-x-10 gap-y-3 text-[0.9375rem]">
             {study.role ? (
               <div>
-                <dt className="label">My role</dt>
+                <dt className="meta">My role</dt>
                 <dd className="mt-1 text-ink">{study.role}</dd>
               </div>
             ) : null}
             {relatedProject ? (
               <div>
-                <dt className="label">Project</dt>
+                <dt className="meta">Project</dt>
                 <dd className="mt-1">
                   <Link href={`/projects/${relatedProject.slug}`} className="link text-ink">
                     {relatedProject.title}
@@ -340,7 +343,7 @@ export function CaseStudyDetail({ study, relatedProject }: { study: CaseStudy; r
 
       {study.coverImage?.url ? (
         <figure className="mt-14">
-          <SiteImage src={study.coverImage.url} alt={study.coverImage.alt} aspect="16 / 9" priority sizes="100vw" className="border border-rule" />
+          <SiteImage src={study.coverImage.url} alt={study.coverImage.alt} aspect="16 / 9" priority sizes="100vw" className="rounded-2xl border border-rule" />
           {study.coverImage.caption ? <figcaption className="mt-3 text-sm text-ink-3">{study.coverImage.caption}</figcaption> : null}
         </figure>
       ) : null}
@@ -349,7 +352,7 @@ export function CaseStudyDetail({ study, relatedProject }: { study: CaseStudy; r
         <DocumentBody toc={sections.map((s) => ({ id: `s-${s.id}`, label: s.heading }))}>
           {sections.map((s) => (
             <DocSection key={s.id} id={`s-${s.id}`} title={s.heading}>
-              {s.topic ? <p className="label -mt-3 mb-5">{CASE_STUDY_TOPIC_LABELS[s.topic]}</p> : null}
+              {s.topic ? <p className="meta -mt-3 mb-5">{CASE_STUDY_TOPIC_LABELS[s.topic]}</p> : null}
               <Blocks blocks={s.blocks} />
             </DocSection>
           ))}
@@ -366,7 +369,7 @@ export function ArticleDetail({ article, relatedProjects = [] }: { article: Arti
     <article className="container-page pt-10 md:pt-14">
       <Breadcrumb href="/writing" label="All notes" />
       <header className="mx-auto max-w-3xl">
-        <p className="label">
+        <p className="meta">
           {article.category || "Note"}
           {article.publishedAt ? (
             <>
@@ -385,15 +388,15 @@ export function ArticleDetail({ article, relatedProjects = [] }: { article: Arti
       </header>
       {article.coverImage?.url ? (
         <figure className="mx-auto mt-12 max-w-5xl">
-          <SiteImage src={article.coverImage.url} alt={article.coverImage.alt} aspect="16 / 9" priority sizes="(min-width: 1024px) 1024px, 100vw" className="border border-rule" />
+          <SiteImage src={article.coverImage.url} alt={article.coverImage.alt} aspect="16 / 9" priority sizes="(min-width: 1024px) 1024px, 100vw" className="rounded-2xl border border-rule" />
           {article.coverImage.caption ? <figcaption className="mt-3 text-sm text-ink-3">{article.coverImage.caption}</figcaption> : null}
         </figure>
       ) : null}
       <div className="mx-auto mt-12 max-w-3xl">
         <Blocks blocks={article.blocks} />
         {relatedProjects.length ? (
-          <aside className="mt-16 border-t border-rule pt-6">
-            <p className="label mb-3">Related projects</p>
+          <aside className="card mt-16 p-6">
+            <p className="mb-3 text-sm font-medium text-ink">Related projects</p>
             <ul className="space-y-2">
               {relatedProjects.map((p) => (
                 <li key={p.slug}>

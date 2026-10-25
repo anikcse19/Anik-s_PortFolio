@@ -2,6 +2,7 @@
 
 import { Field, FieldGrid, FormSection, Input, TextArea } from "@/components/admin/fields";
 import { ImageUrlField } from "@/components/admin/image-url-field";
+import { MetricList } from "@/components/admin/metric-list";
 import { SettingsForm } from "@/components/admin/settings-form";
 import type { ProfileSettings } from "@/lib/validation/settings";
 
@@ -30,6 +31,9 @@ export function ProfileForm({ initial }: { initial: ProfileSettings }) {
                 {({ id }) => <Input id={id} value={v.availability} onChange={(e) => set(["availability"], e.target.value)} />}
               </Field>
             </FieldGrid>
+          </FormSection>
+          <FormSection title="Impact highlights" description="Up to four headline numbers shown in the homepage hero. Leave empty to show facts computed from your experience and projects.">
+            <MetricList value={v.highlights} onChange={(next) => set(["highlights"], next)} errorAt={(i, k) => error(["highlights", i, k])} />
           </FormSection>
           <FormSection title="Résumé" description="A public link to your résumé (e.g. a PDF on Google Drive set to “Anyone with the link”). Leave empty to hide all résumé links.">
             <Field label="Résumé URL" optional error={error(["resumeUrl"])}>

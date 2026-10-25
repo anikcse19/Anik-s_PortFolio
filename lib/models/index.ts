@@ -9,3 +9,4 @@ export { RateLimitModel } from "./RateLimit";
 export { SessionModel } from "./Session";
 export { SettingModel } from "./Setting";
 export { SkillCategoryModel } from "./SkillCategory";
+export { SyncStateModel } from "./SyncState";

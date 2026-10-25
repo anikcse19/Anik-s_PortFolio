@@ -15,6 +15,8 @@ export async function sendContactNotification(input: {
   email: string;
   subject: string;
   message: string;
+  source?: "portfolio" | "studio";
+  details?: { company: string; service: string; budget: string; timeline: string };
 }): Promise<boolean> {
   if (!isMailConfigured()) return false;
   const env = getEnv();
@@ -29,7 +31,16 @@ export async function sendContactNotification(input: {
     socketTimeout: 10000,
   });
 
-  const subject = `Portfolio contact: ${input.subject || input.name}`.replace(/[\r\n]+/g, " ").slice(0, 200);
+  const studio = input.source === "studio";
+  const subject = `${studio ? "Studio" : "Portfolio contact"}: ${input.subject || input.name}`.replace(/[\r\n]+/g, " ").slice(0, 200);
+  const details = input.details
+    ? [
+        input.details.company ? `Company: ${input.details.company}` : "",
+        input.details.service ? `Service: ${input.details.service}` : "",
+        input.details.budget ? `Budget: ${input.details.budget}` : "",
+        input.details.timeline ? `Timeline: ${input.details.timeline}` : "",
+      ].filter(Boolean)
+    : [];
   await transporter.sendMail({
     from: env.CONTACT_FROM_EMAIL || env.SMTP_USER,
     to: env.CONTACT_TO_EMAIL,
@@ -40,12 +51,13 @@ export async function sendContactNotification(input: {
     text: [
       `From: ${input.name} <${input.email}>`,
       input.subject ? `Subject: ${input.subject}` : "",
+      ...details,
       "",
       input.message,
       "",
-      "— Sent from the contact form on your portfolio. Also saved in Admin › Messages.",
+      `— Sent from the ${studio ? "studio project inquiry form" : "contact form on your portfolio"}. Also saved in Admin › Messages.`,
     ]
-      .filter((line, i) => line !== "" || i > 1)
+      .filter((line, i) => line !== "" || i > 1 + details.length)
       .join("\n"),
   });
   return true;

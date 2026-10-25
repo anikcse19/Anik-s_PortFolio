@@ -16,7 +16,7 @@ export default async function ProjectsPage() {
   const intro = settings.seo.pages.projects.description;
   return (
     <div className="container-page pt-12 md:pt-16">
-      <SectionHeader as="h1" label="Index" heading="Projects" intro={intro || "Professional work, personal projects and open-source contributions. Each entry notes the context it was built in and my role."} />
+      <SectionHeader as="h1" label="Work" heading="Projects" intro={intro || "Professional work, personal projects and open-source contributions. Each entry notes the context it was built in and my role."} />
       <div className="mt-12">
         {projects.length ? (
           <Suspense fallback={<ProjectLedger projects={projects} />}>

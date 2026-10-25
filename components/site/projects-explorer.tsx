@@ -59,7 +59,7 @@ export function ProjectsExplorer({ projects, layout }: { projects: ProjectListIt
 
   return (
     <div>
-      <div className="grid gap-4 border-y border-rule py-5 md:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]" role="search">
+      <div className="card grid gap-3 p-3 md:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]" role="search">
         <label className="relative block">
           <span className="sr-only">Search projects</span>
           <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-3" />
@@ -68,7 +68,7 @@ export function ProjectsExplorer({ projects, layout }: { projects: ProjectListIt
             value={filters.q}
             onChange={(e) => update({ q: e.target.value })}
             placeholder="Search by name, stack, domain…"
-            className="h-10 w-full rounded-sm border border-rule bg-paper pl-9 pr-3 text-[0.9375rem] text-ink placeholder:text-ink-3 focus:border-ink focus:outline-none"
+            className="h-10 w-full rounded-lg border border-rule bg-paper pl-9 pr-3 text-[0.9375rem] text-ink placeholder:text-ink-3 focus:border-ink focus:outline-none"
           />
         </label>
         <FilterSelect label="Type" value={filters.type} onChange={(v) => update({ type: v })} options={types.map((t) => ({ value: t, label: PROJECT_TYPE_LABELS[t] }))} />
@@ -94,7 +94,7 @@ export function ProjectsExplorer({ projects, layout }: { projects: ProjectListIt
           <ProjectLedger projects={filtered} />
         )
       ) : (
-        <div className="border-t border-rule py-16 text-center text-ink-2">
+        <div className="rounded-2xl border border-dashed border-rule-strong py-16 text-center text-ink-2">
           <p>No projects match these filters.</p>
         </div>
       )}
@@ -121,7 +121,7 @@ function FilterSelect({
         onChange={(e) => onChange(e.target.value)}
         disabled={!options.length}
         className={cn(
-          "h-10 w-full rounded-sm border border-rule bg-paper px-3 text-[0.9375rem] focus:border-ink focus:outline-none",
+          "h-10 w-full rounded-lg border border-rule bg-paper px-3 text-[0.9375rem] focus:border-ink focus:outline-none",
           value ? "text-ink" : "text-ink-3",
         )}
       >

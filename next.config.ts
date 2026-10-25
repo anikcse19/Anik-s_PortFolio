@@ -62,6 +62,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Uses Node-only modules (fontkit, yoga); load it at runtime instead of bundling.
+  serverExternalPackages: ["@react-pdf/renderer"],
   env: {
     // Not a secret: the client image component needs to know which hosts the
     // optimizer accepts so it can fall back to a plain <img> for others.

@@ -25,6 +25,7 @@ export const profile: ProfileSettings = {
   // Résumé link from the previous site's "Download Resume" button.
   resumeUrl: "https://drive.google.com/file/d/1m2-fIuydChZ2q6GItzuNdJX7J0lfQIy8/view?usp=drive_link",
   portrait: { url: "/me.png", alt: "Portrait of Anik Chandra Deb", caption: "" },
+  highlights: [],
 };
 
 export const contact: ContactSettings = {
@@ -97,6 +98,7 @@ function project(p: Partial<ProjectInput> & Pick<ProjectInput, "title" | "slug" 
     features: [],
     challenges: [],
     outcomes: [],
+    impact: [],
     coverImage: null,
     gallery: [],
     liveUrl: "",

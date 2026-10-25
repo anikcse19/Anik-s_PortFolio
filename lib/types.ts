@@ -30,6 +30,9 @@ export type ContactMessage = {
   message: string;
   read: boolean;
   delivery: "stored" | "emailed" | "email_failed";
+  /** Missing on messages stored before studio inquiries existed. */
+  source?: "portfolio" | "studio";
+  details?: { company?: string; service?: string; budget?: string; timeline?: string };
   createdAt: string;
 };
 

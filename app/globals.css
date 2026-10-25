@@ -9,14 +9,14 @@
 --------------------------------------------------------------------------- */
 @layer base {
   :root {
-    --paper: 247 245 240;
-    --surface: 239 236 229;
-    --surface-2: 229 225 216;
-    --ink: 21 21 19;
-    --ink-2: 74 72 66;
-    --ink-3: 104 101 94;
-    --rule: 216 211 201;
-    --rule-strong: 176 171 161;
+    --paper: 250 250 249;
+    --surface: 243 243 241;
+    --surface-2: 233 233 230;
+    --ink: 20 20 22;
+    --ink-2: 70 70 76;
+    --ink-3: 100 100 108;
+    --rule: 226 226 222;
+    --rule-strong: 186 186 180;
     --accent: 184 58 10;
     --accent-ink: 255 255 255;
     --danger: 180 35 24;
@@ -31,15 +31,16 @@
     color-scheme: light;
   }
 
+  /* Dark is the primary theme: near-black, hairline borders, restrained contrast steps. */
   .dark {
-    --paper: 14 14 13;
-    --surface: 22 22 20;
-    --surface-2: 32 32 29;
-    --ink: 236 233 226;
-    --ink-2: 179 175 166;
-    --ink-3: 142 138 130;
-    --rule: 40 39 36;
-    --rule-strong: 74 72 67;
+    --paper: 9 9 11;
+    --surface: 17 17 20;
+    --surface-2: 27 27 31;
+    --ink: 244 244 245;
+    --ink-2: 165 165 175;
+    --ink-3: 128 128 138;
+    --rule: 34 34 39;
+    --rule-strong: 58 58 66;
     --accent: 255 122 77;
     --accent-ink: 14 14 13;
     --danger: 255 128 112;
@@ -60,6 +61,11 @@
 
   /* Typography presets: map semantic font roles to the loaded families. */
   :root,
+  :root[data-typography="precision"] {
+    --font-display: var(--font-geist);
+    --font-body: var(--font-geist);
+    --font-mono: var(--font-geist-mono);
+  }
   :root[data-typography="journal"] {
     --font-display: var(--font-schibsted);
     --font-body: var(--font-schibsted);
@@ -104,6 +110,7 @@
     font-size: 1.0625rem;
     line-height: 1.65;
     font-feature-settings: "ss01", "cv11";
+    letter-spacing: -0.006em;
   }
 
   ::selection { background: rgb(var(--accent) / 0.25); color: rgb(var(--ink)); }
@@ -155,6 +162,51 @@
   .skip-link {
     @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-ink;
   }
+
+  /* Public-site primitives (the admin keeps .label and .tag). */
+
+  /* Section label: mono, uppercase, with a small accent marker. */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 font-mono text-[0.75rem] font-medium uppercase tracking-[0.14em] text-ink-3;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-1.5 w-1.5 shrink-0 rounded-[1px] bg-accent;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-md border border-rule bg-surface/40 px-2 py-0.5 font-mono text-[0.75rem] leading-5 text-ink-2;
+  }
+  .card {
+    @apply rounded-xl border border-rule bg-surface/40;
+    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.035);
+  }
+  .card-link {
+    @apply transition-[border-color,background-color] duration-base ease-out hover:border-rule-strong hover:bg-surface/80;
+  }
+  .meta {
+    @apply font-mono text-[0.8125rem] text-ink-3;
+  }
+  .metric-value {
+    @apply font-display font-semibold tabular-nums tracking-tight text-ink;
+  }
+
+  /* Faint engineering grid, faded out toward the edges. Decorative only. */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgb(var(--rule) / 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--rule) / 0.55) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 75%);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Studio zone: its own accent so it reads as a separate brand.
+--------------------------------------------------------------------------- */
+@layer base {
+  .zone-studio { --accent: 4 120 87; --accent-ink: 255 255 255; }
+  .dark .zone-studio { --accent: 52 211 153; --accent-ink: 9 9 11; }
 }
 
 /* ---------------------------------------------------------------------------

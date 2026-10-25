@@ -20,6 +20,7 @@ const projectSchema = new Schema(
     features: { type: [String], default: [] },
     challenges: { type: [new Schema({ challenge: String, solution: String }, { _id: false })], default: [] },
     outcomes: { type: [String], default: [] },
+    impact: { type: [new Schema({ value: String, label: String }, { _id: false })], default: [] },
     coverImage: { type: imageRefSchema, default: null },
     gallery: { type: [imageRefSchema], default: [] },
     liveUrl: { type: String, default: "" },

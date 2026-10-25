@@ -1,142 +1,163 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { SiteImage } from "@/components/ui/site-image";
 import type { ProjectListItem } from "@/lib/data/public";
-import { cn, padIndex } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { PROJECT_TYPE_LABELS } from "@/lib/validation/content";
+import { BrowserFrame } from "./browser-frame";
+import { MetricGrid } from "./metrics";
 
-function TechList({ items, max = 4 }: { items: string[]; max?: number }) {
+export function ChipList({ items, max = 4, label = "Technologies", className }: { items: string[]; max?: number; label?: string; className?: string }) {
   if (!items.length) return null;
   const shown = items.slice(0, max);
   return (
-    <ul className="flex flex-wrap gap-1.5" aria-label="Technologies">
+    <ul className={cn("flex flex-wrap gap-1.5", className)} aria-label={label}>
       {shown.map((t) => (
-        <li key={t} className="tag">
+        <li key={t} className="chip">
           {t}
         </li>
       ))}
-      {items.length > max ? <li className="tag border-transparent text-ink-3">+{items.length - max}</li> : null}
+      {items.length > max ? <li className="chip border-transparent bg-transparent text-ink-3">+{items.length - max}</li> : null}
     </ul>
   );
 }
 
-/** Large lead entry used for the first project on the homepage when it has a cover image. */
-export function ProjectLead({ project, index = 0 }: { project: ProjectListItem; index?: number }) {
+function projectMeta(project: ProjectListItem, showType = true): string {
+  return [showType ? PROJECT_TYPE_LABELS[project.type] : "", project.category, project.year].filter(Boolean).join(" · ");
+}
+
+/** Documents saved before impact numbers existed have no `impact` field. */
+export function impactOf(project: { impact?: ProjectListItem["impact"] }): ProjectListItem["impact"] {
+  return project.impact ?? [];
+}
+
+type CardOptions = { basePath?: string; showType?: boolean };
+
+/**
+ * Case-study row: framed screenshot on one side, story and impact on the other.
+ * Used for the projects that should carry the page.
+ */
+export function ProjectShowcase({ projects, basePath = "/projects", showType = true }: { projects: ProjectListItem[] } & CardOptions) {
   return (
-    <article className="group grid-page gap-y-6 border-t border-rule py-8">
-      <Link
-        href={`/projects/${project.slug}`}
-        className="col-span-4 md:col-span-8 lg:col-span-7"
-        aria-label={`${project.title} — read the project write-up`}
-        tabIndex={-1}
-      >
-        <SiteImage
-          src={project.coverImage?.url}
-          alt={project.coverImage?.alt ?? ""}
-          aspect="16 / 10"
-          sizes="(min-width: 1024px) 760px, 100vw"
-          className="border border-rule transition-[filter] duration-base group-hover:brightness-[1.04]"
-          placeholderLabel={project.title}
-        />
-      </Link>
-      <div className="col-span-4 flex flex-col md:col-span-8 lg:col-span-5">
-        <p className="label">
-          <span className="text-accent">{padIndex(index)}</span> · {PROJECT_TYPE_LABELS[project.type]}
-          {project.year ? ` · ${project.year}` : ""}
-        </p>
-        <h3 className="mt-3 text-title-2 font-semibold">
-          <Link href={`/projects/${project.slug}`} className="transition-colors duration-fast hover:text-accent">
+    <ol className="space-y-6">
+      {projects.map((project, i) => {
+        const href = `${basePath}/${project.slug}`;
+        const flip = i % 2 === 1;
+        return (
+          <li key={project.id}>
+            <article className="card group relative grid items-center gap-8 overflow-hidden p-5 md:p-8 lg:grid-cols-2 lg:gap-12 lg:p-10">
+              <div className={cn(flip && "lg:order-2")}>
+                <BrowserFrame
+                  src={project.coverImage?.url}
+                  alt={project.coverImage?.alt ?? ""}
+                  url={project.liveUrl}
+                  sizes="(min-width: 1024px) 560px, 100vw"
+                  priority={i === 0}
+                  placeholderLabel={project.title}
+                  className="transition-transform duration-500 ease-out group-hover:-translate-y-1"
+                />
+              </div>
+              <div>
+                <p className="meta">{projectMeta(project, showType)}</p>
+                <h3 className="mt-3 text-title-2 font-semibold">
+                  <Link href={href} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">
+                    {project.title}
+                  </Link>
+                </h3>
+                <p className="mt-4 text-[1.0625rem] text-ink-2">{project.summary}</p>
+                {impactOf(project).length ? <MetricGrid metrics={impactOf(project)} size="sm" className="mt-7 border-y border-rule py-5" /> : null}
+                {project.role ? (
+                  <p className="mt-5 text-[0.9375rem] text-ink-2">
+                    <span className="meta mr-2">Role</span>
+                    {project.role}
+                  </p>
+                ) : null}
+                <ChipList items={project.technologies} max={6} className="mt-6" />
+                <p className="mt-8 inline-flex items-center gap-1.5 text-[0.9375rem] font-medium text-ink">
+                  Read case study
+                  <ArrowRight aria-hidden className="h-4 w-4 transition-transform duration-fast group-hover:translate-x-1" />
+                </p>
+              </div>
+            </article>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+/** Uniform project card for grids. */
+export function ProjectCard({ project, priority = false, basePath = "/projects", showType = true }: { project: ProjectListItem; priority?: boolean } & CardOptions) {
+  const href = `${basePath}/${project.slug}`;
+  return (
+    <article className="card card-link group relative flex h-full flex-col p-4">
+      <BrowserFrame src={project.coverImage?.url} alt={project.coverImage?.alt ?? ""} url={project.liveUrl} sizes="(min-width: 768px) 50vw, 100vw" priority={priority} placeholderLabel={project.title} />
+      <div className="flex flex-1 flex-col px-2 pb-2 pt-6">
+        <p className="meta">{projectMeta(project, showType)}</p>
+        <h3 className="mt-2 text-title-3 font-semibold">
+          <Link href={href} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">
             {project.title}
           </Link>
         </h3>
-        <p className="mt-4 text-ink-2">{project.summary}</p>
-        {project.role || project.organization ? (
-          <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 text-sm">
-            {project.role ? (
-              <>
-                <dt className="text-ink-3">Role</dt>
-                <dd className="text-ink">{project.role}</dd>
-              </>
-            ) : null}
-            {project.organization ? (
-              <>
-                <dt className="text-ink-3">Context</dt>
-                <dd className="text-ink">{project.organization}</dd>
-              </>
-            ) : null}
-          </dl>
-        ) : null}
-        <div className="mt-6">
-          <TechList items={project.technologies} max={6} />
+        <p className="mt-3 line-clamp-3 text-ink-2">{project.summary}</p>
+        {impactOf(project).length ? <MetricGrid metrics={impactOf(project).slice(0, 3)} size="sm" className="mt-5 border-t border-rule pt-4" /> : null}
+        <div className="mt-auto pt-6">
+          <ChipList items={project.technologies} max={4} />
         </div>
-        <Link href={`/projects/${project.slug}`} className="link mt-auto inline-flex w-fit items-center gap-1 pt-8 text-[0.9375rem] text-ink">
-          Read the write-up <span aria-hidden>→</span>
-        </Link>
       </div>
     </article>
   );
 }
 
-/** Dense, scannable index of projects — the default layout. */
-export function ProjectLedger({ projects, startIndex = 0 }: { projects: ProjectListItem[]; startIndex?: number }) {
+export function ProjectGrid({ projects, ...options }: { projects: ProjectListItem[] } & CardOptions) {
   return (
-    <ol className="border-b border-rule">
+    <ul className="grid grid-cols-1 gap-5 md:grid-cols-2">
       {projects.map((project, i) => (
-        <li key={project.id} className="border-t border-rule">
-          <Link
-            href={`/projects/${project.slug}`}
-            className="group grid-page items-start gap-y-3 py-6 transition-colors duration-fast hover:bg-surface/60 md:py-7"
-          >
-            <span className="col-span-1 pt-1 font-mono text-sm text-ink-3 group-hover:text-accent" aria-hidden>
-              {padIndex(startIndex + i)}
-            </span>
-            <div className="col-span-3 md:col-span-4 lg:col-span-5">
-              <h3 className="text-title-3 font-semibold transition-colors duration-fast group-hover:text-accent">{project.title}</h3>
-              <p className="mt-2 line-clamp-3 text-[0.975rem] text-ink-2 md:line-clamp-2">{project.summary}</p>
-            </div>
-            <div className="col-span-3 col-start-2 md:col-span-2 md:col-start-auto lg:col-span-3">
-              <TechList items={project.technologies} max={3} />
-            </div>
-            <div className="col-span-3 col-start-2 text-sm text-ink-3 md:col-span-1 md:col-start-auto lg:col-span-2">
-              <span className="block">{PROJECT_TYPE_LABELS[project.type]}</span>
-              {project.category ? <span className="block">{project.category}</span> : null}
-            </div>
-            <span className="hidden items-start justify-end gap-2 font-mono text-sm text-ink-3 lg:col-span-1 lg:flex">
-              {project.year}
-              <ArrowUpRight aria-hidden className="h-4 w-4 transition-transform duration-fast group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />
-            </span>
-          </Link>
+        <li key={project.id}>
+          <ProjectCard project={project} priority={i < 2} {...options} />
         </li>
       ))}
-    </ol>
+    </ul>
   );
 }
 
-/** Image-led alternative layout. */
-export function ProjectGrid({ projects }: { projects: ProjectListItem[] }) {
+/** Compact list with thumbnails, for scanning many projects. */
+export function ProjectLedger({ projects, basePath = "/projects", showType = true }: { projects: ProjectListItem[] } & CardOptions) {
   return (
-    <ul className="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-2">
-      {projects.map((project, i) => (
-        <li key={project.id} className={cn("group border-t border-rule pt-5")}>
-          <Link href={`/projects/${project.slug}`} className="block">
+    <ul className="card divide-y divide-rule overflow-hidden">
+      {projects.map((project) => (
+        <li key={project.id}>
+          <Link href={`${basePath}/${project.slug}`} className="group flex gap-5 p-4 transition-colors duration-fast hover:bg-surface sm:p-5">
             <SiteImage
               src={project.coverImage?.url}
-              alt={project.coverImage?.alt ?? ""}
+              alt=""
               aspect="16 / 10"
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="border border-rule"
-              placeholderLabel={project.title}
+              sizes="176px"
+              className="hidden w-44 shrink-0 rounded-md border border-rule sm:block"
+              imgClassName="object-top"
+              placeholderLabel=" "
             />
-            <p className="label mt-5">
-              <span className="text-accent">{padIndex(i)}</span> · {PROJECT_TYPE_LABELS[project.type]}
-              {project.year ? ` · ${project.year}` : ""}
-            </p>
-            <h3 className="mt-2 text-title-3 font-semibold transition-colors duration-fast group-hover:text-accent">{project.title}</h3>
-            <p className="mt-2 line-clamp-3 text-ink-2">{project.summary}</p>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="meta">{projectMeta(project, showType)}</p>
+                  <h3 className="mt-1 text-lg font-semibold tracking-tight">{project.title}</h3>
+                </div>
+                <ArrowUpRight aria-hidden className="mt-1 h-5 w-5 shrink-0 text-ink-3 transition-transform duration-fast group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink" />
+              </div>
+              <p className="mt-1.5 line-clamp-2 text-[0.9375rem] text-ink-2">{project.summary}</p>
+              {impactOf(project).length ? (
+                <p className="mt-2 text-sm text-ink-2">
+                  {impactOf(project).map((m) => (
+                    <span key={m.label} className="mr-4">
+                      <span className="metric-value">{m.value}</span> <span className="text-ink-3">{m.label}</span>
+                    </span>
+                  ))}
+                </p>
+              ) : null}
+              <ChipList items={project.technologies} max={5} className="mt-3" />
+            </div>
           </Link>
-          <div className="mt-4">
-            <TechList items={project.technologies} />
-          </div>
         </li>
       ))}
     </ul>

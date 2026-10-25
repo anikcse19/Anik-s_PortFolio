@@ -14,6 +14,7 @@ import {
   statusSchema,
   text,
   yearMonthSchema,
+  metricListSchema,
 } from "./common";
 
 /* ------------------------------------------------------------------ Projects */
@@ -55,6 +56,8 @@ export const projectInputSchema = z.object({
     .max(20)
     .default([]),
   outcomes: labelListSchema(20, 300),
+  /** Headline impact numbers shown on project cards, e.g. { value: "3×", label: "faster page loads" }. */
+  impact: metricListSchema(4),
   coverImage: optionalImageRefSchema,
   gallery: z.array(imageRefSchema).max(16, "Use at most 16 gallery images").default([]),
   liveUrl: optionalHttpUrl,
@@ -248,3 +251,12 @@ export const contactMessageSchema = z.object({
   message: text(5000).min(10, "Please write at least a sentence (10+ characters)"),
 });
 export type ContactMessageInput = z.infer<typeof contactMessageSchema>;
+
+/** Project inquiry from the studio: a contact message plus project details. */
+export const studioInquirySchema = contactMessageSchema.extend({
+  company: optionalText(120),
+  service: optionalText(80),
+  budget: optionalText(40),
+  timeline: optionalText(40),
+});
+export type StudioInquiryInput = z.infer<typeof studioInquirySchema>;
