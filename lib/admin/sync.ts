@@ -3,12 +3,12 @@ import { getPublishedExperience, getPublishedProjects, getPublishedSkillCategori
 import { connectDB } from "@/lib/db";
 import { getSiteUrl } from "@/lib/env";
 import { SyncStateModel } from "@/lib/models";
-import { buildSyncItems, removedRecords, syncStatus, type SyncItem, type SyncRecord, type SyncStatus } from "@/lib/profile-sync";
+import { buildSyncItems, githubUsername, removedRecords, syncStatus, type SyncItem, type SyncRecord, type SyncStatus } from "@/lib/profile-sync";
 import { htmlToText } from "@/lib/sanitize";
 import { ABOUT_SECTION_KEYS } from "@/lib/validation/settings";
 
 export type SyncBoardItem = SyncItem & { status: SyncStatus; syncedAt: string | null };
-export type SyncBoardData = { items: SyncBoardItem[]; removed: SyncRecord[] };
+export type SyncBoardData = { items: SyncBoardItem[]; removed: SyncRecord[]; /** From the site's GitHub link; "" when none. */ githubUser: string };
 
 /** About sections that read well on LinkedIn (the rest are site-specific). */
 const ABOUT_FOR_LINKEDIN = ABOUT_SECTION_KEYS.filter((k) => k === "expertise" || k === "systemDesign" || k === "approach");
@@ -38,6 +38,7 @@ export async function getSyncBoard(): Promise<SyncBoardData> {
   return {
     items: items.map((i) => ({ ...i, status: syncStatus(i, byKey.get(i.key)), syncedAt: byKey.get(i.key)?.syncedAt ?? null })),
     removed: removedRecords(items, records),
+    githubUser: githubUsername(settings),
   };
 }
 

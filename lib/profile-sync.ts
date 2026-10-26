@@ -4,9 +4,9 @@ import type { Experience, SkillCategory } from "@/lib/types";
 import { EMPLOYMENT_TYPE_LABELS } from "@/lib/validation/content";
 
 /**
- * Profile sync: the site's content is the source of truth. For channels that
- * can't be updated automatically (LinkedIn, GitHub for now), this builds the
- * exact text to paste, and tracks whether it changed since it was last synced.
+ * Profile sync: the site's content is the source of truth. For LinkedIn and
+ * GitHub this builds the exact text to paste (or, for GitHub, to push; see
+ * lib/github.ts), and tracks whether it changed since it was last synced.
  *
  * Pure module (no database, no Node APIs) so it is fully unit tested.
  */
@@ -86,6 +86,11 @@ function handleFrom(url: string | undefined, pattern: RegExp): string {
   return match ? match[1] : "";
 }
 
+/** GitHub username from the site's GitHub social link, or "" when there is none. */
+export function githubUsername(settings: SiteSettings): string {
+  return handleFrom(settings.contact.socials.find((s) => s.kind === "github")?.url, /github\.com\/([^/?#]+)/i);
+}
+
 const WORK_MODE_LABELS: Record<string, string> = { remote: "Remote", onsite: "On-site", hybrid: "Hybrid" };
 
 export type SyncInput = {
@@ -102,9 +107,8 @@ export function buildSyncItems(input: SyncInput): SyncItem[] {
   const { settings, experience, projects, aboutText, siteUrl } = input;
   const { profile, contact, appearance } = settings;
   const linkedinUrl = contact.socials.find((s) => s.kind === "linkedin")?.url;
-  const githubUrl = contact.socials.find((s) => s.kind === "github")?.url;
   const linkedinHandle = handleFrom(linkedinUrl, /linkedin\.com\/in\/([^/?#]+)/i);
-  const githubUser = handleFrom(githubUrl, /github\.com\/([^/?#]+)/i);
+  const githubUser = githubUsername(settings);
   const linkedinBase = linkedinHandle ? `https://www.linkedin.com/in/${linkedinHandle}` : undefined;
 
   const skillNames = input.skills.flatMap((c) => c.skills.filter((s) => appearance.showLearningSkills || s.level !== "learning").map((s) => s.name));

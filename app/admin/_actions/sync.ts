@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { adminAction } from "@/lib/admin/action";
 import { ValidationError } from "@/lib/admin/errors";
+import { previewGithub, pushGithub, type GithubPreview } from "@/lib/admin/github";
 import { forgetSynced, markSynced } from "@/lib/admin/sync";
 import type { ActionResult } from "@/lib/types";
 
@@ -25,4 +26,24 @@ export async function forgetSyncedAction(keys: unknown): Promise<ActionResult> {
     await forgetSynced(parsed.data);
     return undefined;
   }, "Done");
+}
+
+const githubKeySchema = z.enum(["github:profile", "github:readme"]);
+
+/** Fetches GitHub's current text for an item and diffs it against the site. Read-only. */
+export async function previewGithubAction(key: unknown): Promise<ActionResult<GithubPreview>> {
+  return adminAction(async () => {
+    const parsed = githubKeySchema.safeParse(key);
+    if (!parsed.success) throw new ValidationError("This item can't be pushed to GitHub.");
+    return previewGithub(parsed.data);
+  });
+}
+
+/** Writes a reviewed item to GitHub. `hash` must match the fingerprint shown in the review. */
+export async function pushGithubAction(key: unknown, hash: unknown): Promise<ActionResult<{ changed: boolean }>> {
+  return adminAction(async () => {
+    const parsed = z.object({ key: githubKeySchema, hash: z.string().min(1).max(40) }).safeParse({ key, hash });
+    if (!parsed.success) throw new ValidationError("This item can't be pushed to GitHub.");
+    return pushGithub(parsed.data.key, parsed.data.hash);
+  }, "Pushed to GitHub and marked as synced");
 }

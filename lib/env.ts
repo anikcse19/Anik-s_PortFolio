@@ -20,6 +20,7 @@ const serverEnvSchema = z.object({
   CONTACT_TO_EMAIL: z.string().trim().optional(),
   CONTACT_FROM_EMAIL: z.string().trim().optional(),
   SITE_GATE_PASSWORD: z.string().optional(),
+  GITHUB_TOKEN: z.string().trim().optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
@@ -64,6 +65,11 @@ export function getAuthSecret(): string {
 export function getGatePassword(): string | null {
   const value = getEnv().SITE_GATE_PASSWORD;
   return value && value.length >= 4 ? value : null;
+}
+
+/** Token for pushing profile details and the profile README to GitHub. Null when not configured (copy and paste only). */
+export function getGithubToken(): string | null {
+  return getEnv().GITHUB_TOKEN || null;
 }
 
 export function isMailConfigured(): boolean {
