@@ -93,7 +93,7 @@ function GithubReview({ preview }: { preview: GithubPreview }) {
             {preview.profile.map((c) => (
               <tr key={c.field} className={c.changed ? "" : "text-ink-3"}>
                 <td className="py-2 pr-3 align-top text-xs font-medium">{c.label}</td>
-                <td className={cn("py-2 pr-3 align-top", c.changed && "text-danger line-through")}>{c.current || <em className="text-ink-3 no-underline">empty</em>}</td>
+                <td className={cn("py-2 pr-3 align-top", c.changed && c.current && "text-danger line-through")}>{c.current || <em className="text-ink-3">empty</em>}</td>
                 <td className={cn("py-2 align-top", c.changed && "text-success")}>{c.changed ? c.next : "unchanged"}</td>
               </tr>
             ))}
