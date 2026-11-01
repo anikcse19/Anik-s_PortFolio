@@ -9,6 +9,7 @@ import {
   Home,
   Images,
   Inbox,
+  LoaderCircle,
   Layers,
   Navigation,
   Palette,
@@ -21,7 +22,7 @@ import {
   UserRound,
   Wrench,
 } from "lucide-react";
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -67,6 +68,12 @@ const GROUPS = [
   { label: "Account", items: [{ href: "/admin/security", label: "Security", icon: Shield }] },
 ];
 
+/** Replaces the link icon with a spinner while its page is loading, so a click always gets instant feedback. */
+function NavIcon({ icon: Icon }: { icon: (typeof GROUPS)[number]["items"][number]["icon"] }) {
+  const { pending } = useLinkStatus();
+  return pending ? <LoaderCircle className="h-4 w-4 shrink-0 animate-spin" aria-hidden /> : <Icon className="h-4 w-4 shrink-0" aria-hidden />;
+}
+
 export function AdminNav({ unread }: { unread: number }) {
   const pathname = usePathname() ?? "/admin";
   return (
@@ -77,7 +84,6 @@ export function AdminNav({ unread }: { unread: number }) {
           <ul className="space-y-0.5">
             {group.items.map((item) => {
               const active = item.href === "/admin" ? pathname === "/admin" : pathname === item.href || pathname.startsWith(`${item.href}/`);
-              const Icon = item.icon;
               return (
                 <li key={item.href}>
                   <Link
@@ -88,7 +94,7 @@ export function AdminNav({ unread }: { unread: number }) {
                       active ? "bg-surface-2 font-medium text-ink" : "text-ink-2 hover:bg-surface hover:text-ink",
                     )}
                   >
-                    <Icon className="h-4 w-4 shrink-0" aria-hidden />
+                    <NavIcon icon={item.icon} />
                     <span className="flex-1">{item.label}</span>
                     {item.href === "/admin/messages" && unread > 0 ? (
                       <span className="rounded-sm bg-accent px-1.5 font-mono text-[0.6875rem] text-accent-ink">

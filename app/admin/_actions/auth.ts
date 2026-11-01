@@ -18,7 +18,7 @@ import { getSiteUrl } from "@/lib/env";
 import { isSmtpConfigured, sendPasswordResetEmail } from "@/lib/mail";
 import { safeAdminRedirect } from "@/lib/urls";
 
-export type LoginState = { error?: string; email?: string };
+export type LoginState = { error?: string; email?: string; redirectTo?: string };
 
 const loginSchema = z.object({
   email: z.string().trim().max(254),
@@ -48,7 +48,10 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
     const mapped = toActionError(error);
     return { error: mapped.ok ? "Unexpected error." : mapped.error, email };
   }
-  redirect(destination);
+  // The form does a full page load to the destination rather than redirect() here. A server-action
+  // redirect renders the admin inside the login request and merges it into the signed-out client
+  // router state, which could briefly show a stale "not found" page before the dashboard.
+  return { redirectTo: destination };
 }
 
 export type ForgotPasswordState = { error?: string; sent?: boolean; email?: string };

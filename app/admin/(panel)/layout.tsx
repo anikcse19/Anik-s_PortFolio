@@ -15,9 +15,8 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const admin = await requireAdmin();
-  await connectDB();
-  const unread = await MessageModel.countDocuments({ read: false });
+  // Concurrent: the count is only rendered once requireAdmin() has passed (it redirects otherwise).
+  const [admin, unread] = await Promise.all([requireAdmin(), connectDB().then(() => MessageModel.countDocuments({ read: false }))]);
 
   const sidebar = (
     <>

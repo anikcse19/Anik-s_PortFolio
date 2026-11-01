@@ -1,6 +1,8 @@
 import { Types } from "mongoose";
 import { connectDB } from "@/lib/db";
 import { AdminModel, SessionModel } from "@/lib/models";
+import type { AdminDoc } from "@/lib/models/Admin";
+import type { SessionDoc } from "@/lib/models/Session";
 import { generateSessionToken, hmac, sha256 } from "./crypto";
 import { getDummyHash, verifyPassword } from "./password";
 import { consumeRateLimit, peekRateLimit, RATE_LIMITS, resetRateLimit } from "./rate-limit";
@@ -34,17 +36,30 @@ export async function getAdminForToken(token: string | undefined | null): Promis
   if (!token || token.length < 20 || token.length > 200) return null;
   await connectDB();
   const now = Date.now();
-  const session = await SessionModel.findOne({ tokenHash: sha256(token) }).lean();
+  // Session and admin in one round trip: this runs on every admin request.
+  const [session] = await SessionModel.aggregate<SessionDoc & { admin: AdminDoc[] }>([
+    { $match: { tokenHash: sha256(token) } },
+    { $limit: 1 },
+    {
+      $lookup: {
+        from: AdminModel.collection.name,
+        localField: "adminId",
+        foreignField: "_id",
+        as: "admin",
+        pipeline: [{ $project: { email: 1, name: 1, passwordChangedAt: 1 } }],
+      },
+    },
+  ]);
   if (!session) return null;
 
-  const expired = session.expiresAt.getTime() <= now;
+  const expired = new Date(session.expiresAt).getTime() <= now;
   const idle = now - new Date(session.lastSeenAt).getTime() > SESSION_IDLE_TTL_MS;
   if (expired || idle) {
     await SessionModel.deleteOne({ _id: session._id });
     return null;
   }
 
-  const admin = await AdminModel.findById(session.adminId).lean();
+  const admin = session.admin[0];
   if (!admin) {
     await SessionModel.deleteOne({ _id: session._id });
     return null;

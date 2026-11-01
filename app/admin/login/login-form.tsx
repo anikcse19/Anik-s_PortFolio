@@ -1,11 +1,15 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { login, type LoginState } from "@/app/admin/_actions/auth";
 import { Button } from "@/components/ui/button";
 
 export function LoginForm({ next }: { next: string }) {
   const [state, action, pending] = useActionState<LoginState, FormData>(login, {});
+  useEffect(() => {
+    if (state.redirectTo) window.location.replace(state.redirectTo);
+  }, [state.redirectTo]);
+  const busy = pending || Boolean(state.redirectTo);
   return (
     <form action={action} className="space-y-5">
       {state.error ? (
@@ -41,8 +45,8 @@ export function LoginForm({ next }: { next: string }) {
           className="h-11 w-full rounded-sm border border-rule-strong bg-paper px-3 focus:border-ink focus:outline-none"
         />
       </div>
-      <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Signing in…" : "Sign in"}
+      <Button type="submit" className="w-full" disabled={busy}>
+        {busy ? "Signing in…" : "Sign in"}
       </Button>
     </form>
   );
