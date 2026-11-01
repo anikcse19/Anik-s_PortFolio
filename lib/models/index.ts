@@ -4,6 +4,7 @@ export { CaseStudyModel } from "./CaseStudy";
 export { ExperienceModel } from "./Experience";
 export { MediaModel } from "./Media";
 export { MessageModel } from "./Message";
+export { PasswordResetModel } from "./PasswordReset";
 export { ProjectModel } from "./Project";
 export { RateLimitModel } from "./RateLimit";
 export { SessionModel } from "./Session";

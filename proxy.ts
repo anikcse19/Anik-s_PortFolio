@@ -9,12 +9,14 @@ import { decideZone, UNLOCK_PATH, ZONE_COOKIE, ZONE_COOKIE_MAX_AGE } from "@/lib
  *    and sends cross-zone navigation to the password screen (see lib/zones.ts).
  */
 const ADMIN_COOKIE_NAMES = ["__Host-admin_session", "admin_session"];
+/** Admin pages reachable while signed out. */
+const PUBLIC_ADMIN_PATHS = ["/admin/login", "/admin/forgot-password", "/admin/reset-password"];
 
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
-    if (pathname.startsWith("/admin/login")) return NextResponse.next();
+    if (PUBLIC_ADMIN_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return NextResponse.next();
     const hasSession = ADMIN_COOKIE_NAMES.some((name) => request.cookies.get(name)?.value);
     if (!hasSession) {
       const url = request.nextUrl.clone();

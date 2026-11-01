@@ -57,6 +57,9 @@ export const RATE_LIMITS = {
   loginPerIp: { limit: 10, windowSeconds: 15 * 60 },
   loginFailuresPerAccount: { limit: 5, windowSeconds: 15 * 60 },
   contactPerIp: { limit: 5, windowSeconds: 60 * 60 },
+  resetRequestPerIp: { limit: 5, windowSeconds: 60 * 60 },
+  resetRequestPerAccount: { limit: 3, windowSeconds: 60 * 60 },
+  resetSubmitPerIp: { limit: 10, windowSeconds: 15 * 60 },
   gatePerIp: { limit: 10, windowSeconds: 15 * 60 },
   linkCheck: { limit: 6, windowSeconds: 10 * 60 },
 } as const;

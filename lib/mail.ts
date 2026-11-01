@@ -1,14 +1,45 @@
 import "server-only";
 import nodemailer from "nodemailer";
-import { getEnv, isMailConfigured } from "@/lib/env";
+import { getEnv, isMailConfigured, isSmtpConfigured } from "@/lib/env";
 
 /**
- * Optional SMTP notification for contact-form submissions. Messages are always
- * stored in the database first, so nothing is lost when email is not configured.
- * Any SMTP provider works (Gmail app password, Brevo, Resend SMTP, Zoho, ...).
+ * Optional SMTP email: contact-form notifications and admin password reset links.
+ * Messages are always stored in the database first, so nothing is lost when email
+ * is not configured. Any SMTP provider works (Gmail app password, Brevo, Resend SMTP, Zoho, ...).
  */
 
-export { isMailConfigured };
+export { isMailConfigured, isSmtpConfigured };
+
+function createTransport() {
+  const env = getEnv();
+  const port = env.SMTP_PORT ?? 587;
+  return nodemailer.createTransport({
+    host: env.SMTP_HOST,
+    port,
+    secure: env.SMTP_SECURE ? env.SMTP_SECURE === "true" : port === 465,
+    auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 10000,
+  });
+}
+
+export async function sendPasswordResetEmail(to: string, resetUrl: string, expiresInMinutes: number): Promise<void> {
+  const env = getEnv();
+  await createTransport().sendMail({
+    from: env.CONTACT_FROM_EMAIL || env.SMTP_USER,
+    to,
+    subject: "Reset your portfolio admin password",
+    text: [
+      "Someone asked to reset the password for your portfolio admin account.",
+      "",
+      `Open this link to choose a new password (valid for ${expiresInMinutes} minutes, single use):`,
+      resetUrl,
+      "",
+      "If you did not ask for this, ignore this email; your password stays the same.",
+    ].join("\n"),
+  });
+}
 
 export async function sendContactNotification(input: {
   name: string;
@@ -20,16 +51,7 @@ export async function sendContactNotification(input: {
 }): Promise<boolean> {
   if (!isMailConfigured()) return false;
   const env = getEnv();
-  const port = env.SMTP_PORT ?? 587;
-  const transporter = nodemailer.createTransport({
-    host: env.SMTP_HOST,
-    port,
-    secure: env.SMTP_SECURE ? env.SMTP_SECURE === "true" : port === 465,
-    auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    connectionTimeout: 8000,
-    greetingTimeout: 8000,
-    socketTimeout: 10000,
-  });
+  const transporter = createTransport();
 
   const studio = input.source === "studio";
   const subject = `${studio ? "Studio" : "Portfolio contact"}: ${input.subject || input.name}`.replace(/[\r\n]+/g, " ").slice(0, 200);

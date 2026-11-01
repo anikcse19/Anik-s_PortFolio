@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentAdmin } from "@/lib/auth/session";
 import { isDatabaseConfigured } from "@/lib/db";
@@ -23,6 +24,11 @@ export default async function LoginPage({ searchParams }: PageProps<"/admin/logi
             You have been signed out.
           </p>
         ) : null}
+        {params.reset ? (
+          <p role="status" className="mt-6 text-sm text-success">
+            Your password was changed. Sign in with the new one.
+          </p>
+        ) : null}
         {!isDatabaseConfigured() ? (
           <p role="alert" className="mt-6 border-l-2 border-warning bg-surface px-3 py-2 text-sm">
             MONGODB_URI is not set, so sign-in is unavailable. See the deployment guide in the README.
@@ -31,6 +37,11 @@ export default async function LoginPage({ searchParams }: PageProps<"/admin/logi
         <div className="mt-8">
           <LoginForm next={next} />
         </div>
+        <p className="mt-6 text-sm">
+          <Link href="/admin/forgot-password" className="text-ink-3 underline underline-offset-4 hover:text-ink">
+            Forgot password?
+          </Link>
+        </p>
       </div>
     </main>
   );

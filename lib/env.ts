@@ -72,7 +72,13 @@ export function getGithubToken(): string | null {
   return getEnv().GITHUB_TOKEN || null;
 }
 
-export function isMailConfigured(): boolean {
+/** SMTP credentials are present, so the site can send email (e.g. password reset links). */
+export function isSmtpConfigured(): boolean {
   const env = getEnv();
-  return Boolean(env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS && env.CONTACT_TO_EMAIL);
+  return Boolean(env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS);
+}
+
+/** SMTP is configured and there is an inbox for contact-form notifications. */
+export function isMailConfigured(): boolean {
+  return isSmtpConfigured() && Boolean(getEnv().CONTACT_TO_EMAIL);
 }
