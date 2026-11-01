@@ -2,6 +2,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { SiteImage } from "@/components/ui/site-image";
 import type { ProjectListItem } from "@/lib/data/public";
+import { firstUrl } from "@/lib/urls";
 import { cn } from "@/lib/utils";
 import { PROJECT_TYPE_LABELS } from "@/lib/validation/content";
 import { BrowserFrame } from "./browser-frame";
@@ -50,7 +51,7 @@ export function ProjectShowcase({ projects, basePath = "/projects", showType = t
                 <BrowserFrame
                   src={project.coverImage?.url}
                   alt={project.coverImage?.alt ?? ""}
-                  url={project.liveUrl}
+                  url={firstUrl(project.liveUrl)}
                   sizes="(min-width: 1024px) 560px, 100vw"
                   priority={i === 0}
                   placeholderLabel={project.title}
@@ -91,7 +92,7 @@ export function ProjectCard({ project, priority = false, basePath = "/projects",
   const href = `${basePath}/${project.slug}`;
   return (
     <article className="card card-link group relative flex h-full flex-col p-4">
-      <BrowserFrame src={project.coverImage?.url} alt={project.coverImage?.alt ?? ""} url={project.liveUrl} sizes="(min-width: 768px) 50vw, 100vw" priority={priority} placeholderLabel={project.title} />
+      <BrowserFrame src={project.coverImage?.url} alt={project.coverImage?.alt ?? ""} url={firstUrl(project.liveUrl)} sizes="(min-width: 768px) 50vw, 100vw" priority={priority} placeholderLabel={project.title} />
       <div className="flex flex-1 flex-col px-2 pb-2 pt-6">
         <p className="meta">{projectMeta(project, showType)}</p>
         <h3 className="mt-2 text-title-3 font-semibold">

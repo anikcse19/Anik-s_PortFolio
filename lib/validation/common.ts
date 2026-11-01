@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { checkImageUrl } from "@/lib/images";
-import { isHttpUrl, isSafeHref } from "@/lib/urls";
+import { isHttpUrl, isSafeHref, splitUrlList } from "@/lib/urls";
 
 export const PUBLICATION_STATUSES = ["draft", "published"] as const;
 export const statusSchema = z.enum(PUBLICATION_STATUSES);
@@ -26,6 +26,20 @@ export const optionalHttpUrl = z
   .max(2048)
   .default("")
   .refine((v) => v === "" || isHttpUrl(v), "Enter a full URL starting with https://");
+
+/** Optional comma-separated list of absolute http(s) URLs, normalized to "a, b" without duplicates. */
+export const optionalHttpUrlList = (maxItems: number) =>
+  z
+    .string()
+    .max(maxItems * 2048)
+    .default("")
+    .transform((v) => [...new Set(splitUrlList(v))])
+    .superRefine((urls, ctx) => {
+      if (urls.length > maxItems) ctx.addIssue({ code: "custom", message: `Use at most ${maxItems} URLs` });
+      const bad = urls.find((u) => !isHttpUrl(u));
+      if (bad) ctx.addIssue({ code: "custom", message: `"${bad.slice(0, 60)}" is not a full URL starting with https://` });
+    })
+    .transform((urls) => urls.join(", "));
 
 export const hrefSchema = z
   .string()

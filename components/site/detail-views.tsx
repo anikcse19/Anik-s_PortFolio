@@ -9,6 +9,7 @@ import type { ProjectListItem } from "@/lib/data/public";
 import { formatDate } from "@/lib/dates";
 import { sanitizeRichText } from "@/lib/sanitize";
 import type { Article, CaseStudy, Project } from "@/lib/types";
+import { firstUrl, splitUrlList } from "@/lib/urls";
 import { CASE_STUDY_KIND_LABELS, CASE_STUDY_TOPIC_LABELS, PROJECT_TYPE_LABELS } from "@/lib/validation/content";
 
 /* ------------------------------------------------------------ Shared pieces */
@@ -32,6 +33,19 @@ function ExternalLink({ href, children }: { href: string; children: ReactNode })
       <span className="sr-only">(opens in a new tab)</span>
     </a>
   );
+}
+
+/** Hostname of a live URL, plus its path when another demo shares the same host. */
+function liveUrlLabel(url: string, all: string[]): string {
+  const host = (u: URL) => u.hostname.replace(/^www\./, "");
+  try {
+    const parsed = new URL(url);
+    const shared = all.filter((other) => URL.canParse(other) && host(new URL(other)) === host(parsed)).length > 1;
+    const path = parsed.pathname.replace(/\/$/, "");
+    return shared && path ? `${host(parsed)}${path}` : host(parsed);
+  } catch {
+    return url;
+  }
 }
 
 type TocEntry = { id: string; label: string };
@@ -196,11 +210,25 @@ export function ProjectDetail({
     });
   }
 
+  const liveUrls = splitUrlList(project.liveUrl);
   const facts = [
     project.role ? { term: "Role", value: <>{project.role}</> } : null,
     project.organization ? { term: "Context", value: <>{project.organization}</> } : null,
     project.year ? { term: "Year", value: <>{project.year}</> } : null,
-    project.liveUrl ? { term: "Live", value: <ExternalLink href={project.liveUrl}>{new URL(project.liveUrl).hostname.replace(/^www\./, "")}</ExternalLink> } : null,
+    liveUrls.length
+      ? {
+          term: "Live",
+          value: (
+            <span className="flex flex-col items-start gap-1">
+              {liveUrls.map((url) => (
+                <ExternalLink key={url} href={url}>
+                  {liveUrlLabel(url, liveUrls)}
+                </ExternalLink>
+              ))}
+            </span>
+          ),
+        }
+      : null,
     project.repoUrl ? { term: "Source", value: <ExternalLink href={project.repoUrl}>Repository</ExternalLink> } : null,
   ].filter((f): f is { term: string; value: React.ReactElement } => f !== null);
 
@@ -234,7 +262,7 @@ export function ProjectDetail({
 
       {project.coverImage?.url ? (
         <figure className="mt-14">
-          <BrowserFrame src={project.coverImage.url} alt={project.coverImage.alt} url={project.liveUrl} priority sizes="(min-width: 1400px) 1400px, 100vw" />
+          <BrowserFrame src={project.coverImage.url} alt={project.coverImage.alt} url={firstUrl(project.liveUrl)} priority sizes="(min-width: 1400px) 1400px, 100vw" />
           {project.coverImage.caption ? <figcaption className="mt-3 text-sm text-ink-3">{project.coverImage.caption}</figcaption> : null}
         </figure>
       ) : null}

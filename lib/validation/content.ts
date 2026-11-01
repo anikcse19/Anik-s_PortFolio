@@ -5,6 +5,7 @@ import {
   labelListSchema,
   objectIdSchema,
   optionalHttpUrl,
+  optionalHttpUrlList,
   optionalImageRefSchema,
   optionalText,
   requiredText,
@@ -60,7 +61,8 @@ export const projectInputSchema = z.object({
   impact: metricListSchema(4),
   coverImage: optionalImageRefSchema,
   gallery: z.array(imageRefSchema).max(16, "Use at most 16 gallery images").default([]),
-  liveUrl: optionalHttpUrl,
+  /** One or more live demos, comma-separated (some projects have several samples). */
+  liveUrl: optionalHttpUrlList(10),
   repoUrl: optionalHttpUrl,
   featured: z.boolean().default(false),
   status: statusSchema.default("draft"),

@@ -187,8 +187,8 @@ export function ProjectEditor({
             <TagInput label="Technologies" value={v.technologies} onChange={(t) => set(["technologies"], t)} error={error(["technologies"])} suggestions={techSuggestions} />
           </FormSection>
           <FormSection title="Links">
-            <Field label="Live URL" optional error={error(["liveUrl"])}>
-              {({ id: fid, invalid }) => <Input id={fid} type="url" invalid={invalid} value={v.liveUrl} onChange={(e) => set(["liveUrl"], e.target.value)} placeholder="https://" />}
+            <Field label="Live URLs" optional error={error(["liveUrl"])} hint="Separate several demos with commas. The first one is the main link.">
+              {({ id: fid, invalid }) => <Input id={fid} type="text" inputMode="url" invalid={invalid} value={v.liveUrl} onChange={(e) => set(["liveUrl"], e.target.value)} placeholder="https://demo-one.com, https://demo-two.com" />}
             </Field>
             <Field label="Source repository" optional error={error(["repoUrl"])} hint="Only public repositories.">
               {({ id: fid, invalid }) => <Input id={fid} type="url" invalid={invalid} value={v.repoUrl} onChange={(e) => set(["repoUrl"], e.target.value)} placeholder="https://github.com/…" />}

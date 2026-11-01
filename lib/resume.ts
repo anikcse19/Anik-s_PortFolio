@@ -1,6 +1,7 @@
 import type { ProjectListItem, SiteSettings } from "@/lib/data/public";
 import { employmentPeriod } from "@/lib/dates";
 import type { Experience, SkillCategory } from "@/lib/types";
+import { firstUrl } from "@/lib/urls";
 import type { Metric } from "@/lib/validation/common";
 
 /** Public path of the generated résumé. */
@@ -70,7 +71,7 @@ export function buildResume(
       })();
   const projects = chosen.slice(0, resume.projectLimit).map((p) => ({
     title: p.title,
-    url: p.liveUrl,
+    url: firstUrl(p.liveUrl),
     summary: p.summary,
     metrics: p.impact ?? [],
     bullets: (p.outcomes ?? []).slice(0, 3),

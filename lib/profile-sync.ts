@@ -1,6 +1,7 @@
 import type { ProjectListItem, SiteSettings } from "@/lib/data/public";
 import { formatYearMonth } from "@/lib/dates";
 import type { Experience, SkillCategory } from "@/lib/types";
+import { firstUrl } from "@/lib/urls";
 import { EMPLOYMENT_TYPE_LABELS } from "@/lib/validation/content";
 
 /**
@@ -188,7 +189,7 @@ export function buildSyncItems(input: SyncInput): SyncItem[] {
         fields: [
           { label: "Project name", value: fit(p.title, LIMITS.linkedinProjectName), limit: LIMITS.linkedinProjectName },
           { label: "Description", value: fit(description, LIMITS.linkedinDescription), limit: LIMITS.linkedinDescription, multiline: true },
-          { label: "Project URL", value: p.liveUrl || `${siteUrl}/projects/${p.slug}` },
+          { label: "Project URL", value: firstUrl(p.liveUrl) || `${siteUrl}/projects/${p.slug}` },
           { label: "Skills", value: p.technologies.slice(0, LIMITS.linkedinSkillsPerEntry).join(", ") },
         ],
         editUrl: linkedinBase ? `${linkedinBase}/details/projects/` : undefined,
@@ -244,7 +245,7 @@ export function buildSyncItems(input: SyncInput): SyncItem[] {
     "",
     ...(topStack.length ? ["### Stack", "", skillNames.slice(0, 16).map((s) => `\`${s}\``).join(" "), ""] : []),
     ...(readmeProjects.length
-      ? ["### Selected work", "", ...readmeProjects.map((p) => `- **[${p.title}](${p.liveUrl || `${siteUrl}/projects/${p.slug}`})** — ${p.summary}`), ""]
+      ? ["### Selected work", "", ...readmeProjects.map((p) => `- **[${p.title}](${firstUrl(p.liveUrl) || `${siteUrl}/projects/${p.slug}`})** — ${p.summary}`), ""]
       : []),
   ].join("\n");
 

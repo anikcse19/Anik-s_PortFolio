@@ -3,7 +3,7 @@ import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
 import { connectDB } from "@/lib/db";
 import { ArticleModel, CaseStudyModel, ProjectModel, SettingModel } from "@/lib/models";
-import { isPrivateHostname, parseHttpUrl } from "@/lib/urls";
+import { isPrivateHostname, parseHttpUrl, splitUrlList } from "@/lib/urls";
 import { parseStoredSettings } from "@/lib/validation/settings";
 
 /**
@@ -67,7 +67,7 @@ export async function collectLinks(): Promise<{ url: string; where: string }[]> 
   const projects = await ProjectModel.find({ status: "published" }).select("title liveUrl repoUrl coverImage gallery").lean();
   for (const p of projects as Array<Record<string, unknown>>) {
     const title = String(p.title);
-    add(p.liveUrl as string, `${title} — live URL`);
+    for (const url of splitUrlList(p.liveUrl as string)) add(url, `${title} — live URL`);
     add(p.repoUrl as string, `${title} — repository`);
     add((p.coverImage as { url?: string } | null)?.url, `${title} — cover image`);
     for (const g of (p.gallery as { url: string }[]) ?? []) add(g.url, `${title} — gallery`);

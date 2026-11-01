@@ -59,6 +59,14 @@ describe("content schemas", () => {
     expect(projectInputSchema.safeParse({ ...base, slug: "Bad Slug" }).success).toBe(false);
     expect(projectInputSchema.safeParse({ ...base, liveUrl: "javascript:alert(1)" }).success).toBe(false);
   });
+  it("accepts several comma-separated live URLs", () => {
+    const parse = (liveUrl: string) => projectInputSchema.safeParse({ ...base, liveUrl });
+    expect(parse("https://a.example").data?.liveUrl).toBe("https://a.example");
+    expect(parse(" https://a.example ,https://b.example/demo,, https://a.example ").data?.liveUrl).toBe("https://a.example, https://b.example/demo");
+    expect(parse("").data?.liveUrl).toBe("");
+    expect(parse("https://a.example, javascript:alert(1)").success).toBe(false);
+    expect(parse("https://a.example, not a url").success).toBe(false);
+  });
   it("defaults new projects to draft", () => {
     expect(projectInputSchema.parse(base).status).toBe("draft");
   });

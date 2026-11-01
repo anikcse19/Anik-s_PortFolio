@@ -46,6 +46,20 @@ export function isHttpUrl(raw: string): boolean {
   return parseHttpUrl(raw) !== null;
 }
 
+/** Splits a comma-separated URL list (e.g. a project's live URLs) into trimmed, non-empty entries. */
+export function splitUrlList(raw: string | undefined | null): string[] {
+  if (typeof raw !== "string") return [];
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+/** First URL of a comma-separated list, for places that show a single link. */
+export function firstUrl(raw: string | undefined | null): string {
+  return splitUrlList(raw)[0] ?? "";
+}
+
 /** Root-relative path within this site, e.g. "/projects" or "/#contact". Rejects protocol-relative "//". */
 export function isInternalPath(raw: string): boolean {
   if (typeof raw !== "string") return false;
